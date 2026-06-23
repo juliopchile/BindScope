@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "exportedAt": "2026-06-23T12:00:00.000Z",
+  "profiles": [
+    {
+      "id": "skyrim-streamer-layout",
+      "gameId": "skyrim",
+      "name": "Streamer Layout",
+      "sourceType": "custom",
+      "versionLabel": "2026-06",
+      "verificationStatus": "custom",
+      "bindings": [
+        { "key": "KeyE", "action": "Activate / Talk", "context": "interaction" },
+        { "key": "KeyF", "action": "Wait", "context": "follower" },
+        { "key": "KeyR", "action": "Ready Weapon", "context": "combat" },
+        { "key": "KeyT", "action": "Shout", "context": "voice" },
+        { "key": "KeyM", "action": "Map", "notes": "Moved from default Tab" },
+        { "key": "Tab", "action": "Journal", "notes": "Swapped with Map" }
+      ]
+    }
+  ]
+}
