@@ -61,6 +61,9 @@ across the entire feature list at once; this stage is deliberately narrow.
 - Static output only. No server runtime, no database, no required runtime network calls.
 - `app/src/domain/` must not import React, browser APIs, or data modules.
 - Do not build the SVG keyboard, game search, filters, or import/export in this stage.
+- Do not implement the language switcher, theme switcher, or final responsive shell here — those are
+  Stage 2 / Stage 5 (D10–D12). Do not hardcode patterns that block them (e.g. English-only chrome
+  baked into many files with no extraction path, or fixed-width desktop-only layout assumptions).
 - Do not create empty placeholder modules for future features. The prior attempt shipped stub files
   like `extensionPoints.ts` and `databaseAdapter.ts` with no callers; do not repeat that.
 - Do not add seed game data beyond the small fixtures the tests need. Stage 3 owns curated data.

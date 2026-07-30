@@ -15,10 +15,10 @@ methodology.
 |---|---|---|
 | 0. Documentation | Complete | Concept, target architecture, decisions, and documentation system |
 | 1. Scaffold and engine | Pending | Vite + React + TS project, data model, availability engine with tests |
-| 2. SVG keyboard | Pending | Data-driven layout, interactive keys, visual states, detail panel |
+| 2. SVG keyboard | Pending | Data-driven layout, interactive keys, visual states, detail panel, responsive scaling, theme tokens |
 | 3. Selection and seed data | Pending | Game search, curated seed profiles, filters and legend |
 | 4. Custom profiles | Pending | JSON import/export, profile precedence, safe-key export |
-| 5. Deployment and polish | Pending | GitHub Pages workflow, accessibility, performance, E2E |
+| 5. Deployment and polish | Pending | GitHub Pages workflow, i18n switcher, theme switcher, responsive verification, accessibility, performance, E2E |
 
 After stage 5 the product enters the longer phases described in **Later Direction**.
 
@@ -35,6 +35,8 @@ Delivered:
 - Decision record with rationale
 - Documentation system aligned to the `doc-template` standard
 - Archived the source conversation as a primary source
+- Product requirements for switchable i18n, light/dark/system theme, and responsive device support
+  (D10–D12)
 
 ## In Progress
 
@@ -48,6 +50,9 @@ No stage is running. Stage 1 is defined in `PLAN.md`, awaiting authorization.
 - Hand-curated seed data for 20–30 games
 - Custom profile import/export in JSON
 - Parsers for real config formats (INI, CFG, XML)
+- Switchable UI localization (i18n) with at least English plus one additional locale
+- Light / dark / system theme switch with persisted preference
+- Responsive verification on phone, tablet, and desktop viewports
 
 ## Technical Debt
 
@@ -57,6 +62,8 @@ No technical debt yet: there is no code. Known risks that become debt if neglect
   verification state from the very first entry.
 - Badly normalized key identifiers contaminate every layer and are expensive to fix later.
 - Seed data will grow; the model must support a large catalog without a redesign.
+- Hardcoded UI chrome strings or theme colors lock out i18n and dark mode; keep copy and colors
+  extractable from the first real UI stage onward (D10–D12).
 
 ## Known Limitations
 
@@ -65,12 +72,13 @@ No technical debt yet: there is no code. Known risks that become debt if neglect
 - No backend or database.
 - No automatic wiki scraping in the critical path.
 - No desktop application.
+- Seed binding action names are not translated in the MVP unless a profile-specific catalog exists.
 
 ## Later Direction
 
 | Phase | Scope |
 |---|---|
-| V2 | Modifier combinations, action-name search, layout variants (60%, TKL, ISO) |
+| V2 | Modifier combinations, action-name search, layout variants (60%, TKL, ISO), more UI locales |
 | V3 | Real config file import, Steam sync, cloud profiles, game detection |
 | V4 | Recommendations: *"the best push-to-talk key for your library"* |
 

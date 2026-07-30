@@ -43,6 +43,9 @@ These are easy to get wrong and expensive to fix later:
 - **Key identifiers are normalized once.** Every layer refers to the same physical key by the same identifier. Never compare raw display labels.
 - **Modifiers are in the model from day one**, even if the MVP does not render chords. Do not design them out.
 - **Do not auto-scrape wikis for binding data.** Seed data is hand-curated and marked with a verification state.
+- **UI chrome is localizable.** Do not hardcode user-facing copy in components once i18n lands; use catalogs. Domain logic stays locale-agnostic (D10).
+- **Appearance is theme-token driven.** Support light, dark, and system modes; do not convey key state by color alone (D11).
+- **Layouts must reflow.** Phone, tablet, and desktop are all first-class; do not assume a fixed desktop width (D12).
 
 ## Agent Roles: Orchestrator and Orchestrated
 
@@ -79,5 +82,5 @@ points there as they appear.
 | File | When to Reference | Status |
 |---|---|---|
 | `DECISIONS.md` | Architectural tradeoffs and their rationale | Exists |
-| `STYLES.md` | Visual design tokens, key-state colors, component rules | Create when UI work starts; interim rules are in `PROJECT_STRUCTURE.md` |
+| `STYLES.md` | Visual design tokens, light/dark themes, key-state colors, responsive breakpoints, component rules | Create when UI work starts; interim rules are in `PROJECT_STRUCTURE.md` |
 | `CONTRIBUTING.md` | Binding-data submission workflow | Create only if community contributions open |

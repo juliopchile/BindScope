@@ -34,10 +34,11 @@ BindScope/
 │   │   ├── components/         # UI components (SVG keyboard, search, panel, filters)
 │   │   ├── domain/             # Pure logic: availability and conflicts
 │   │   ├── data/               # Seed data: games, layouts, reserved keys
+│   │   ├── i18n/               # Locale message catalogs and locale helpers
 │   │   ├── lib/                # Import/export, parsers, app state
 │   │   ├── types/              # Shared typed models
 │   │   ├── utils/              # Key normalization, search, helpers
-│   │   └── styles/             # Global styles and tokens
+│   │   └── styles/             # Global styles and theme tokens (light / dark)
 │   ├── public/                 # Static assets and sample profiles
 │   ├── tests/                  # Unit and end-to-end tests
 │   └── package.json            # App dependencies (does not exist yet)
@@ -63,10 +64,12 @@ Paths are relative to `app/src/`.
 |---|---|
 | `domain/` | Availability and conflict computation. Pure, no React or browser APIs |
 | `data/` | Game catalog, seed profiles, layout definitions, reserved-key rules |
+| `i18n/` | UI message catalogs and locale selection helpers. No domain logic |
 | `components/` | Presentation. Contains no business rules |
 | `lib/` | Profile import/export, config parsers, application state |
 | `utils/` | Key identifier normalization, forgiving search |
 | `types/` | Models shared across domain, data, and UI |
+| `styles/` | Global CSS and theme tokens for light / dark / system modes |
 
 ## Stack
 
@@ -75,7 +78,8 @@ Paths are relative to `app/src/`.
 | Language | TypeScript in strict mode |
 | UI | React |
 | Build | Vite, static output |
-| Styling | Tailwind CSS |
+| Styling | Tailwind CSS plus CSS custom properties for themes |
+| i18n | Client-side message catalogs; library chosen at implementation (e.g. i18next) |
 | Keyboard | SVG (every key is an interactive element) |
 | Validation | Zod |
 | Unit tests | Vitest |
@@ -152,17 +156,41 @@ E
 ```
 
 **Panels:** game search · selected-game chips · keyboard · key detail side panel · profile toggles ·
-filters (free / used / reserved / conflicted) · legend · reset · empty state with guidance text.
+filters (free / used / reserved / conflicted) · legend · reset · empty state with guidance text ·
+language switcher · theme switcher (light / dark / system).
 
 **Layouts:** ANSI full-size, TKL, and a scalable compact abstraction. Data-driven, never hardcoded in
 component logic; ISO and regional variants must remain possible.
 
 **Design:** clean, high-contrast, minimal but professional. The keyboard must look like a keyboard.
-Obvious hover and selected states. Responsive. No visual noise, no gratuitous animation, no flashy
-branding.
+Obvious hover and selected states. No visual noise, no gratuitous animation, no flashy branding.
+Appearance is token-driven so light and dark themes stay consistent (see D11).
 
-**Accessibility:** fully operable with mouse *and* keyboard, with meaningful labels, visible focus,
-and usable contrast.
+**Theme:** three modes — light, dark, and system (follow `prefers-color-scheme`). The user can switch
+at any time; the choice persists locally. Key-state colors are theme tokens; every state still needs
+a non-color cue (text, pattern, or icon).
+
+**Localization (i18n):** all UI chrome strings come from locale catalogs and are switchable at
+runtime (see D10). English is the source locale. Domain identifiers and the availability engine are
+locale-agnostic. Curated binding action names stay in their source language unless a translated
+profile catalog exists.
+
+**Responsive layout:** the app must be usable on phone, tablet, and desktop (see D12).
+
+| Viewport class | Intent |
+|---|---|
+| Desktop (wide) | Multi-region shell: games · keyboard · detail |
+| Tablet | Reflow or collapse side panels; keyboard remains the focus |
+| Phone | Single-column stack; essential controls reachable without horizontal page scroll |
+
+The SVG keyboard scales with its container, stays readable, and remains operable with pointer, touch,
+and keyboard input. Touch targets for interactive keys and controls must be large enough for fingers.
+Exact breakpoints live in `STYLES.md` when UI work starts; until then, treat the skeleton’s ~900px
+collapse as a temporary stand-in, not the final system.
+
+**Accessibility:** fully operable with mouse, touch, *and* keyboard, with meaningful labels, visible
+focus, and usable contrast in both light and dark themes. Locale changes must keep labels coherent
+for assistive tech (update document language when the active locale changes).
 
 ## Implementation Conventions
 
@@ -173,6 +201,9 @@ and usable contrast.
 - Comment only what explains non-obvious domain decisions.
 - Avoid premature abstraction, but do not hardcode assumptions that block future growth.
 - Seed data must include deliberate conflicts so the overlay can be verified at a glance.
+- Do not hardcode user-facing UI chrome strings in components once i18n is in place; use catalogs.
+- Style through theme tokens; do not scatter raw colors that ignore light / dark modes.
+- Build layouts so they reflow; do not assume a fixed desktop width.
 
 ## Maintenance Rule
 

@@ -52,6 +52,9 @@ rules. The user can load a custom profile for any game and the result updates in
 | Optional future backend | Only for storing profiles; always behind an interface, never a dependency |
 | Performance | Instant interaction, lean bundle, local computation instead of network calls |
 | Pure domain logic | Independent of the UI and covered by tests |
+| Localization | Switchable UI language via client-side i18n catalogs |
+| Theme | Light, dark, and system modes with a user-facing switch |
+| Responsive | Usable on phone, tablet, and desktop viewports |
 
 ## Getting Started
 
