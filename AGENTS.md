@@ -4,9 +4,12 @@ This file is written for AI coding agents working in BindScope. It should help a
 
 ## Project State — Read This First
 
-**The repository has no build and no dependencies.** It contains documentation plus a static HTML skeleton (`app/index.html`, `app/src/styles/skeleton.css`) that renders layout regions and nothing else. There is no `package.json`, no test suite, and no framework chosen yet — the stack named in `PROJECT_STRUCTURE.md` is a target, not a decision that has been acted on. Verify before referencing any command.
+**Stage 1 is complete.** `app/` is a Vite + React + TypeScript app with Tailwind, Zod, ESLint,
+Prettier, and Vitest. The pure availability engine, key normalization, ANSI full layout, and
+reserved-key rules exist and are tested. The UI is a placeholder — Stage 2 owns the SVG keyboard.
 
-The skeleton is scaffolding: no behaviour, no design system, no palette. Do not build features on top of it or treat `skeleton.css` as a style foundation.
+Use `make install`, `make run`, `make test`, `make lint`, and `make build` from the repo root. Do not
+invent commands; prefer the Makefile.
 
 A previous full implementation existed in commit `ab47adc` and was deliberately discarded in `ebe8889`. Do not restore it wholesale. See `PROJECT_ROADMAP.md` for why it was rejected.
 
@@ -64,14 +67,13 @@ points there as they appear.
 | Command | Purpose | Status |
 |---|---|---|
 | `make help` | List targets and show the active port | Works |
-| `make run` | Serve with live reload via `npx live-server` | Works |
+| `make install` | `npm install` inside `app/` | Works |
+| `make run` | Vite dev server with HMR (opens browser) | Works |
 | `make serve` | Same, without opening a browser | Works |
 | `make port` | Print the port `make run` would use | Works |
-| `npm install` | Install dependencies | Pending scaffold |
-| `npm run dev` | Development server with HMR | Pending scaffold |
-| `npm test` | Run unit tests | Pending scaffold |
-| `npm run lint` | Run linting | Pending scaffold |
-| `npm run build` | Build static artifact | Pending scaffold |
+| `make test` | Vitest unit tests | Works |
+| `make lint` | ESLint | Works |
+| `make build` | Static production build into `app/dist` | Works |
 
 `PORT` and `HOST` are read from an optional git-ignored `.env`, falling back to `8080` and
 `127.0.0.1`. `.env.example` is the committed template. Overrides also work inline:

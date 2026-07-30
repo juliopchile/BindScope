@@ -14,7 +14,7 @@ methodology.
 | Stage | Status | Summary |
 |---|---|---|
 | 0. Documentation | Complete | Concept, target architecture, decisions, and documentation system |
-| 1. Scaffold and engine | Pending | Vite + React + TS project, data model, availability engine with tests |
+| 1. Scaffold and engine | Complete | Vite + React + TS scaffold, typed models, key normalization, pure availability engine + tests |
 | 2. SVG keyboard | Pending | Data-driven layout, interactive keys, visual states, detail panel, responsive scaling, theme tokens |
 | 3. Selection and seed data | Pending | Game search, curated seed profiles, filters and legend |
 | 4. Custom profiles | Pending | JSON import/export, profile precedence, safe-key export |
@@ -38,14 +38,27 @@ Delivered:
 - Product requirements for switchable i18n, light/dark/system theme, and responsive device support
   (D10–D12)
 
+### Stage 1: Scaffold and availability engine
+
+Delivered a runnable Vite + React + TypeScript app whose only real feature is a correct, tested
+availability engine.
+
+Delivered:
+
+- `app/` package: Vite, React 19, TypeScript strict, Tailwind v4, Zod, ESLint, Prettier, Vitest
+- Shared typed models (`Game`, `InputProfile`, `Binding`, `KeyboardLayout`, `ConflictSummary`, …)
+- Key normalization to KeyboardEvent.code-style identifiers, with modifier helpers
+- Pure `computeAvailability` / `resolveProfiles` (no React, no browser APIs, no data imports)
+- ANSI full-size layout data and reserved-key rules (bare-key vs chord-only distinguished)
+- Table-driven tests for normalization and every availability case listed in Stage 1
+- Minimal placeholder UI showing engine counts; Makefile targets for install/run/test/lint/build
+
 ## In Progress
 
-No stage is running. Stage 1 is defined in `PLAN.md`, awaiting authorization.
+No stage is running. Stage 2 is defined in `PLAN.md`, awaiting authorization.
 
 ## Pending Work
 
-- Runnable, deployable static scaffold
-- Pure availability engine with table-driven tests
 - SVG keyboard visualization with data-driven layouts
 - Hand-curated seed data for 20–30 games
 - Custom profile import/export in JSON
@@ -56,7 +69,7 @@ No stage is running. Stage 1 is defined in `PLAN.md`, awaiting authorization.
 
 ## Technical Debt
 
-No technical debt yet: there is no code. Known risks that become debt if neglected from the start:
+Known risks that become debt if neglected:
 
 - Binding data quality is the real bottleneck of the product, not the UI. Curate by hand and record a
   verification state from the very first entry.

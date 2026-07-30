@@ -7,12 +7,11 @@ interactive keyboard, and instantly see **which keys are still free** across all
 
 ## Project Status
 
-**Stage 0 — documentation and a static skeleton.** There is no build, no dependency, and no
-framework chosen yet. `app/index.html` renders the page's layout regions and nothing else. The command
-list further down describes the target stack, not something you can run today. See
-`PROJECT_ROADMAP.md` for the real state and `PLAN.md` for active work.
+**Stage 1 complete — scaffold and availability engine.** The app under `app/` is a Vite + React +
+TypeScript project with a pure, tested availability engine and a minimal placeholder UI. The SVG
+keyboard and full product UI are Stage 2+. See `PROJECT_ROADMAP.md` and `PLAN.md`.
 
-To view it, see **Getting Started** below.
+To run it, see **Getting Started** below.
 
 ## The Problem
 
@@ -58,18 +57,25 @@ rules. The user can load a custom profile for any game and the result updates in
 
 ## Getting Started
 
-There is nothing to install. Serve the skeleton with live reload:
+Requires Node.js. Install dependencies once, then start the Vite dev server:
 
 ```sh
-make run     # http://127.0.0.1:8080, reloads on save
-make help    # list all targets
+make install   # npm install inside app/
+make run       # http://127.0.0.1:8080 with HMR
+make help      # list all targets
 ```
 
-`make run` uses `npx live-server`, so the only requirement is Node. The page reloads automatically
-whenever you save a file.
+Useful targets:
 
-The application lives in `app/`, and that is the only directory served. Repository documentation is
-never exposed by the dev server or by the deployed site.
+```sh
+make test      # Vitest unit tests
+make lint      # ESLint
+make build     # static artifact in app/dist
+make serve     # same as run, without opening a browser
+```
+
+The application lives in `app/`. Repository documentation is never part of the Vite app root or the
+deployed site.
 
 ### Configuration
 
@@ -81,24 +87,11 @@ cp .env.example .env    # then edit PORT
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `PORT` | `8080` | Port for `make run` |
+| `PORT` | `8080` | Port for `make run` / `make serve` |
 | `HOST` | `127.0.0.1` | Bind address; use `0.0.0.0` to reach the server from another device |
-| `ROOT` | `app` | Directory served to the browser |
 
 A one-off override works too: `make run PORT=8090`. If the port is already taken, `make run` says
 what is holding it and suggests the next free one instead of failing obscurely.
-
-### Planned commands
-
-Once a stack is chosen, these arrive inside `app/` and get wrapped in `make` targets so the root
-task runner stays the single entry point:
-
-```sh
-npm install     # install dependencies
-npm run dev     # development server with hot module replacement
-npm test        # unit tests
-npm run build   # static artifact for deployment
-```
 
 ## Deployment
 

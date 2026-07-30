@@ -3,8 +3,9 @@
 `PROJECT_STRUCTURE.md` documents how BindScope is organized and how its pieces fit together. It
 should let a human or an agent understand the repository without guessing from filenames.
 
-> **Status:** the architecture described here is the **target**, not reality. The repository contains
-> no code yet. As each stage is implemented, update this file to reflect what actually exists.
+> **Status:** Stage 1 is real — scaffold, types, normalization, layout/reserved data, and the
+> availability engine exist under `app/`. Components, i18n, seed game catalog, import/export, and the
+> SVG keyboard are still target. Update this file as each stage lands.
 
 ## Architecture
 
@@ -27,24 +28,26 @@ nothing else can leak into the build by accident.
 ```
 BindScope/
 ├── app/                        # The application. Everything deployable lives here
-│   ├── index.html              # Page entry point (also the Vite entry point)
+│   ├── index.html              # Vite entry point
+│   ├── package.json            # App dependencies and scripts
+│   ├── vite.config.ts
 │   ├── src/
 │   │   ├── main.tsx            # Script entry point
-│   │   ├── App.tsx             # Main view composition
-│   │   ├── components/         # UI components (SVG keyboard, search, panel, filters)
-│   │   ├── domain/             # Pure logic: availability and conflicts
-│   │   ├── data/               # Seed data: games, layouts, reserved keys
-│   │   ├── i18n/               # Locale message catalogs and locale helpers
-│   │   ├── lib/                # Import/export, parsers, app state
-│   │   ├── types/              # Shared typed models
-│   │   ├── utils/              # Key normalization, search, helpers
-│   │   └── styles/             # Global styles and theme tokens (light / dark)
-│   ├── public/                 # Static assets and sample profiles
-│   ├── tests/                  # Unit and end-to-end tests
-│   └── package.json            # App dependencies (does not exist yet)
+│   │   ├── App.tsx             # Placeholder UI (Stage 1); real composition in Stage 2+
+│   │   ├── domain/             # Pure logic: availability and conflicts (exists)
+│   │   ├── data/               # Layout + reserved keys (exists); game seeds in Stage 3
+│   │   ├── types/              # Shared typed models (exists)
+│   │   ├── utils/              # Key normalization (exists)
+│   │   ├── styles/             # Minimal global CSS; theme tokens in Stage 2
+│   │   ├── components/         # UI components — Stage 2+
+│   │   ├── i18n/               # Locale catalogs — Stage 5
+│   │   └── lib/                # Import/export, parsers, app state — Stage 4+
+│   ├── public/                 # Static assets
+│   ├── tests/                  # Unit tests (exists)
+│   └── dist/                   # Production build output (git-ignored)
 ├── docs/                       # Historical and supporting documentation
-├── Makefile                    # Root task runner; the entry point for all commands
-├── .env.example                # Template for local PORT / HOST overrides
+├── Makefile                    # Root task runner
+├── .env.example
 ├── README.md
 ├── PROJECT_STRUCTURE.md
 ├── PROJECT_ROADMAP.md
@@ -52,9 +55,6 @@ BindScope/
 ├── PLAN.md
 └── AGENTS.md
 ```
-
-Current contents of `app/` are the static skeleton only: `index.html` and
-`src/styles/skeleton.css`. Everything else in the tree above is the target.
 
 ## Components
 
@@ -73,18 +73,18 @@ Paths are relative to `app/src/`.
 
 ## Stack
 
-| Layer | Tool |
-|---|---|
-| Language | TypeScript in strict mode |
-| UI | React |
-| Build | Vite, static output |
-| Styling | Tailwind CSS plus CSS custom properties for themes |
-| i18n | Client-side message catalogs; library chosen at implementation (e.g. i18next) |
-| Keyboard | SVG (every key is an interactive element) |
-| Validation | Zod |
-| Unit tests | Vitest |
-| E2E tests | Playwright |
-| Quality | ESLint + Prettier |
+| Layer | Tool | Status |
+|---|---|---|
+| Language | TypeScript in strict mode | In use |
+| UI | React 19 | In use (placeholder UI) |
+| Build | Vite, static output to `app/dist` | In use |
+| Styling | Tailwind CSS v4 plus CSS custom properties for themes | Tailwind in use; theme tokens Stage 2 |
+| i18n | Client-side message catalogs; library chosen at implementation | Stage 5 |
+| Keyboard | SVG (every key is an interactive element) | Stage 2 |
+| Validation | Zod | In use (availability input) |
+| Unit tests | Vitest | In use |
+| E2E tests | Playwright | Stage 5 |
+| Quality | ESLint + Prettier | In use |
 
 ## Data Model
 
