@@ -1,0 +1,72 @@
+# AGENTS.md
+
+This file is written for AI coding agents working in BindScope. It should help agents avoid avoidable mistakes and ramp up quickly.
+
+## Project State — Read This First
+
+**The repository contains no application code.** Only documentation exists. Do not assume a build, a test suite, or a `package.json` is present; verify before referencing any command.
+
+A previous full implementation existed in commit `ab47adc` and was deliberately discarded in `ebe8889`. Do not restore it wholesale. See `PROJECT_ROADMAP.md` for why it was rejected.
+
+## Primary Documentation Sources
+
+Read these files before making changes:
+
+1. `README.md` — product overview, problem statement, setup, documentation map
+2. `PROJECT_STRUCTURE.md` — target architecture, data model, availability engine contract, conventions
+3. `PROJECT_ROADMAP.md` — stages, completed work, pending work, technical debt, project history
+4. `DECISIONS.md` — why the project is built this way; read before proposing architectural changes
+5. `PLAN.md` — active work only; consult when it exists and the user asks for implementation work
+
+`PLAN.md` is not permanent project documentation. Use it to understand the current task, blockers, and next steps.
+
+`docs/source-conversation.md` is the archived source conversation that produced the concept. It is an immutable historical record, not a specification. Do not edit it and do not treat its recommendations as binding — the permanent docs above supersede it.
+
+All documentation in this repository is written in English.
+
+## Agent Rules
+
+- Prefer project commands from `README.md` or the root task runner. Do not invent commands.
+- If docs conflict with executable config, trust executable config and update docs if requested.
+- Do not commit, push, release, or deploy unless the user explicitly asks.
+- Preserve user changes; do not revert unrelated work.
+- When a stage completes, summarize it in `PROJECT_ROADMAP.md` and clear the detail out of `PLAN.md`.
+
+## Domain Invariants
+
+These are easy to get wrong and expensive to fix later:
+
+- **Static-only.** No server runtime, no database, no required network calls at runtime. The build must deploy to GitHub Pages unchanged. Any persistence is a future adapter behind an interface, never a dependency.
+- **The availability engine is pure.** `src/domain/` must not import React, browser APIs, or data files. It takes profiles + layout + reserved rules and returns a summary. It is tested in isolation with table-driven tests.
+- **Key identifiers are normalized once.** Every layer refers to the same physical key by the same identifier. Never compare raw display labels.
+- **Modifiers are in the model from day one**, even if the MVP does not render chords. Do not design them out.
+- **Do not auto-scrape wikis for binding data.** Seed data is hand-curated and marked with a verification state.
+
+## Agent Roles: Orchestrator and Orchestrated
+
+An agent in this project can act as an **orchestrator** (coordinates sub-agents that implement stages of the plan) or as an **orchestrated** agent (implements one concrete stage). The role is recognized from the prompt received; no configuration is needed.
+
+- **Orchestrated**: follows familiarization → stage summary (with questions, if any) → authorized execution. On completion, it documents in `PLAN.md` and `PROJECT_ROADMAP.md`, and **proposes** a commit message without committing.
+- **Orchestrator**: launches a fresh sub-agent per stage, evaluates its summaries, resolves questions with its own judgment when possible, and escalates only product or scope decisions to the user. It never authorizes commits on its own.
+
+The methodology and its three canonical prompts live in the user-level `orquestando-agentes` skill. It is **not** vendored into this repository — invoke it with `/orquestando-agentes`. Stages in `PROJECT_ROADMAP.md` are sized to be delegated one per sub-agent.
+
+## Commands
+
+No commands exist yet. Once the scaffold lands, replace this table and keep it accurate:
+
+| Command | Purpose | Status |
+|---|---|---|
+| `npm install` | Install dependencies | Pending scaffold |
+| `npm run dev` | Start local development server | Pending scaffold |
+| `npm test` | Run unit tests | Pending scaffold |
+| `npm run lint` | Run linting | Pending scaffold |
+| `npm run build` | Build static artifact for deployment | Pending scaffold |
+
+## Additional Documentation
+
+| File | When to Reference | Status |
+|---|---|---|
+| `DECISIONS.md` | Architectural tradeoffs and their rationale | Exists |
+| `STYLES.md` | Visual design tokens, key-state colors, component rules | Create when UI work starts; interim rules are in `PROJECT_STRUCTURE.md` |
+| `CONTRIBUTING.md` | Binding-data submission workflow | Create only if community contributions open |

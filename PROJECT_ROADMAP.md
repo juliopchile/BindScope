@@ -1,0 +1,99 @@
+# Project Roadmap
+
+`PROJECT_ROADMAP.md` summarizes project progress over time. It works as a lightweight changelog plus
+a forward-looking roadmap.
+
+Unlike `PLAN.md`, it must not contain detailed active implementation notes. Once a stage is complete,
+its details are condensed here into a short summary.
+
+Stages are sized to be delegated **one per sub-agent**, following the `orquestando-agentes` skill
+methodology.
+
+## Timeline
+
+| Stage | Status | Summary |
+|---|---|---|
+| 0. Documentation | Complete | Concept, target architecture, decisions, and documentation system |
+| 1. Scaffold and engine | Pending | Vite + React + TS project, data model, availability engine with tests |
+| 2. SVG keyboard | Pending | Data-driven layout, interactive keys, visual states, detail panel |
+| 3. Selection and seed data | Pending | Game search, curated seed profiles, filters and legend |
+| 4. Custom profiles | Pending | JSON import/export, profile precedence, safe-key export |
+| 5. Deployment and polish | Pending | GitHub Pages workflow, accessibility, performance, E2E |
+
+After stage 5 the product enters the longer phases described in **Later Direction**.
+
+## Completed Work
+
+### Stage 0: Documentation
+
+Established the product concept and the repository documentation system.
+
+Delivered:
+
+- Problem statement and differentiator (intersection of free keys across several profiles)
+- Target architecture, data model, and availability engine contract
+- Decision record with rationale
+- Documentation system aligned to the `doc-template` standard
+- Archived the source conversation as a primary source
+
+## In Progress
+
+No stage is running. Stage 1 is defined in `PLAN.md`, awaiting authorization.
+
+## Pending Work
+
+- Runnable, deployable static scaffold
+- Pure availability engine with table-driven tests
+- SVG keyboard visualization with data-driven layouts
+- Hand-curated seed data for 20–30 games
+- Custom profile import/export in JSON
+- Parsers for real config formats (INI, CFG, XML)
+
+## Technical Debt
+
+No technical debt yet: there is no code. Known risks that become debt if neglected from the start:
+
+- Binding data quality is the real bottleneck of the product, not the UI. Curate by hand and record a
+  verification state from the very first entry.
+- Badly normalized key identifiers contaminate every layer and are expensive to fix later.
+- Seed data will grow; the model must support a large catalog without a redesign.
+
+## Known Limitations
+
+- No controller or gamepad bindings.
+- No user accounts or sync.
+- No backend or database.
+- No automatic wiki scraping in the critical path.
+- No desktop application.
+
+## Later Direction
+
+| Phase | Scope |
+|---|---|
+| V2 | Modifier combinations, action-name search, layout variants (60%, TKL, ISO) |
+| V3 | Real config file import, Steam sync, cloud profiles, game detection |
+| V4 | Recommendations: *"the best push-to-talk key for your library"* |
+
+Real config import is the defensible advantage: once BindScope reads the user's own config files, it
+becomes much harder to copy.
+
+## History
+
+| Commit | What happened |
+|---|---|
+| `ab47adc` | First full implementation: ~50 files, Vite + React + TS, SVG keyboard, availability engine, 20 seed games, GitHub Pages workflow |
+| `ebe8889` | Discarded entirely |
+
+The prompt that produced `ab47adc` specified around forty deliverables at equal priority, so effort
+was spread evenly across seed data, three layouts, an import/export schema, a database adapter
+boundary, and E2E tests — and the SVG keyboard, which **is** the product, never got the attention it
+needed. The lesson for later stages is to prioritize explicitly instead of treating the whole scope
+as equivalent.
+
+The original prompt is preserved in full inside `docs/source-conversation.md`. Read it as a statement
+of intent, not as a specification to re-run.
+
+## Maintenance Rule
+
+When a task, refactor, or implementation is completed, add a short summary here and remove the
+detailed implementation notes from `PLAN.md`.
