@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BindScope</title>
+    <meta
+      name="description"
+      content="See which keyboard keys are still free across the games you play."
+    />
+    <!-- Empty data URI: suppresses the favicon 404 without committing to an icon. -->
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./src/styles/skeleton.css" />
+  </head>
+
+  <body>
+    <!--
+      STRUCTURAL SKELETON ONLY.
+
+      Every region named in PROJECT_STRUCTURE.md is present and labelled, with no
+      behaviour and no design decisions. Elements carry `id`s so they can be wired
+      up later regardless of which framework is chosen.
+
+      Nothing here locks in a stack: this file is valid as a plain static page and
+      as a Vite entry point.
+    -->
+
+    <a class="skip-link" href="#keyboard-panel">Skip to keyboard</a>
+
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand__name">BindScope</span>
+        <span class="brand__tagline">Which keys are still free across your games?</span>
+      </div>
+
+      <div class="app-header__actions">
+        <!-- REGION: layout selector (ANSI full-size / TKL / compact) -->
+        <div class="slot slot--inline" id="layout-selector" data-region="layout-selector">
+          <span class="slot__label">Layout selector</span>
+        </div>
+
+        <!-- REGION: reset control -->
+        <div class="slot slot--inline" id="reset-control" data-region="reset">
+          <span class="slot__label">Reset</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <!-- ============================================================
+           COLUMN 1 — Game and profile selection
+           ============================================================ -->
+      <aside class="panel panel--games" aria-labelledby="games-heading">
+        <h2 class="panel__heading" id="games-heading">Games</h2>
+
+        <!-- REGION: game search (fast, forgiving) -->
+        <div class="slot" id="game-search" data-region="game-search">
+          <span class="slot__label">Game search</span>
+        </div>
+
+        <!-- REGION: selected game chips, editable -->
+        <div class="slot slot--grow" id="selected-games" data-region="selected-games">
+          <span class="slot__label">Selected games</span>
+          <p class="slot__hint">Chips for each selected game, removable.</p>
+        </div>
+
+        <!-- REGION: per-game profile toggles (default vs custom) -->
+        <div class="slot" id="profile-toggles" data-region="profile-toggles">
+          <span class="slot__label">Profile toggles</span>
+          <p class="slot__hint">Default or custom profile, per selected game.</p>
+        </div>
+      </aside>
+
+      <!-- ============================================================
+           COLUMN 2 — Keyboard overlay
+           ============================================================ -->
+      <section class="panel panel--keyboard" id="keyboard-panel" aria-labelledby="keyboard-heading">
+        <h2 class="panel__heading" id="keyboard-heading">Keyboard</h2>
+
+        <!-- REGION: filters — free / used / reserved / conflicted -->
+        <div class="slot slot--inline" id="filters" data-region="filters">
+          <span class="slot__label">Filters</span>
+          <span class="slot__hint">free · used · reserved · conflicted</span>
+        </div>
+
+        <!-- REGION: the keyboard itself. Renders the empty state until games are selected. -->
+        <div class="keyboard-stage" id="keyboard-stage" data-region="keyboard">
+          <div class="empty-state" id="empty-state" data-region="empty-state">
+            <p class="empty-state__title">No games selected</p>
+            <p class="empty-state__body">
+              Pick two or more games to overlay their keymaps and see which keys are still free.
+            </p>
+          </div>
+        </div>
+
+        <!-- REGION: legend. States are from PROJECT_STRUCTURE.md.
+             Swatches are deliberately neutral — colours are not decided yet.
+             Each state must stay readable without colour. -->
+        <ul class="legend" id="legend" data-region="legend">
+          <li class="legend__item"><span class="legend__swatch" data-state="free"></span>Free</li>
+          <li class="legend__item">
+            <span class="legend__swatch" data-state="partial"></span>Partial
+          </li>
+          <li class="legend__item">
+            <span class="legend__swatch" data-state="conflicted"></span>Conflicted
+          </li>
+          <li class="legend__item">
+            <span class="legend__swatch" data-state="reserved"></span>Reserved
+          </li>
+          <li class="legend__item"><span class="legend__swatch" data-state="yours"></span>Yours</li>
+        </ul>
+      </section>
+
+      <!-- ============================================================
+           COLUMN 3 — Detail and summary
+           ============================================================ -->
+      <aside class="panel panel--detail" aria-labelledby="detail-heading">
+        <h2 class="panel__heading" id="detail-heading">Detail</h2>
+
+        <!-- REGION: selected key detail — actions per game occupying that key -->
+        <div class="slot slot--grow" id="key-detail" data-region="key-detail">
+          <span class="slot__label">Key detail</span>
+          <p class="slot__hint">Actions bound to the selected key, grouped by game.</p>
+        </div>
+
+        <!-- REGION: availability summary counts -->
+        <div class="slot" id="availability-summary" data-region="summary">
+          <span class="slot__label">Availability summary</span>
+          <p class="slot__hint">Free / used / reserved counts for the active layout.</p>
+        </div>
+
+        <!-- REGION: profile import & export -->
+        <div class="slot" id="import-export" data-region="import-export">
+          <span class="slot__label">Import / export</span>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="app-footer">
+      <span>Skeleton — no behaviour, no stack chosen yet.</span>
+    </footer>
+  </body>
+</html>

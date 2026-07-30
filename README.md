@@ -7,9 +7,12 @@ interactive keyboard, and instantly see **which keys are still free** across all
 
 ## Project Status
 
-**Stage 0 — documentation only.** The repository contains no application code yet. The setup and
-usage sections below describe the target, not something you can run today. See `PROJECT_ROADMAP.md`
-for the real state and `PLAN.md` for active work.
+**Stage 0 — documentation and a static skeleton.** There is no build, no dependency, and no
+framework chosen yet. `app/index.html` renders the page's layout regions and nothing else. The command
+list further down describes the target stack, not something you can run today. See
+`PROJECT_ROADMAP.md` for the real state and `PLAN.md` for active work.
+
+To view it, see **Getting Started** below.
 
 ## The Problem
 
@@ -52,19 +55,55 @@ rules. The user can load a custom profile for any game and the result updates in
 
 ## Getting Started
 
-Pending until the scaffold exists. The planned commands are:
+There is nothing to install. Serve the skeleton with live reload:
+
+```sh
+make run     # http://127.0.0.1:8080, reloads on save
+make help    # list all targets
+```
+
+`make run` uses `npx live-server`, so the only requirement is Node. The page reloads automatically
+whenever you save a file.
+
+The application lives in `app/`, and that is the only directory served. Repository documentation is
+never exposed by the dev server or by the deployed site.
+
+### Configuration
+
+The port and host come from an optional `.env` file, which is git-ignored:
+
+```sh
+cp .env.example .env    # then edit PORT
+```
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `PORT` | `8080` | Port for `make run` |
+| `HOST` | `127.0.0.1` | Bind address; use `0.0.0.0` to reach the server from another device |
+| `ROOT` | `app` | Directory served to the browser |
+
+A one-off override works too: `make run PORT=8090`. If the port is already taken, `make run` says
+what is holding it and suggests the next free one instead of failing obscurely.
+
+### Planned commands
+
+Once a stack is chosen, these arrive inside `app/` and get wrapped in `make` targets so the root
+task runner stays the single entry point:
 
 ```sh
 npm install     # install dependencies
-npm run dev     # development server
+npm run dev     # development server with hot module replacement
 npm test        # unit tests
 npm run build   # static artifact for deployment
 ```
 
 ## Deployment
 
-The `npm run build` artifact is static and published to GitHub Pages through a GitHub Actions
-workflow. It requires no server runtime.
+Everything deployable lives in `app/`. The build output from `app/` is static and published to
+GitHub Pages through a GitHub Actions workflow, which requires no server runtime.
+
+The workflow builds from `app/` rather than using the "deploy from `/docs`" setting, so `docs/` stays
+free for project documentation and never reaches the published site.
 
 ## Documentation Map
 

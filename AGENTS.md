@@ -4,7 +4,9 @@ This file is written for AI coding agents working in BindScope. It should help a
 
 ## Project State — Read This First
 
-**The repository contains no application code.** Only documentation exists. Do not assume a build, a test suite, or a `package.json` is present; verify before referencing any command.
+**The repository has no build and no dependencies.** It contains documentation plus a static HTML skeleton (`app/index.html`, `app/src/styles/skeleton.css`) that renders layout regions and nothing else. There is no `package.json`, no test suite, and no framework chosen yet — the stack named in `PROJECT_STRUCTURE.md` is a target, not a decision that has been acted on. Verify before referencing any command.
+
+The skeleton is scaffolding: no behaviour, no design system, no palette. Do not build features on top of it or treat `skeleton.css` as a style foundation.
 
 A previous full implementation existed in commit `ab47adc` and was deliberately discarded in `ebe8889`. Do not restore it wholesale. See `PROJECT_ROADMAP.md` for why it was rejected.
 
@@ -37,7 +39,7 @@ All documentation in this repository is written in English.
 These are easy to get wrong and expensive to fix later:
 
 - **Static-only.** No server runtime, no database, no required network calls at runtime. The build must deploy to GitHub Pages unchanged. Any persistence is a future adapter behind an interface, never a dependency.
-- **The availability engine is pure.** `src/domain/` must not import React, browser APIs, or data files. It takes profiles + layout + reserved rules and returns a summary. It is tested in isolation with table-driven tests.
+- **The availability engine is pure.** `app/src/domain/` must not import React, browser APIs, or data files. It takes profiles + layout + reserved rules and returns a summary. It is tested in isolation with table-driven tests.
 - **Key identifiers are normalized once.** Every layer refers to the same physical key by the same identifier. Never compare raw display labels.
 - **Modifiers are in the model from day one**, even if the MVP does not render chords. Do not design them out.
 - **Do not auto-scrape wikis for binding data.** Seed data is hand-curated and marked with a verification state.
@@ -53,15 +55,24 @@ The methodology and its three canonical prompts live in the user-level `orquesta
 
 ## Commands
 
-No commands exist yet. Once the scaffold lands, replace this table and keep it accurate:
+The `Makefile` is the task runner. Use it rather than calling `npx` directly, and add new entry
+points there as they appear.
 
 | Command | Purpose | Status |
 |---|---|---|
+| `make help` | List targets and show the active port | Works |
+| `make run` | Serve with live reload via `npx live-server` | Works |
+| `make serve` | Same, without opening a browser | Works |
+| `make port` | Print the port `make run` would use | Works |
 | `npm install` | Install dependencies | Pending scaffold |
-| `npm run dev` | Start local development server | Pending scaffold |
+| `npm run dev` | Development server with HMR | Pending scaffold |
 | `npm test` | Run unit tests | Pending scaffold |
 | `npm run lint` | Run linting | Pending scaffold |
-| `npm run build` | Build static artifact for deployment | Pending scaffold |
+| `npm run build` | Build static artifact | Pending scaffold |
+
+`PORT` and `HOST` are read from an optional git-ignored `.env`, falling back to `8080` and
+`127.0.0.1`. `.env.example` is the committed template. Overrides also work inline:
+`make run PORT=8090`.
 
 ## Additional Documentation
 

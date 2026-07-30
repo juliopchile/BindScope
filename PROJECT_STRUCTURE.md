@@ -20,21 +20,30 @@ critical path.
 
 ## Repository Layout
 
+The application is confined to `app/`. The repository root holds documentation and tooling only.
+This keeps the deployable surface obvious: everything GitHub Pages publishes comes from `app/`, and
+nothing else can leak into the build by accident.
+
 ```
 BindScope/
-├── src/
-│   ├── main.tsx                # Entry point
-│   ├── App.tsx                 # Main view composition
-│   ├── components/             # UI components (SVG keyboard, search, panel, filters)
-│   ├── domain/                 # Pure logic: availability and conflicts
-│   ├── data/                   # Seed data: games, layouts, reserved keys
-│   ├── lib/                    # Import/export, parsers, app state
-│   ├── types/                  # Shared typed models
-│   ├── utils/                  # Key normalization, search, helpers
-│   └── styles/                 # Global styles and tokens
-├── public/                     # Static assets and sample profiles
-├── tests/                      # Unit and end-to-end tests
+├── app/                        # The application. Everything deployable lives here
+│   ├── index.html              # Page entry point (also the Vite entry point)
+│   ├── src/
+│   │   ├── main.tsx            # Script entry point
+│   │   ├── App.tsx             # Main view composition
+│   │   ├── components/         # UI components (SVG keyboard, search, panel, filters)
+│   │   ├── domain/             # Pure logic: availability and conflicts
+│   │   ├── data/               # Seed data: games, layouts, reserved keys
+│   │   ├── lib/                # Import/export, parsers, app state
+│   │   ├── types/              # Shared typed models
+│   │   ├── utils/              # Key normalization, search, helpers
+│   │   └── styles/             # Global styles and tokens
+│   ├── public/                 # Static assets and sample profiles
+│   ├── tests/                  # Unit and end-to-end tests
+│   └── package.json            # App dependencies (does not exist yet)
 ├── docs/                       # Historical and supporting documentation
+├── Makefile                    # Root task runner; the entry point for all commands
+├── .env.example                # Template for local PORT / HOST overrides
 ├── README.md
 ├── PROJECT_STRUCTURE.md
 ├── PROJECT_ROADMAP.md
@@ -43,7 +52,12 @@ BindScope/
 └── AGENTS.md
 ```
 
+Current contents of `app/` are the static skeleton only: `index.html` and
+`src/styles/skeleton.css`. Everything else in the tree above is the target.
+
 ## Components
+
+Paths are relative to `app/src/`.
 
 | Directory | Responsibility |
 |---|---|

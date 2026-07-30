@@ -10,10 +10,18 @@ into `PROJECT_ROADMAP.md`; stable design information lives in `PROJECT_STRUCTURE
 
 **Current stage:** Stage 1 — Scaffold and availability engine
 
-**Status:** Defined, not started. **Awaiting user authorization before any code is written.**
+**Status:** Defined, not started. **Awaiting user authorization before the scaffold is created.**
 
-**Immediate next step:** Confirm with the user that Stage 1 should begin, then create the Vite +
-React + TypeScript project and the pure availability module.
+**Done ahead of the stage:** a dependency-free static skeleton (`app/index.html`,
+`app/src/styles/skeleton.css`) marking out the page's layout regions, built so the stack could stay
+undecided. It carries no behaviour and no design decisions, and both files are expected to be
+replaced or absorbed once the framework is chosen.
+
+**Open decision blocking this stage:** the stack in `PROJECT_STRUCTURE.md` (Vite + React + Tailwind)
+has not been confirmed by the user. Confirm it, or revise that file, before scaffolding.
+
+**Immediate next step:** Settle the stack question, then create the project and the pure availability
+module.
 
 ## Active Task: Scaffold and Availability Engine
 
@@ -27,14 +35,14 @@ across the entire feature list at once; this stage is deliberately narrow.
 
 ### Files In Scope
 
-- `package.json`, `tsconfig.json`, `vite.config.ts`, `.gitignore`
-- ESLint and Prettier configuration
-- `src/types/` — shared typed models
-- `src/utils/keyNormalization.ts` — canonical key identifiers
-- `src/domain/availability.ts` — the engine
-- `src/data/keyboardLayouts.ts` — one layout only (ANSI full-size)
-- `src/data/reservedKeys.ts` — reserved-key rules
-- `tests/keyNormalization.test.ts`, `tests/availability.test.ts`
+- `app/package.json`, `app/tsconfig.json`, `app/vite.config.ts`
+- ESLint and Prettier configuration, inside `app/`
+- `app/src/types/` — shared typed models
+- `app/src/utils/keyNormalization.ts` — canonical key identifiers
+- `app/src/domain/availability.ts` — the engine
+- `app/src/data/keyboardLayouts.ts` — one layout only (ANSI full-size)
+- `app/src/data/reservedKeys.ts` — reserved-key rules
+- `app/tests/keyNormalization.test.ts`, `app/tests/availability.test.ts`
 
 ### Tasks
 
@@ -51,7 +59,7 @@ across the entire feature list at once; this stage is deliberately narrow.
 ### Constraints
 
 - Static output only. No server runtime, no database, no required runtime network calls.
-- `src/domain/` must not import React, browser APIs, or data modules.
+- `app/src/domain/` must not import React, browser APIs, or data modules.
 - Do not build the SVG keyboard, game search, filters, or import/export in this stage.
 - Do not create empty placeholder modules for future features. The prior attempt shipped stub files
   like `extensionPoints.ts` and `databaseAdapter.ts` with no callers; do not repeat that.
@@ -60,14 +68,18 @@ across the entire feature list at once; this stage is deliberately narrow.
 
 ### Verification
 
-Run the focused suite first, then everything, and confirm the production build succeeds:
+Run the focused suite first, then everything, and confirm the production build succeeds. All npm
+commands run from inside `app/`:
 
 ```sh
+cd app
 npm test -- tests/availability.test.ts
 npm test
 npm run lint
 npm run build
 ```
+
+Then add `make` targets wrapping these, so the root task runner stays the entry point.
 
 Report actual output. If a check fails, say so rather than describing the stage as complete.
 

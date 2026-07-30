@@ -1,0 +1,229 @@
+/*
+  SCAFFOLDING STYLES — TEMPORARY.
+
+  Just enough CSS to make the page regions visible so the layout can be judged.
+  This is not a design system and not a starting point for one: no palette, no
+  type scale, no spacing scale, no component styles. Expect to delete this file
+  wholesale once styling is decided.
+
+  The only deliberate choices here are neutral greys and `color-scheme`, so the
+  page is legible in both light and dark without picking a theme.
+*/
+
+:root {
+  color-scheme: light dark;
+
+  --bg: #ffffff;
+  --bg-sunken: #f4f4f5;
+  --fg: #18181b;
+  --fg-muted: #71717a;
+  --line: #d4d4d8;
+  --line-dashed: #a1a1aa;
+  --focus: #2563eb;
+
+  --gap: 0.75rem;
+  --radius: 6px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #18181b;
+    --bg-sunken: #1f1f23;
+    --fg: #e4e4e7;
+    --fg-muted: #a1a1aa;
+    --line: #3f3f46;
+    --line-dashed: #52525b;
+    --focus: #60a5fa;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: var(--bg);
+  color: var(--fg);
+  font: 14px/1.5 system-ui, sans-serif;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Visible only on keyboard focus. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+.skip-link:focus {
+  left: var(--gap);
+  top: var(--gap);
+  z-index: 1;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+/* ---------- Frame ---------- */
+
+.app-header,
+.app-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+  padding: var(--gap) 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.app-footer {
+  border: 0;
+  border-top: 1px solid var(--line);
+  color: var(--fg-muted);
+}
+
+.app-header__actions {
+  display: flex;
+  gap: var(--gap);
+  margin-left: auto;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.brand__name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+.brand__tagline {
+  color: var(--fg-muted);
+}
+
+/* ---------- Three-column working area ---------- */
+
+.app-main {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) minmax(0, 3fr) minmax(220px, 1fr);
+  gap: var(--gap);
+  padding: var(--gap);
+  align-items: start;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  min-width: 0;
+}
+
+.panel__heading {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg-muted);
+}
+
+/* ---------- Placeholder regions ---------- */
+
+/* Dashed = nothing is built here yet. */
+.slot {
+  padding: var(--gap);
+  border: 1px dashed var(--line-dashed);
+  border-radius: var(--radius);
+  background: var(--bg-sunken);
+}
+
+.slot--inline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.slot--grow {
+  min-height: 8rem;
+}
+
+.slot__label {
+  font-weight: 500;
+}
+
+.slot__hint {
+  margin: 0.35rem 0 0;
+  color: var(--fg-muted);
+}
+
+.slot--inline .slot__hint {
+  margin: 0;
+}
+
+/* ---------- Keyboard stage ---------- */
+
+.keyboard-stage {
+  display: grid;
+  place-items: center;
+  min-height: 20rem;
+  padding: 1.5rem;
+  border: 1px dashed var(--line-dashed);
+  border-radius: var(--radius);
+  background: var(--bg-sunken);
+}
+
+.empty-state {
+  max-width: 32ch;
+  text-align: center;
+}
+.empty-state__title {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+}
+.empty-state__body {
+  margin: 0;
+  color: var(--fg-muted);
+}
+
+/* ---------- Legend ---------- */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--fg-muted);
+}
+
+.legend__item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Uniform grey on purpose. State colours are an open design decision, and the
+   legend must stay readable without them. */
+.legend__swatch {
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 1px solid var(--line-dashed);
+  border-radius: 3px;
+  background: var(--bg);
+}
+
+/* ---------- Narrow screens ---------- */
+
+@media (max-width: 900px) {
+  .app-main {
+    grid-template-columns: 1fr;
+  }
+}

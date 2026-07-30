@@ -1,0 +1,21 @@
+# Local configuration — copy .env.example to .env
+.env
+.env.local
+
+# Dependencies and build output (not used yet; here so they never get committed
+# by accident once a stack is chosen)
+node_modules/
+dist/
+build/
+.vite/
+
+# Logs and caches
+*.log
+npm-debug.log*
+.npm/
+.cache/
+
+# Editor and OS noise
+.DS_Store
+.idea/
+*.swp
