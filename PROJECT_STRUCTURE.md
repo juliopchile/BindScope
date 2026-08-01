@@ -3,9 +3,9 @@
 `PROJECT_STRUCTURE.md` documents how BindScope is organized and how its pieces fit together. It
 should let a human or an agent understand the repository without guessing from filenames.
 
-> **Status:** Stage 1 is real — scaffold, types, normalization, layout/reserved data, and the
-> availability engine exist under `app/`. Components, i18n, seed game catalog, import/export, and the
-> SVG keyboard are still target. Update this file as each stage lands.
+> **Status:** Stages 1–2 are real — scaffold, engine, theme tokens, SVG keyboard, detail panel, and
+> legend exist under `app/`. Game search, seed catalog, import/export, and i18n switcher are still
+> target. Update this file as each stage lands.
 
 ## Architecture
 
@@ -33,17 +33,18 @@ BindScope/
 │   ├── vite.config.ts
 │   ├── src/
 │   │   ├── main.tsx            # Script entry point
-│   │   ├── App.tsx             # Placeholder UI (Stage 1); real composition in Stage 2+
-│   │   ├── domain/             # Pure logic: availability and conflicts (exists)
-│   │   ├── data/               # Layout + reserved keys (exists); game seeds in Stage 3
-│   │   ├── types/              # Shared typed models (exists)
-│   │   ├── utils/              # Key normalization (exists)
-│   │   ├── styles/             # Minimal global CSS; theme tokens in Stage 2
-│   │   ├── components/         # UI components — Stage 2+
+│   │   ├── App.tsx             # Keyboard + detail composition (demo profiles)
+│   │   ├── domain/             # Pure availability engine
+│   │   ├── data/               # Layout, reserved keys, demo profiles; seeds in Stage 3
+│   │   ├── types/              # Shared typed models
+│   │   ├── utils/              # Key normalization
+│   │   ├── ui/                 # Chrome messages + key-state meta
+│   │   ├── styles/             # Theme tokens (system light/dark)
+│   │   ├── components/         # KeyboardVisualizer, KeyDetailPanel, Legend
 │   │   ├── i18n/               # Locale catalogs — Stage 5
 │   │   └── lib/                # Import/export, parsers, app state — Stage 4+
 │   ├── public/                 # Static assets
-│   ├── tests/                  # Unit tests (exists)
+│   ├── tests/                  # Unit tests
 │   └── dist/                   # Production build output (git-ignored)
 ├── docs/                       # Historical and supporting documentation
 ├── Makefile                    # Root task runner
@@ -76,11 +77,11 @@ Paths are relative to `app/src/`.
 | Layer | Tool | Status |
 |---|---|---|
 | Language | TypeScript in strict mode | In use |
-| UI | React 19 | In use (placeholder UI) |
+| UI | React 19 | In use |
 | Build | Vite, static output to `app/dist` | In use |
-| Styling | Tailwind CSS v4 plus CSS custom properties for themes | Tailwind in use; theme tokens Stage 2 |
-| i18n | Client-side message catalogs; library chosen at implementation | Stage 5 |
-| Keyboard | SVG (every key is an interactive element) | Stage 2 |
+| Styling | Tailwind CSS v4 plus CSS custom properties for themes | In use (system light/dark) |
+| i18n | Client-side message catalogs; library chosen at implementation | Strings extractable; switcher Stage 5 |
+| Keyboard | SVG (every key is an interactive element) | In use (ANSI full) |
 | Validation | Zod | In use (availability input) |
 | Unit tests | Vitest | In use |
 | E2E tests | Playwright | Stage 5 |
@@ -185,8 +186,7 @@ profile catalog exists.
 
 The SVG keyboard scales with its container, stays readable, and remains operable with pointer, touch,
 and keyboard input. Touch targets for interactive keys and controls must be large enough for fingers.
-Exact breakpoints live in `STYLES.md` when UI work starts; until then, treat the skeleton’s ~900px
-collapse as a temporary stand-in, not the final system.
+Exact breakpoints live in `STYLES.md`.
 
 **Accessibility:** fully operable with mouse, touch, *and* keyboard, with meaningful labels, visible
 focus, and usable contrast in both light and dark themes. Locale changes must keep labels coherent

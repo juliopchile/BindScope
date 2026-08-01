@@ -4,9 +4,10 @@ This file is written for AI coding agents working in BindScope. It should help a
 
 ## Project State — Read This First
 
-**Stage 1 is complete.** `app/` is a Vite + React + TypeScript app with Tailwind, Zod, ESLint,
-Prettier, and Vitest. The pure availability engine, key normalization, ANSI full layout, and
-reserved-key rules exist and are tested. The UI is a placeholder — Stage 2 owns the SVG keyboard.
+**Stage 2 is complete.** `app/` is a Vite + React + TypeScript app with a pure availability engine
+and a data-driven SVG keyboard (detail panel, legend, theme tokens). Chrome copy lives in
+`app/src/ui/messages.ts`; visual tokens are documented in `STYLES.md`. Demo profiles only — Stage 3
+owns game search and curated seeds.
 
 Use `make install`, `make run`, `make test`, `make lint`, and `make build` from the repo root. Do not
 invent commands; prefer the Makefile.
@@ -84,5 +85,5 @@ points there as they appear.
 | File | When to Reference | Status |
 |---|---|---|
 | `DECISIONS.md` | Architectural tradeoffs and their rationale | Exists |
-| `STYLES.md` | Visual design tokens, light/dark themes, key-state colors, responsive breakpoints, component rules | Create when UI work starts; interim rules are in `PROJECT_STRUCTURE.md` |
+| `STYLES.md` | Visual design tokens, key-state cues, breakpoints, component rules | Exists |
 | `CONTRIBUTING.md` | Binding-data submission workflow | Create only if community contributions open |

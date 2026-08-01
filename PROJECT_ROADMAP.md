@@ -15,7 +15,7 @@ methodology.
 |---|---|---|
 | 0. Documentation | Complete | Concept, target architecture, decisions, and documentation system |
 | 1. Scaffold and engine | Complete | Vite + React + TS scaffold, typed models, key normalization, pure availability engine + tests |
-| 2. SVG keyboard | Pending | Data-driven layout, interactive keys, visual states, detail panel, responsive scaling, theme tokens |
+| 2. SVG keyboard | Complete | Data-driven SVG keyboard, detail panel, legend, theme tokens, non-color state cues |
 | 3. Selection and seed data | Pending | Game search, curated seed profiles, filters and legend |
 | 4. Custom profiles | Pending | JSON import/export, profile precedence, safe-key export |
 | 5. Deployment and polish | Pending | GitHub Pages workflow, i18n switcher, theme switcher, responsive verification, accessibility, performance, E2E |
@@ -53,13 +53,24 @@ Delivered:
 - Table-driven tests for normalization and every availability case listed in Stage 1
 - Minimal placeholder UI showing engine counts; Makefile targets for install/run/test/lint/build
 
+### Stage 2: SVG keyboard
+
+Made the availability engine visible with a data-driven keyboard and detail panel.
+
+Delivered:
+
+- Theme tokens (system light/dark) in `app/src/styles/index.css`; documented in `STYLES.md`
+- `KeyboardVisualizer` — SVG keys from `ANSI_FULL_LAYOUT`, selection, focusable keys
+- Non-color state cues: marks (≈ / ! / ×) plus SVG fill patterns (D11)
+- `KeyDetailPanel` and `Legend`; chrome strings centralized in `app/src/ui/messages.ts`
+- Demo profiles only (Stage 3 replaces with curated seeds); responsive keyboard + detail layout
+
 ## In Progress
 
-No stage is running. Stage 2 is defined in `PLAN.md`, awaiting authorization.
+No stage is running. Stage 3 is defined in `PLAN.md`, awaiting authorization.
 
 ## Pending Work
 
-- SVG keyboard visualization with data-driven layouts
 - Hand-curated seed data for 20–30 games
 - Custom profile import/export in JSON
 - Parsers for real config formats (INI, CFG, XML)

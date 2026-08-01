@@ -7,9 +7,10 @@ interactive keyboard, and instantly see **which keys are still free** across all
 
 ## Project Status
 
-**Stage 1 complete — scaffold and availability engine.** The app under `app/` is a Vite + React +
-TypeScript project with a pure, tested availability engine and a minimal placeholder UI. The SVG
-keyboard and full product UI are Stage 2+. See `PROJECT_ROADMAP.md` and `PLAN.md`.
+**Stage 2 complete — SVG keyboard.** The app renders a data-driven ANSI keyboard from the
+availability engine, with a key detail panel, legend, and system light/dark theme tokens. Demo
+profiles drive the overlay until Stage 3 adds game search and curated seeds. See
+`PROJECT_ROADMAP.md` and `PLAN.md`.
 
 To run it, see **Getting Started** below.
 
@@ -111,6 +112,7 @@ free for project documentation and never reaches the published site.
 | `DECISIONS.md` | Architecture decisions and their rationale |
 | `PLAN.md` | Active work only: current task, blockers, next step |
 | `AGENTS.md` | AI agent instructions: reading order, invariants, commands |
+| `STYLES.md` | Theme tokens, key-state cues, breakpoints |
 | `docs/source-conversation.md` | Conversation that produced the concept; immutable historical record |
 
 ## Documentation Rule

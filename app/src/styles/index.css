@@ -1,22 +1,177 @@
 @import 'tailwindcss';
 
 /*
-  Minimal scaffold styles only. Theme tokens and key-state colors land in Stage 2 / STYLES.md.
-  Do not treat this file as the product design system.
+  Theme tokens — light / dark via prefers-color-scheme (system mode foundation).
+  Explicit light/dark/system switch lands in Stage 5. See STYLES.md.
 */
 
 :root {
   color-scheme: light dark;
+
+  --bg: #f4f4f5;
+  --fg: #18181b;
+  --fg-muted: #52525b;
+  --surface: #ffffff;
+  --border: #d4d4d8;
+  --accent: #2563eb;
+  --focus: #2563eb;
+
+  --key-free-bg: #ecfdf5;
+  --key-free-border: #059669;
+  --key-partial-bg: #fffbeb;
+  --key-partial-border: #d97706;
+  --key-heavy-bg: #fef2f2;
+  --key-heavy-border: #dc2626;
+  --key-reserved-bg: #f4f4f5;
+  --key-reserved-border: #52525b;
+  --key-unknown-bg: #fafafa;
+  --key-unknown-border: #a1a1aa;
+
+  --key-label: #18181b;
+  --key-mark: #3f3f46;
+  --pattern-stroke: #3f3f46;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #09090b;
+    --fg: #e4e4e7;
+    --fg-muted: #a1a1aa;
+    --surface: #18181b;
+    --border: #3f3f46;
+    --accent: #60a5fa;
+    --focus: #60a5fa;
+
+    --key-free-bg: #052e1a;
+    --key-free-border: #34d399;
+    --key-partial-bg: #422006;
+    --key-partial-border: #fbbf24;
+    --key-heavy-bg: #450a0a;
+    --key-heavy-border: #f87171;
+    --key-reserved-bg: #27272a;
+    --key-reserved-border: #a1a1aa;
+    --key-unknown-bg: #18181b;
+    --key-unknown-border: #71717a;
+
+    --key-label: #f4f4f5;
+    --key-mark: #d4d4d8;
+    --pattern-stroke: #d4d4d8;
+  }
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
   font-family: system-ui, sans-serif;
-  background: Canvas;
-  color: CanvasText;
+  background: var(--bg);
+  color: var(--fg);
 }
 
 #root {
   min-height: 100vh;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Key fills — used from SVG via class names */
+.key-fill-free {
+  fill: var(--key-free-bg);
+  stroke: var(--key-free-border);
+}
+.key-fill-partial {
+  fill: var(--key-partial-bg);
+  stroke: var(--key-partial-border);
+}
+.key-fill-heavy {
+  fill: var(--key-heavy-bg);
+  stroke: var(--key-heavy-border);
+}
+.key-fill-reserved {
+  fill: var(--key-reserved-bg);
+  stroke: var(--key-reserved-border);
+}
+.key-fill-unknown {
+  fill: var(--key-unknown-bg);
+  stroke: var(--key-unknown-border);
+}
+
+.key-label {
+  fill: var(--key-label);
+  font-size: 11px;
+  font-weight: 600;
+  pointer-events: none;
+  user-select: none;
+}
+
+.key-mark {
+  fill: var(--key-mark);
+  font-size: 10px;
+  font-weight: 700;
+  pointer-events: none;
+  user-select: none;
+}
+
+.pattern-stroke {
+  stroke: var(--pattern-stroke);
+}
+
+.legend-swatch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 1.25rem;
+  border-radius: 4px;
+  border: 1.5px solid;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--key-mark);
+}
+
+.legend-swatch--free {
+  background: var(--key-free-bg);
+  border-color: var(--key-free-border);
+}
+.legend-swatch--partial {
+  background: repeating-linear-gradient(
+    0deg,
+    var(--key-partial-bg),
+    var(--key-partial-bg) 3px,
+    color-mix(in srgb, var(--key-partial-border) 35%, transparent) 3px,
+    color-mix(in srgb, var(--key-partial-border) 35%, transparent) 5px
+  );
+  border-color: var(--key-partial-border);
+}
+.legend-swatch--heavy {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--key-heavy-bg),
+    var(--key-heavy-bg) 3px,
+    color-mix(in srgb, var(--key-heavy-border) 40%, transparent) 3px,
+    color-mix(in srgb, var(--key-heavy-border) 40%, transparent) 5px
+  );
+  border-color: var(--key-heavy-border);
+}
+.legend-swatch--reserved {
+  background: var(--key-reserved-bg);
+  border-color: var(--key-reserved-border);
+  background-image:
+    linear-gradient(
+      45deg,
+      color-mix(in srgb, var(--key-reserved-border) 30%, transparent) 25%,
+      transparent 25%
+    ),
+    linear-gradient(
+      -45deg,
+      color-mix(in srgb, var(--key-reserved-border) 30%, transparent) 25%,
+      transparent 25%
+    );
+  background-size: 6px 6px;
 }
