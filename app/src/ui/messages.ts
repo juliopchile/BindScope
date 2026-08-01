@@ -16,7 +16,21 @@ export const messages = {
   summaryPartial: 'Partial',
   summaryHeavy: 'Heavy',
   summaryReserved: 'Reserved',
-  stageNote: 'Demo profiles — game search arrives in Stage 3.',
+  selectionHeading: 'Games & tools',
+  searchPlaceholder: 'Search games or tools…',
+  searchAriaLabel: 'Search catalog',
+  searchNoResults: 'No matches in the catalog.',
+  selectedHeading: 'Selected',
+  emptySelection:
+    'No games selected. Search above and add a title — or a tool like OBS — to see free keys.',
+  removeGame: 'Remove',
+  layersHeading: 'Binding layers',
+  filtersHeading: 'Show states',
+  filterHint: 'Click a legend item to show or hide that state on the keyboard.',
+  kindGame: 'Game',
+  kindTool: 'Tool (Yours)',
+  addGame: 'Add',
+  starterNote: 'Started with a random title from the starter pool.',
 } as const
 
 export type MessageKey = keyof typeof messages

@@ -23,6 +23,15 @@ export interface Binding {
   notes?: string
 }
 
+/** Named binding group within a seed profile; toggled in the UI. */
+export interface BindingLayer {
+  id: string
+  label: string
+  /** Included when the game is first selected unless the user turns it off. */
+  defaultEnabled: boolean
+  bindings: Binding[]
+}
+
 export interface InputProfile {
   id: string
   gameId: string
@@ -34,18 +43,42 @@ export interface InputProfile {
   notes?: string
 }
 
+/**
+ * Curated seed shape: layered bindings flatten into `InputProfile` for the
+ * availability engine based on which layers the user enables.
+ */
+export interface SeedProfile {
+  id: string
+  gameId: string
+  name: string
+  sourceType: ProfileSourceType
+  versionLabel?: string
+  verificationStatus: VerificationStatus
+  notes?: string
+  layers: BindingLayer[]
+}
+
 export interface ProfileSource {
   type: ProfileSourceType
   label: string
   url?: string
 }
 
+/** Games are playable titles; tools are the "Yours" overlay layer (OBS, Afterburner, …). */
+export type CatalogKind = 'game' | 'tool'
+
 export interface Game {
   id: string
   name: string
+  kind: CatalogKind
   aliases?: string[]
   tags?: string[]
   profileIds: string[]
+}
+
+export interface CatalogEntry {
+  game: Game
+  profile: SeedProfile
 }
 
 export interface LayoutKey {

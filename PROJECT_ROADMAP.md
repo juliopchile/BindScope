@@ -16,7 +16,7 @@ methodology.
 | 0. Documentation | Complete | Concept, target architecture, decisions, and documentation system |
 | 1. Scaffold and engine | Complete | Vite + React + TS scaffold, typed models, key normalization, pure availability engine + tests |
 | 2. SVG keyboard | Complete | Data-driven SVG keyboard, detail panel, legend, theme tokens, non-color state cues |
-| 3. Selection and seed data | Pending | Game search, curated seed profiles, filters and legend |
+| 3. Selection and seed data | Complete | Game search, layered seed catalog (games + tools), filters, legend |
 | 4. Custom profiles | Pending | JSON import/export, profile precedence, safe-key export |
 | 5. Deployment and polish | Pending | GitHub Pages workflow, i18n switcher, theme switcher, responsive verification, accessibility, performance, E2E |
 
@@ -65,13 +65,27 @@ Delivered:
 - `KeyDetailPanel` and `Legend`; chrome strings centralized in `app/src/ui/messages.ts`
 - Demo profiles only (Stage 3 replaces with curated seeds); responsive keyboard + detail layout
 
+### Stage 3: Selection and seed data
+
+Delivered searchable multi-select over a hand-curated, file-per-title seed catalog.
+
+Delivered:
+
+- `app/src/data/catalog/` — one module per game/tool, aggregated in `index.ts` with editable
+  `STARTER_POOL`
+- Layered seed profiles (`BindingLayer`: default-on vs opt-in); flattened for the pure engine
+- Games plus tool profiles (`kind: 'tool'`) for OBS Studio and MSI Afterburner (Yours layer)
+- Game search, selected chips, layer toggles, interactive legend filters on the keyboard
+- Random first-load pick from the starter pool; empty-selection guidance when cleared
+- Tests for search, selection/flattening, and catalog invariants (`make test` 40 passing)
+
 ## In Progress
 
-No stage is running. Stage 3 is defined in `PLAN.md`, awaiting authorization.
+No stage is running. Stage 4 is defined in `PLAN.md`, awaiting authorization.
 
 ## Pending Work
 
-- Hand-curated seed data for 20–30 games
+- Grow the hand-curated catalog toward ~20–30 games (layout already extensible)
 - Custom profile import/export in JSON
 - Parsers for real config formats (INI, CFG, XML)
 - Switchable UI localization (i18n) with at least English plus one additional locale

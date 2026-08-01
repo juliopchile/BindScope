@@ -4,10 +4,10 @@ This file is written for AI coding agents working in BindScope. It should help a
 
 ## Project State — Read This First
 
-**Stage 2 is complete.** `app/` is a Vite + React + TypeScript app with a pure availability engine
-and a data-driven SVG keyboard (detail panel, legend, theme tokens). Chrome copy lives in
-`app/src/ui/messages.ts`; visual tokens are documented in `STYLES.md`. Demo profiles only — Stage 3
-owns game search and curated seeds.
+**Stage 3 is complete.** `app/` is a Vite + React + TypeScript app with a pure availability engine,
+data-driven SVG keyboard, game/tool search, layered seed catalog under `app/src/data/catalog/`, and
+legend state filters. Chrome copy lives in `app/src/ui/messages.ts`; visual tokens in `STYLES.md`.
+Stage 4 owns custom profile import/export.
 
 Use `make install`, `make run`, `make test`, `make lint`, and `make build` from the repo root. Do not
 invent commands; prefer the Makefile.

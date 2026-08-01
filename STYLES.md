@@ -40,9 +40,11 @@ container. Horizontal scroll is allowed as a last resort via `min-w-[320px]` on 
 
 ## Components
 
-- Keyboard: `app/src/components/KeyboardVisualizer.tsx` — data-driven from `KeyboardLayout`
+- Keyboard: `app/src/components/KeyboardVisualizer.tsx` — data-driven from `KeyboardLayout`; dims
+  keys whose state is filtered out via the legend
 - Detail: `app/src/components/KeyDetailPanel.tsx`
-- Legend: `app/src/components/Legend.tsx`
+- Legend: `app/src/components/Legend.tsx` — toggles state filters
+- Search / selection: `GameSearch.tsx`, `SelectedGames.tsx`
 - Chrome copy: `app/src/ui/messages.ts` (extractable for i18n)
 
 ## Design rules

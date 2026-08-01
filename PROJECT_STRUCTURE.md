@@ -3,17 +3,17 @@
 `PROJECT_STRUCTURE.md` documents how BindScope is organized and how its pieces fit together. It
 should let a human or an agent understand the repository without guessing from filenames.
 
-> **Status:** Stages 1–2 are real — scaffold, engine, theme tokens, SVG keyboard, detail panel, and
-> legend exist under `app/`. Game search, seed catalog, import/export, and i18n switcher are still
-> target. Update this file as each stage lands.
+> **Status:** Stages 1–3 are real — scaffold, engine, SVG keyboard, selection UI, and layered seed
+> catalog exist under `app/`. Import/export and i18n/theme switchers are still target. Update this
+> file as each stage lands.
 
 ## Architecture
 
 ```
-Seed data (static)      ─┐
-User profiles           ─┤
+Seed catalog (static)   ─┐
+Selected games + layers ─┤
 Layout definition       ─┼─→  domain/availability  ─→  Conflict summary  ─→  SVG keyboard
-Reserved-key rules      ─┘          (pure)                (per key)          Detail panel
+Reserved-key rules      ─┘          (pure)                (per key)          Detail + filters
 ```
 
 Everything happens in the browser. There is no server, no database, and no network call in the
@@ -33,16 +33,19 @@ BindScope/
 │   ├── vite.config.ts
 │   ├── src/
 │   │   ├── main.tsx            # Script entry point
-│   │   ├── App.tsx             # Keyboard + detail composition (demo profiles)
+│   │   ├── App.tsx             # Selection + keyboard + detail composition
 │   │   ├── domain/             # Pure availability engine
-│   │   ├── data/               # Layout, reserved keys, demo profiles; seeds in Stage 3
+│   │   ├── data/
+│   │   │   ├── catalog/        # Seed games/tools (one file each) + index
+│   │   │   ├── keyboardLayouts.ts
+│   │   │   └── reservedKeys.ts
 │   │   ├── types/              # Shared typed models
-│   │   ├── utils/              # Key normalization
+│   │   ├── utils/              # Key normalization + forgiving search
 │   │   ├── ui/                 # Chrome messages + key-state meta
 │   │   ├── styles/             # Theme tokens (system light/dark)
-│   │   ├── components/         # KeyboardVisualizer, KeyDetailPanel, Legend
-│   │   ├── i18n/               # Locale catalogs — Stage 5
-│   │   └── lib/                # Import/export, parsers, app state — Stage 4+
+│   │   ├── components/         # Search, chips, keyboard, detail, legend
+│   │   ├── lib/                # Selection helpers (import/export in Stage 4)
+│   │   └── i18n/               # Locale catalogs — Stage 5
 │   ├── public/                 # Static assets
 │   ├── tests/                  # Unit tests
 │   └── dist/                   # Production build output (git-ignored)
@@ -57,6 +60,25 @@ BindScope/
 └── AGENTS.md
 ```
 
+## Seed catalog
+
+Hand-curated static modules under `app/src/data/catalog/`:
+
+| Path | Role |
+|---|---|
+| `catalog/index.ts` | Aggregates entries, `STARTER_POOL`, lookup maps |
+| `catalog/games/*.ts` | One `CatalogEntry` per game |
+| `catalog/tools/*.ts` | Tool / "Yours" profiles (`kind: 'tool'`) |
+| `catalog/flatten.ts` | Enabled layers → engine `InputProfile` |
+| `catalog/bind.ts` | Compact binding factory for seed authors |
+
+To add a title: create a file exporting a `CatalogEntry`, then append it to the `ENTRIES` array in
+`index.ts`. Edit `STARTER_POOL` to change the random first-load set.
+
+Each seed profile uses **layers** (`BindingLayer`: `id`, `label`, `defaultEnabled`, `bindings`).
+Default-enabled layers apply on select; deeper layers are opt-in checkboxes in the UI. Every binding
+carries a `verification` state. The availability engine still receives flat `InputProfile`s only.
+
 ## Components
 
 Paths are relative to `app/src/`.
@@ -65,9 +87,10 @@ Paths are relative to `app/src/`.
 |---|---|
 | `domain/` | Availability and conflict computation. Pure, no React or browser APIs |
 | `data/` | Game catalog, seed profiles, layout definitions, reserved-key rules |
+| `data/catalog/` | File-per-title seeds; tools marked `kind: 'tool'` |
 | `i18n/` | UI message catalogs and locale selection helpers. No domain logic |
 | `components/` | Presentation. Contains no business rules |
-| `lib/` | Profile import/export, config parsers, application state |
+| `lib/` | Selection helpers today; import/export and parsers in Stage 4+ |
 | `utils/` | Key identifier normalization, forgiving search |
 | `types/` | Models shared across domain, data, and UI |
 | `styles/` | Global CSS and theme tokens for light / dark / system modes |
@@ -91,11 +114,17 @@ Paths are relative to `app/src/`.
 
 Minimum typed models:
 
-`Game` · `ProfileSource` · `InputProfile` · `Binding` · `Action` · `KeyboardKey` · `KeyboardLayout` ·
-`ConflictSummary` · `ReservedKeyRule` · `ImportExportDocument`
+`Game` · `CatalogKind` · `CatalogEntry` · `SeedProfile` · `BindingLayer` · `ProfileSource` ·
+`InputProfile` · `Binding` · `KeyboardKey` · `KeyboardLayout` · `ConflictSummary` ·
+`ReservedKeyRule` · `ImportExportDocument`
 
 **`Binding`** — key identifier, action name, optional context, optional modifiers, source metadata,
 verification state, and notes.
+
+**`BindingLayer` / `SeedProfile`** — curated seed shape; layers flatten into `InputProfile` for the
+engine based on UI toggles.
+
+**`Game.kind`** — `game` or `tool` (tools are the Yours overlay: OBS, Afterburner, …).
 
 **`InputProfile`** — profile id, game id, name, source type, version or patch label, bindings list,
 and verification status.
@@ -156,9 +185,13 @@ E
   Genshin:  Elemental Skill
 ```
 
-**Panels:** game search · selected-game chips · keyboard · key detail side panel · profile toggles ·
-filters (free / used / reserved / conflicted) · legend · reset · empty state with guidance text ·
-language switcher · theme switcher (light / dark / system).
+**Panels (Stage 3):** game/tool search · selected chips · binding-layer toggles · keyboard · key
+detail side panel · interactive legend filters (free / partial / heavy / reserved) · empty-selection
+guidance. Still ahead: language switcher · theme switcher (Stage 5) · import/export (Stage 4).
+
+**Yours / tools:** catalog entries with `kind: 'tool'` participate in the same availability
+computation as games; the detail panel labels them as tools. A dedicated `yours` key-state is not
+required in the engine.
 
 **Layouts:** ANSI full-size, TKL, and a scalable compact abstraction. Data-driven, never hardcoded in
 component logic; ISO and regional variants must remain possible.

@@ -8,44 +8,41 @@ into `PROJECT_ROADMAP.md`; stable design information lives in `PROJECT_STRUCTURE
 
 ## Current Status
 
-**Current stage:** Stage 3 — Selection and seed data
+**Current stage:** Stage 4 — Custom profiles
 
 **Status:** Defined, not started. Awaiting authorization.
 
-**Done ahead of the stage (Stage 2 milestones):**
+**Stage 3 delivered (condensed):**
 
-1. Theme tokens in `app/src/styles/index.css` (system light/dark via `prefers-color-scheme`)
-2. `STYLES.md` — tokens, key-state cues, breakpoints
-3. Extractable chrome copy in `app/src/ui/messages.ts` + state meta in `keyStateMeta.ts`
-4. Data-driven `KeyboardVisualizer` over `ANSI_FULL_LAYOUT` (marks + SVG patterns, not color alone)
-5. `KeyDetailPanel` + `Legend`; `App` composes keyboard + detail (demo profiles only)
-6. Verified: `make test` (30), `make lint`, `make build`
+1. Extensible seed catalog under `app/src/data/catalog/` (per-game/tool files + index)
+2. Layered bindings with default-on / opt-in layers; tools as `kind: 'tool'` (Yours)
+3. Game search, selected chips, layer toggles, legend state filters
+4. Random starter from `STARTER_POOL`; empty-selection guidance
+5. Verified: `make test` (40), `make lint`, `make build`
 
-**Immediate next step:** Game search, selected-game chips, curated seed profiles, filters wired to
-the keyboard.
+**Immediate next step:** JSON import/export, profile precedence against seeds, safe-key export.
 
-## Active Task: Selection and seed data
+## Active Task: Custom profiles
 
 ### Objective
 
-Let the user pick real games and see the overlay update. Hand-curate a first batch of seed profiles
-with deliberate conflicts and verification states. Wire filters and keep the legend accurate.
+Let users import and export binding profiles as JSON, with custom profiles taking precedence over
+seed defaults for the same game. Export the current free / safe key set for use elsewhere.
 
 ### Files In Scope
 
-- `app/src/data/` — game catalog + seed profiles (replace `demoProfiles.ts`)
-- `app/src/components/` — game search, selected chips, filters (as needed)
-- `app/src/utils/search.ts` — forgiving search helper
-- `app/src/App.tsx` / small state hook — selection state driving `computeAvailability`
-- Tests for search and any pure selection helpers
+- `app/src/lib/` — import/export document parse/serialize, precedence wiring
+- `app/src/types/` — extend `ImportExportDocument` only if the schema needs it
+- `app/src/components/` / `App.tsx` — import/export controls (keep chrome in `messages.ts`)
+- Tests for round-trip import/export and precedence against seeds
 
 ### Constraints
 
-- Seed data is hand-curated; every binding carries a verification state (D7). No wiki scraping.
-- Include deliberate conflicts so the overlay is visually checkable.
-- Do not implement import/export (Stage 4) or deploy/i18n switcher (Stage 5).
-- Keep chrome strings in `messages.ts` (or expand that catalog).
-- Do not commit. Propose a commit message and let the user decide.
+- Static-only; no backend. Persistence is file download/upload (or equivalent), not a server.
+- Custom/imported profiles must win over official seeds for the same `gameId` (engine already
+  prefers `custom` / `imported` in `resolveProfiles`).
+- Do not implement GitHub Pages deploy, i18n switcher, or theme switcher (Stage 5).
+- Do not scrape wikis. Do not commit; propose a commit message.
 
 ### Verification
 
@@ -60,6 +57,6 @@ Report actual output.
 
 ## After Completion
 
-- Replace this section with the Stage 4 task.
-- Summarize Stage 3 in `PROJECT_ROADMAP.md`.
-- Update `PROJECT_STRUCTURE.md` for the seed data layout.
+- Replace this section with the Stage 5 task.
+- Summarize Stage 4 in `PROJECT_ROADMAP.md`.
+- Update `PROJECT_STRUCTURE.md` if the lib/import layout changes.

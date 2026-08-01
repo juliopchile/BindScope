@@ -1,3 +1,4 @@
+import { GAMES_BY_ID } from '../data/catalog'
 import type { ConflictSummary, KeyboardKey } from '../types'
 import { bindingChordLabel } from '../utils/keyNormalization'
 import { getKeyStateMeta } from '../ui/keyStateMeta'
@@ -71,9 +72,17 @@ function SelectedDetail({ selected }: { selected: NonNullable<ConflictSummary['k
               className="rounded-md border p-3"
               style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}
             >
-              <p className="font-medium">{ref.gameName}</p>
+              <p className="font-medium">
+                {ref.gameName}
+                {GAMES_BY_ID[ref.gameId]?.kind === 'tool' ? (
+                  <span className="ml-2 text-xs font-normal" style={{ color: 'var(--fg-muted)' }}>
+                    {messages.kindTool}
+                  </span>
+                ) : null}
+              </p>
               <p className="text-xs" style={{ color: 'var(--fg-muted)' }}>
                 {ref.profileName}
+                {ref.binding.context ? ` · ${ref.binding.context}` : ''}
               </p>
               <p className="mt-1">
                 {bindingChordLabel(ref.binding.key, ref.binding.modifiers)} → {ref.binding.action}

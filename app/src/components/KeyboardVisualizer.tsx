@@ -1,4 +1,5 @@
-import type { KeyAvailability, KeyboardKey, KeyboardLayout } from '../types'
+import type { KeyAvailability, KeyAvailabilityState, KeyboardKey, KeyboardLayout } from '../types'
+import { isStateVisible } from '../lib/selection'
 import { getKeyStateMeta } from '../ui/keyStateMeta'
 import { messages } from '../ui/messages'
 
@@ -7,6 +8,8 @@ interface KeyboardVisualizerProps {
   keys: KeyAvailability[]
   selectedKey: KeyboardKey | null
   onSelectKey: (key: KeyboardKey) => void
+  /** Empty set = all states visible. */
+  activeFilters?: ReadonlySet<KeyAvailabilityState>
 }
 
 function KeyPatterns() {
@@ -41,6 +44,7 @@ export function KeyboardVisualizer({
   keys,
   selectedKey,
   onSelectKey,
+  activeFilters = new Set(),
 }: KeyboardVisualizerProps) {
   const byKey = new Map(keys.map((item) => [item.key, item]))
 
@@ -58,15 +62,18 @@ export function KeyboardVisualizer({
           const state = availability?.state ?? 'free'
           const meta = getKeyStateMeta(state)
           const selected = selectedKey === layoutKey.id
+          const visible = isStateVisible(state, activeFilters)
 
           return (
             <g
               key={layoutKey.id}
               role="button"
-              tabIndex={0}
+              tabIndex={visible ? 0 : -1}
               aria-label={`${layoutKey.label}, ${meta.label}`}
               aria-pressed={selected}
-              className="cursor-pointer"
+              aria-hidden={!visible}
+              className={visible ? 'cursor-pointer' : 'pointer-events-none'}
+              opacity={visible ? 1 : 0.18}
               onClick={() => onSelectKey(layoutKey.id)}
               onKeyDown={(event) => {
                 if (event.key === 'Enter' || event.key === ' ') {

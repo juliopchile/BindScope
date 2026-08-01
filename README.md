@@ -7,10 +7,9 @@ interactive keyboard, and instantly see **which keys are still free** across all
 
 ## Project Status
 
-**Stage 2 complete — SVG keyboard.** The app renders a data-driven ANSI keyboard from the
-availability engine, with a key detail panel, legend, and system light/dark theme tokens. Demo
-profiles drive the overlay until Stage 3 adds game search and curated seeds. See
-`PROJECT_ROADMAP.md` and `PLAN.md`.
+**Stage 3 complete — Selection and seed data.** Search and select curated games and tools, toggle
+binding layers, and filter key states on the SVG keyboard. A random starter title is pre-selected on
+first load. Custom profile import/export is Stage 4. See `PROJECT_ROADMAP.md` and `PLAN.md`.
 
 To run it, see **Getting Started** below.
 
