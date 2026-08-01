@@ -11,6 +11,7 @@ import {
   isStateVisible,
   profilesForSelection,
 } from '../src/lib/selection'
+import { makeProfile } from './fixtures'
 
 describe('catalog seeds', () => {
   it('exposes layered profiles with verification on every binding', () => {
@@ -62,6 +63,22 @@ describe('selection helpers', () => {
     const profiles = profilesForSelection(['warframe'], layers)
     expect(profiles).toHaveLength(1)
     expect(profiles[0]?.bindings.length).toBeGreaterThan(0)
+  })
+
+  it('includes imported overrides alongside seeds for the same game', () => {
+    const layers = buildEnabledLayers(['warframe'])
+    const override = makeProfile({
+      id: 'warframe-imported',
+      gameId: 'warframe',
+      name: 'Imported',
+      sourceType: 'imported',
+      verificationStatus: 'custom',
+      bindings: [{ key: 'KeyP', action: 'Ping' }],
+    })
+    const profiles = profilesForSelection(['warframe'], layers, { warframe: override })
+    expect(profiles).toHaveLength(2)
+    expect(profiles.some((p) => p.sourceType === 'official')).toBe(true)
+    expect(profiles.some((p) => p.id === 'warframe-imported')).toBe(true)
   })
 
   it('treats empty filter set as show-all', () => {

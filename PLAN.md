@@ -8,41 +8,42 @@ into `PROJECT_ROADMAP.md`; stable design information lives in `PROJECT_STRUCTURE
 
 ## Current Status
 
-**Current stage:** Stage 4 — Custom profiles
+**Current stage:** Stage 5 — Deployment and polish
 
 **Status:** Defined, not started. Awaiting authorization.
 
-**Stage 3 delivered (condensed):**
+**Stage 4 delivered (condensed):**
 
-1. Extensible seed catalog under `app/src/data/catalog/` (per-game/tool files + index)
-2. Layered bindings with default-on / opt-in layers; tools as `kind: 'tool'` (Yours)
-3. Game search, selected chips, layer toggles, legend state filters
-4. Random starter from `STARTER_POOL`; empty-selection guidance
-5. Verified: `make test` (40), `make lint`, `make build`
+1. JSON profile import/export (`ImportExportDocument` v1) via `app/src/lib/importExport.ts`
+2. Imported overrides win over seed defaults for the same `gameId` (`resolveProfiles`)
+3. Safe-key JSON export from the current free (non-reserved) key set
+4. UI: import/export controls; clear override restores seed layers
+5. Verified: `make test` (46), `make lint`, `make build`
 
-**Immediate next step:** JSON import/export, profile precedence against seeds, safe-key export.
+**Immediate next step:** GitHub Pages workflow, i18n switcher, theme switcher, responsive/a11y polish.
 
-## Active Task: Custom profiles
+## Active Task: Deployment and polish
 
 ### Objective
 
-Let users import and export binding profiles as JSON, with custom profiles taking precedence over
-seed defaults for the same game. Export the current free / safe key set for use elsewhere.
+Ship a polished static site: GitHub Pages deploy, switchable UI locale, light/dark/system theme
+control with persistence, and verification that the app works across phone, tablet, and desktop
+with solid accessibility and performance.
 
-### Files In Scope
+### Files In Scope (expected)
 
-- `app/src/lib/` — import/export document parse/serialize, precedence wiring
-- `app/src/types/` — extend `ImportExportDocument` only if the schema needs it
-- `app/src/components/` / `App.tsx` — import/export controls (keep chrome in `messages.ts`)
-- Tests for round-trip import/export and precedence against seeds
+- `.github/workflows/` — Pages build/deploy from `app/`
+- `app/src/i18n/` — locale catalogs + switcher (D10)
+- `app/src/styles/` / theme control UI — light / dark / system with local persistence (D11)
+- Responsive and a11y pass across components (D12)
+- Optional Playwright E2E smoke if time allows
 
 ### Constraints
 
-- Static-only; no backend. Persistence is file download/upload (or equivalent), not a server.
-- Custom/imported profiles must win over official seeds for the same `gameId` (engine already
-  prefers `custom` / `imported` in `resolveProfiles`).
-- Do not implement GitHub Pages deploy, i18n switcher, or theme switcher (Stage 5).
-- Do not scrape wikis. Do not commit; propose a commit message.
+- Stay static-only; no backend.
+- Do not scrape wikis. Do not commit unless the user asks; propose a commit message.
+- Prefer extending existing `messages.ts` extraction into locale catalogs rather than inventing a
+  parallel copy system.
 
 ### Verification
 
@@ -53,10 +54,10 @@ make build
 make serve
 ```
 
-Report actual output.
+Report actual output. Manually confirm theme and locale switches and a narrow viewport.
 
 ## After Completion
 
-- Replace this section with the Stage 5 task.
-- Summarize Stage 4 in `PROJECT_ROADMAP.md`.
-- Update `PROJECT_STRUCTURE.md` if the lib/import layout changes.
+- Clear this section or leave a short “MVP complete / later direction” note.
+- Summarize Stage 5 in `PROJECT_ROADMAP.md`.
+- Update `PROJECT_STRUCTURE.md`, `README.md`, and `AGENTS.md` for deploy/i18n/theme as needed.

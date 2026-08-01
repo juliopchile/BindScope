@@ -31,6 +31,17 @@ export const messages = {
   kindTool: 'Tool (Yours)',
   addGame: 'Add',
   starterNote: 'Started with a random title from the starter pool.',
+  profilesHeading: 'Custom profiles',
+  importProfiles: 'Import JSON',
+  exportProfiles: 'Export profiles',
+  exportSafeKeys: 'Export safe keys',
+  clearOverride: 'Use seed',
+  overrideActive: 'Custom profile active — seed layers ignored.',
+  importSuccess: 'Imported {count} profile(s).',
+  importPartial:
+    'Imported {count} profile(s); skipped {skippedBindings} bad binding(s) and {skippedProfiles} empty profile(s).',
+  importError: 'Could not import that file.',
+  importAriaLabel: 'Import binding profiles from JSON',
 } as const
 
 export type MessageKey = keyof typeof messages

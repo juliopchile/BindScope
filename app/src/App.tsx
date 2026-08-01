@@ -3,18 +3,28 @@ import { GameSearch } from './components/GameSearch'
 import { KeyboardVisualizer } from './components/KeyboardVisualizer'
 import { KeyDetailPanel } from './components/KeyDetailPanel'
 import { Legend } from './components/Legend'
+import { ProfileIO } from './components/ProfileIO'
 import { SelectedGames } from './components/SelectedGames'
-import { CATALOG_GAMES, pickRandomStarter } from './data/catalog'
+import { CATALOG_GAMES, GAMES_BY_ID, pickRandomStarter } from './data/catalog'
 import { ANSI_FULL_LAYOUT } from './data/keyboardLayouts'
 import { RESERVED_KEY_RULES } from './data/reservedKeys'
-import { computeAvailability } from './domain/availability'
+import { computeAvailability, resolveProfiles } from './domain/availability'
+import {
+  buildSafeKeysDocument,
+  downloadJson,
+  parseImportDocument,
+  readFileAsText,
+  serializeProfilesDocument,
+} from './lib/importExport'
 import {
   buildEnabledLayers,
   gamesNameMapForSelection,
   profilesForSelection,
   type EnabledLayersByGame,
+  type ExtraGameNames,
+  type ProfileOverridesByGame,
 } from './lib/selection'
-import type { KeyAvailabilityState, KeyboardKey } from './types'
+import type { Game, KeyboardKey, KeyAvailabilityState } from './types'
 import { LEGEND_STATES } from './ui/keyStateMeta'
 import { messages } from './ui/messages'
 
@@ -27,23 +37,41 @@ function createInitialSelection(): {
   return { selectedIds, layers: buildEnabledLayers(selectedIds) }
 }
 
+function formatImportMessage(
+  count: number,
+  skippedBindings: number,
+  skippedProfiles: number,
+): string {
+  if (skippedBindings === 0 && skippedProfiles === 0) {
+    return messages.importSuccess.replace('{count}', String(count))
+  }
+  return messages.importPartial
+    .replace('{count}', String(count))
+    .replace('{skippedBindings}', String(skippedBindings))
+    .replace('{skippedProfiles}', String(skippedProfiles))
+}
+
 export default function App() {
   const [initial] = useState(createInitialSelection)
   const [selectedIds, setSelectedIds] = useState<string[]>(initial.selectedIds)
   const [enabledLayersByGame, setEnabledLayersByGame] = useState<EnabledLayersByGame>(
     initial.layers,
   )
+  const [overridesByGame, setOverridesByGame] = useState<ProfileOverridesByGame>({})
+  const [extraNames, setExtraNames] = useState<ExtraGameNames>({})
   const [activeFilters, setActiveFilters] = useState<Set<KeyAvailabilityState>>(() => new Set())
   const [selectedKey, setSelectedKey] = useState<KeyboardKey | null>(null)
 
-  const profiles = profilesForSelection(selectedIds, enabledLayersByGame)
+  const profiles = profilesForSelection(selectedIds, enabledLayersByGame, overridesByGame)
+  const gamesById = gamesNameMapForSelection(selectedIds, extraNames)
   const summary = computeAvailability({
     profiles,
     layout: ANSI_FULL_LAYOUT,
     reservedRules: RESERVED_KEY_RULES,
-    gamesById: gamesNameMapForSelection(selectedIds),
+    gamesById,
   })
   const selectedIdSet = new Set(selectedIds)
+  const effectiveProfiles = resolveProfiles(profiles)
 
   function addGame(gameId: string) {
     if (selectedIdSet.has(gameId)) return
@@ -56,14 +84,30 @@ export default function App() {
     const nextIds = selectedIds.filter((id) => id !== gameId)
     setSelectedIds(nextIds)
     setEnabledLayersByGame((prev) => buildEnabledLayers(nextIds, prev))
+    setOverridesByGame((prev) => {
+      if (!(gameId in prev)) return prev
+      const next = { ...prev }
+      delete next[gameId]
+      return next
+    })
   }
 
   function toggleLayer(gameId: string, layerId: string) {
+    if (overridesByGame[gameId]) return
     setEnabledLayersByGame((prev) => {
       const current = new Set(prev[gameId] ?? [])
       if (current.has(layerId)) current.delete(layerId)
       else current.add(layerId)
       return { ...prev, [gameId]: [...current] }
+    })
+  }
+
+  function clearOverride(gameId: string) {
+    setOverridesByGame((prev) => {
+      if (!(gameId in prev)) return prev
+      const next = { ...prev }
+      delete next[gameId]
+      return next
     })
   }
 
@@ -76,6 +120,63 @@ export default function App() {
       if (base.size === LEGEND_STATES.length) return new Set()
       return base
     })
+  }
+
+  async function handleImportFile(file: File): Promise<string> {
+    const text = await readFileAsText(file)
+    const result = parseImportDocument(text)
+
+    const nextOverrides: ProfileOverridesByGame = { ...overridesByGame }
+    for (const profile of result.profiles) {
+      nextOverrides[profile.gameId] = profile
+    }
+    setOverridesByGame(nextOverrides)
+
+    const nextExtras: ExtraGameNames = { ...extraNames }
+    for (const game of result.document.games ?? []) {
+      if (!GAMES_BY_ID[game.id]) nextExtras[game.id] = { name: game.name }
+    }
+    for (const profile of result.profiles) {
+      if (!GAMES_BY_ID[profile.gameId] && !nextExtras[profile.gameId]) {
+        nextExtras[profile.gameId] = { name: profile.name }
+      }
+    }
+    setExtraNames(nextExtras)
+
+    const importedIds = result.profiles.map((profile) => profile.gameId)
+    const nextIds = [...selectedIds]
+    for (const gameId of importedIds) {
+      if (!nextIds.includes(gameId)) nextIds.push(gameId)
+    }
+    setSelectedIds(nextIds)
+    setEnabledLayersByGame((prev) => buildEnabledLayers(nextIds, prev))
+
+    return formatImportMessage(
+      result.profiles.length,
+      result.skippedBindings,
+      result.skippedProfiles,
+    )
+  }
+
+  function handleExportProfiles() {
+    if (effectiveProfiles.length === 0) return
+    const games: Game[] = effectiveProfiles.map((profile) => {
+      const catalog = GAMES_BY_ID[profile.gameId]
+      if (catalog) return catalog
+      return {
+        id: profile.gameId,
+        name: gamesById[profile.gameId]?.name ?? profile.name,
+        kind: 'game',
+        profileIds: [profile.id],
+      }
+    })
+    const document = serializeProfilesDocument(effectiveProfiles, { games })
+    downloadJson('bindscope-profiles.json', document)
+  }
+
+  function handleExportSafeKeys() {
+    if (selectedIds.length === 0) return
+    downloadJson('bindscope-safe-keys.json', buildSafeKeysDocument(summary))
   }
 
   return (
@@ -103,8 +204,19 @@ export default function App() {
               <SelectedGames
                 selectedIds={selectedIds}
                 enabledLayersByGame={enabledLayersByGame}
+                overridesByGame={overridesByGame}
+                extraNames={extraNames}
                 onRemove={removeGame}
                 onToggleLayer={toggleLayer}
+                onClearOverride={clearOverride}
+              />
+            </div>
+            <div className="mt-4 border-t pt-4" style={{ borderColor: 'var(--border)' }}>
+              <ProfileIO
+                onImportFile={handleImportFile}
+                onExportProfiles={handleExportProfiles}
+                onExportSafeKeys={handleExportSafeKeys}
+                canExport={effectiveProfiles.length > 0}
               />
             </div>
           </section>

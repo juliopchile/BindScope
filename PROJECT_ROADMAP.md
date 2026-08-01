@@ -17,7 +17,7 @@ methodology.
 | 1. Scaffold and engine | Complete | Vite + React + TS scaffold, typed models, key normalization, pure availability engine + tests |
 | 2. SVG keyboard | Complete | Data-driven SVG keyboard, detail panel, legend, theme tokens, non-color state cues |
 | 3. Selection and seed data | Complete | Game search, layered seed catalog (games + tools), filters, legend |
-| 4. Custom profiles | Pending | JSON import/export, profile precedence, safe-key export |
+| 4. Custom profiles | Complete | JSON import/export, profile precedence, safe-key export |
 | 5. Deployment and polish | Pending | GitHub Pages workflow, i18n switcher, theme switcher, responsive verification, accessibility, performance, E2E |
 
 After stage 5 the product enters the longer phases described in **Later Direction**.
@@ -79,14 +79,26 @@ Delivered:
 - Random first-load pick from the starter pool; empty-selection guidance when cleared
 - Tests for search, selection/flattening, and catalog invariants (`make test` 40 passing)
 
+### Stage 4: Custom profiles
+
+Delivered client-side JSON import/export with seed precedence and a safe-key download.
+
+Delivered:
+
+- `app/src/lib/importExport.ts` — Zod parse/serialize for `ImportExportDocument` v1; key
+  normalization on import; skip invalid bindings; coerce `sourceType: 'imported'`
+- Selection merge: seed flatten + overrides → `computeAvailability` / `resolveProfiles`
+- `SafeKeysDocument` export of free (non-reserved) keys from the live summary
+- `ProfileIO` UI + clear-override path; seed layer toggles disabled while an override is active
+- Tests for round-trip, skip-invalid, precedence, and safe-key export (`make test` 46 passing)
+
 ## In Progress
 
-No stage is running. Stage 4 is defined in `PLAN.md`, awaiting authorization.
+No stage is running. Stage 5 is defined in `PLAN.md`, awaiting authorization.
 
 ## Pending Work
 
 - Grow the hand-curated catalog toward ~20–30 games (layout already extensible)
-- Custom profile import/export in JSON
 - Parsers for real config formats (INI, CFG, XML)
 - Switchable UI localization (i18n) with at least English plus one additional locale
 - Light / dark / system theme switch with persisted preference

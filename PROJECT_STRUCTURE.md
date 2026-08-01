@@ -3,17 +3,18 @@
 `PROJECT_STRUCTURE.md` documents how BindScope is organized and how its pieces fit together. It
 should let a human or an agent understand the repository without guessing from filenames.
 
-> **Status:** Stages 1–3 are real — scaffold, engine, SVG keyboard, selection UI, and layered seed
-> catalog exist under `app/`. Import/export and i18n/theme switchers are still target. Update this
-> file as each stage lands.
+> **Status:** Stages 1–4 are real — scaffold, engine, SVG keyboard, selection UI, layered seed
+> catalog, and JSON custom-profile import/export exist under `app/`. i18n/theme switchers and Pages
+> deploy are Stage 5. Update this file as each stage lands.
 
 ## Architecture
 
 ```
 Seed catalog (static)   ─┐
 Selected games + layers ─┤
-Layout definition       ─┼─→  domain/availability  ─→  Conflict summary  ─→  SVG keyboard
-Reserved-key rules      ─┘          (pure)                (per key)          Detail + filters
+Imported overrides      ─┼─→  domain/availability  ─→  Conflict summary  ─→  SVG keyboard
+Layout definition       ─┤          (pure)                (per key)          Detail + filters
+Reserved-key rules      ─┘                                         └─→ safe-key / profile JSON export
 ```
 
 Everything happens in the browser. There is no server, no database, and no network call in the
@@ -44,7 +45,7 @@ BindScope/
 │   │   ├── ui/                 # Chrome messages + key-state meta
 │   │   ├── styles/             # Theme tokens (system light/dark)
 │   │   ├── components/         # Search, chips, keyboard, detail, legend
-│   │   ├── lib/                # Selection helpers (import/export in Stage 4)
+│   │   ├── lib/                # Selection helpers + JSON import/export
 │   │   └── i18n/               # Locale catalogs — Stage 5
 │   ├── public/                 # Static assets
 │   ├── tests/                  # Unit tests
@@ -90,7 +91,7 @@ Paths are relative to `app/src/`.
 | `data/catalog/` | File-per-title seeds; tools marked `kind: 'tool'` |
 | `i18n/` | UI message catalogs and locale selection helpers. No domain logic |
 | `components/` | Presentation. Contains no business rules |
-| `lib/` | Selection helpers today; import/export and parsers in Stage 4+ |
+| `lib/` | Selection helpers, JSON import/export; real config parsers later |
 | `utils/` | Key identifier normalization, forgiving search |
 | `types/` | Models shared across domain, data, and UI |
 | `styles/` | Global CSS and theme tokens for light / dark / system modes |
@@ -116,7 +117,7 @@ Minimum typed models:
 
 `Game` · `CatalogKind` · `CatalogEntry` · `SeedProfile` · `BindingLayer` · `ProfileSource` ·
 `InputProfile` · `Binding` · `KeyboardKey` · `KeyboardLayout` · `ConflictSummary` ·
-`ReservedKeyRule` · `ImportExportDocument`
+`ReservedKeyRule` · `ImportExportDocument` · `SafeKeysDocument`
 
 **`Binding`** — key identifier, action name, optional context, optional modifiers, source metadata,
 verification state, and notes.
@@ -185,9 +186,10 @@ E
   Genshin:  Elemental Skill
 ```
 
-**Panels (Stage 3):** game/tool search · selected chips · binding-layer toggles · keyboard · key
-detail side panel · interactive legend filters (free / partial / heavy / reserved) · empty-selection
-guidance. Still ahead: language switcher · theme switcher (Stage 5) · import/export (Stage 4).
+**Panels:** game/tool search · selected chips · binding-layer toggles · custom profile
+import/export · safe-key export · keyboard · key detail side panel · interactive legend filters
+(free / partial / heavy / reserved) · empty-selection guidance. Still ahead: language switcher ·
+theme switcher (Stage 5).
 
 **Yours / tools:** catalog entries with `kind: 'tool'` participate in the same availability
 computation as games; the detail panel labels them as tools. A dedicated `yours` key-state is not

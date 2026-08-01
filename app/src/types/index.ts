@@ -149,4 +149,12 @@ export interface ImportExportDocument {
   notes?: string
 }
 
+/** Lightweight export of keys that are free (not reserved) in the current summary. */
+export interface SafeKeysDocument {
+  schemaVersion: 1
+  exportedAt: string
+  keys: Array<{ id: KeyboardKey; label: string }>
+  notes?: string
+}
+
 export type LayoutId = 'ansi-full'

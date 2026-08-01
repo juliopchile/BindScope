@@ -8,6 +8,8 @@ import {
 import type { Game, InputProfile, KeyAvailabilityState, SeedProfile } from '../types'
 
 export type EnabledLayersByGame = Record<string, string[]>
+export type ProfileOverridesByGame = Record<string, InputProfile>
+export type ExtraGameNames = Record<string, { name: string }>
 
 export function initialLayersForGame(gameId: string): string[] {
   const profile = SEED_PROFILES_BY_GAME_ID[gameId]
@@ -25,26 +27,35 @@ export function buildEnabledLayers(
   return next
 }
 
+/**
+ * Seed flatten plus any imported/custom overrides. The engine's
+ * `resolveProfiles` prefers custom/imported over official for the same gameId.
+ */
 export function profilesForSelection(
   selectedGameIds: readonly string[],
   enabledLayersByGame: EnabledLayersByGame,
+  overridesByGame: ProfileOverridesByGame = {},
 ): InputProfile[] {
   const profiles: InputProfile[] = []
   for (const gameId of selectedGameIds) {
     const seed = SEED_PROFILES_BY_GAME_ID[gameId]
-    if (!seed) continue
-    const layers = enabledLayersByGame[gameId] ?? defaultEnabledLayerIds(seed)
-    profiles.push(toInputProfile(seed, layers))
+    if (seed) {
+      const layers = enabledLayersByGame[gameId] ?? defaultEnabledLayerIds(seed)
+      profiles.push(toInputProfile(seed, layers))
+    }
+    const override = overridesByGame[gameId]
+    if (override) profiles.push(override)
   }
   return profiles
 }
 
 export function gamesNameMapForSelection(
   selectedGameIds: readonly string[],
+  extraNames: ExtraGameNames = {},
 ): Record<string, { name: string }> {
   const map: Record<string, { name: string }> = {}
   for (const gameId of selectedGameIds) {
-    const known = GAMES_NAME_BY_ID[gameId]
+    const known = GAMES_NAME_BY_ID[gameId] ?? extraNames[gameId]
     if (known) map[gameId] = known
   }
   return map
@@ -56,6 +67,13 @@ export function getSeedProfile(gameId: string): SeedProfile | undefined {
 
 export function getGame(gameId: string): Game | undefined {
   return GAMES_BY_ID[gameId]
+}
+
+export function displayNameForGame(
+  gameId: string,
+  extraNames: ExtraGameNames = {},
+): string {
+  return GAMES_BY_ID[gameId]?.name ?? extraNames[gameId]?.name ?? gameId
 }
 
 /** Empty filter set means "show every legend state". */
