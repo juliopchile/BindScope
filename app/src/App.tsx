@@ -3,12 +3,14 @@ import { GameSearch } from './components/GameSearch'
 import { KeyboardVisualizer } from './components/KeyboardVisualizer'
 import { KeyDetailPanel } from './components/KeyDetailPanel'
 import { Legend } from './components/Legend'
+import { PrefsControls } from './components/PrefsControls'
 import { ProfileIO } from './components/ProfileIO'
 import { SelectedGames } from './components/SelectedGames'
 import { CATALOG_GAMES, GAMES_BY_ID, pickRandomStarter } from './data/catalog'
 import { ANSI_FULL_LAYOUT } from './data/keyboardLayouts'
 import { RESERVED_KEY_RULES } from './data/reservedKeys'
 import { computeAvailability, resolveProfiles } from './domain/availability'
+import { useI18n } from './i18n/useI18n'
 import {
   buildSafeKeysDocument,
   downloadJson,
@@ -26,7 +28,6 @@ import {
 } from './lib/selection'
 import type { Game, KeyboardKey, KeyAvailabilityState } from './types'
 import { LEGEND_STATES } from './ui/keyStateMeta'
-import { messages } from './ui/messages'
 
 function createInitialSelection(): {
   selectedIds: string[]
@@ -37,21 +38,8 @@ function createInitialSelection(): {
   return { selectedIds, layers: buildEnabledLayers(selectedIds) }
 }
 
-function formatImportMessage(
-  count: number,
-  skippedBindings: number,
-  skippedProfiles: number,
-): string {
-  if (skippedBindings === 0 && skippedProfiles === 0) {
-    return messages.importSuccess.replace('{count}', String(count))
-  }
-  return messages.importPartial
-    .replace('{count}', String(count))
-    .replace('{skippedBindings}', String(skippedBindings))
-    .replace('{skippedProfiles}', String(skippedProfiles))
-}
-
 export default function App() {
+  const { t } = useI18n()
   const [initial] = useState(createInitialSelection)
   const [selectedIds, setSelectedIds] = useState<string[]>(initial.selectedIds)
   const [enabledLayersByGame, setEnabledLayersByGame] = useState<EnabledLayersByGame>(
@@ -151,11 +139,14 @@ export default function App() {
     setSelectedIds(nextIds)
     setEnabledLayersByGame((prev) => buildEnabledLayers(nextIds, prev))
 
-    return formatImportMessage(
-      result.profiles.length,
-      result.skippedBindings,
-      result.skippedProfiles,
-    )
+    if (result.skippedBindings === 0 && result.skippedProfiles === 0) {
+      return t('importSuccess', { count: result.profiles.length })
+    }
+    return t('importPartial', {
+      count: result.profiles.length,
+      skippedBindings: result.skippedBindings,
+      skippedProfiles: result.skippedProfiles,
+    })
   }
 
   function handleExportProfiles() {
@@ -185,11 +176,14 @@ export default function App() {
         className="border-b px-4 py-4"
         style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
       >
-        <div className="mx-auto flex max-w-6xl flex-wrap items-baseline gap-x-3 gap-y-1">
-          <h1 className="text-xl font-semibold">{messages.appTitle}</h1>
-          <p className="text-sm" style={{ color: 'var(--fg-muted)' }}>
-            {messages.appTagline}
-          </p>
+        <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-3">
+          <div className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
+            <h1 className="text-xl font-semibold">{t('appTitle')}</h1>
+            <p className="text-sm" style={{ color: 'var(--fg-muted)' }}>
+              {t('appTagline')}
+            </p>
+          </div>
+          <PrefsControls />
         </div>
       </header>
 
@@ -232,10 +226,10 @@ export default function App() {
                 className="text-xs font-semibold tracking-wide uppercase"
                 style={{ color: 'var(--fg-muted)' }}
               >
-                {messages.keyboardHeading}
+                {t('keyboardHeading')}
               </h2>
               <p className="text-xs" style={{ color: 'var(--fg-muted)' }}>
-                {messages.starterNote}
+                {t('starterNote')}
               </p>
             </div>
 

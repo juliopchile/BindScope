@@ -1,7 +1,7 @@
+import { useI18n } from '../i18n/useI18n'
 import type { KeyAvailability, KeyAvailabilityState, KeyboardKey, KeyboardLayout } from '../types'
 import { isStateVisible } from '../lib/selection'
 import { getKeyStateMeta } from '../ui/keyStateMeta'
-import { messages } from '../ui/messages'
 
 interface KeyboardVisualizerProps {
   layout: KeyboardLayout
@@ -46,13 +46,14 @@ export function KeyboardVisualizer({
   onSelectKey,
   activeFilters = new Set(),
 }: KeyboardVisualizerProps) {
+  const { t } = useI18n()
   const byKey = new Map(keys.map((item) => [item.key, item]))
 
   return (
     <div className="w-full overflow-x-auto">
       <svg
         role="group"
-        aria-label={messages.keyboardAriaLabel}
+        aria-label={t('keyboardAriaLabel')}
         viewBox={`0 0 ${layout.width} ${layout.height}`}
         className="mx-auto h-auto w-full min-w-[320px] max-w-5xl"
       >
@@ -69,7 +70,7 @@ export function KeyboardVisualizer({
               key={layoutKey.id}
               role="button"
               tabIndex={visible ? 0 : -1}
-              aria-label={`${layoutKey.label}, ${meta.label}`}
+              aria-label={`${layoutKey.label}, ${t(meta.labelKey)}`}
               aria-pressed={selected}
               aria-hidden={!visible}
               className={visible ? 'cursor-pointer' : 'pointer-events-none'}

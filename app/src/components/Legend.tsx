@@ -1,6 +1,6 @@
+import { useI18n } from '../i18n/useI18n'
 import type { KeyAvailabilityState } from '../types'
 import { getKeyStateMeta, LEGEND_STATES } from '../ui/keyStateMeta'
-import { messages } from '../ui/messages'
 
 interface LegendProps {
   /** Active filter states. Empty set = show all. */
@@ -9,19 +9,20 @@ interface LegendProps {
 }
 
 export function Legend({ activeFilters, onToggleFilter }: LegendProps) {
+  const { t } = useI18n()
   const showAll = activeFilters.size === 0
 
   return (
-    <section aria-label={messages.legendHeading}>
+    <section aria-label={t('legendHeading')}>
       <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
         <h2
           className="text-xs font-semibold tracking-wide uppercase"
           style={{ color: 'var(--fg-muted)' }}
         >
-          {messages.legendHeading}
+          {t('legendHeading')}
         </h2>
         <p className="text-xs" style={{ color: 'var(--fg-muted)' }}>
-          {messages.filterHint}
+          {t('filterHint')}
         </p>
       </div>
       <ul className="flex flex-wrap gap-x-3 gap-y-2 text-sm">
@@ -34,7 +35,7 @@ export function Legend({ activeFilters, onToggleFilter }: LegendProps) {
                 type="button"
                 aria-pressed={active}
                 onClick={() => onToggleFilter(state)}
-                className="flex items-center gap-2 rounded-md border px-2 py-1 focus-visible:outline focus-visible:outline-2"
+                className="flex min-h-10 items-center gap-2 rounded-md border px-2 py-1.5 focus-visible:outline focus-visible:outline-2"
                 style={{
                   borderColor: active ? 'var(--accent)' : 'var(--border)',
                   background: 'var(--bg)',
@@ -45,9 +46,9 @@ export function Legend({ activeFilters, onToggleFilter }: LegendProps) {
                   {meta.mark || '·'}
                 </span>
                 <span>
-                  <span className="font-medium">{meta.label}</span>
+                  <span className="font-medium">{t(meta.labelKey)}</span>
                   <span className="ml-1 text-xs" style={{ color: 'var(--fg-muted)' }}>
-                    {meta.description}
+                    {t(meta.descriptionKey)}
                   </span>
                 </span>
               </button>

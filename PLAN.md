@@ -10,54 +10,27 @@ into `PROJECT_ROADMAP.md`; stable design information lives in `PROJECT_STRUCTURE
 
 **Current stage:** Stage 5 — Deployment and polish
 
-**Status:** Defined, not started. Awaiting authorization.
+**Status:** Complete (awaiting user commit).
 
-**Stage 4 delivered (condensed):**
+### Milestones delivered
 
-1. JSON profile import/export (`ImportExportDocument` v1) via `app/src/lib/importExport.ts`
-2. Imported overrides win over seed defaults for the same `gameId` (`resolveProfiles`)
-3. Safe-key JSON export from the current free (non-reserved) key set
-4. UI: import/export controls; clear override restores seed layers
-5. Verified: `make test` (46), `make lint`, `make build`
+1. Light custom i18n — shared keys + catalogs `en` / `es` / `pt` / `fr` / `zh` under `app/src/i18n/`
+2. Locale switcher + `document.documentElement.lang`; preference in `localStorage`
+3. Theme switcher light / dark / system via `html[data-theme]`; preference in `localStorage`
+4. Boot script applies stored theme/locale before React paint (`app/src/boot.ts`)
+5. GitHub Pages workflow `.github/workflows/deploy-pages.yml` (`VITE_BASE_PATH=/BindScope/`)
+6. Header `PrefsControls`; chrome components use `useI18n()`; touch-target / aria polish
+7. Verified: `make test` (52), `make lint` (clean), `make build` (~91 kB gzip JS)
 
-**Immediate next step:** GitHub Pages workflow, i18n switcher, theme switcher, responsive/a11y polish.
+**Playwright:** skipped (optional; stage not blocked).
 
-## Active Task: Deployment and polish
+### Immediate next step
 
-### Objective
-
-Ship a polished static site: GitHub Pages deploy, switchable UI locale, light/dark/system theme
-control with persistence, and verification that the app works across phone, tablet, and desktop
-with solid accessibility and performance.
-
-### Files In Scope (expected)
-
-- `.github/workflows/` — Pages build/deploy from `app/`
-- `app/src/i18n/` — locale catalogs + switcher (D10)
-- `app/src/styles/` / theme control UI — light / dark / system with local persistence (D11)
-- Responsive and a11y pass across components (D12)
-- Optional Playwright E2E smoke if time allows
-
-### Constraints
-
-- Stay static-only; no backend.
-- Do not scrape wikis. Do not commit unless the user asks; propose a commit message.
-- Prefer extending existing `messages.ts` extraction into locale catalogs rather than inventing a
-  parallel copy system.
-
-### Verification
-
-```sh
-make test
-make lint
-make build
-make serve
-```
-
-Report actual output. Manually confirm theme and locale switches and a narrow viewport.
+User commits Stage 5. MVP product scope from the roadmap is complete; further work follows
+**Later Direction** in `PROJECT_ROADMAP.md` (not a Stage 6).
 
 ## After Completion
 
-- Clear this section or leave a short “MVP complete / later direction” note.
-- Summarize Stage 5 in `PROJECT_ROADMAP.md`.
-- Update `PROJECT_STRUCTURE.md`, `README.md`, and `AGENTS.md` for deploy/i18n/theme as needed.
+- Stage 5 summarized in `PROJECT_ROADMAP.md`.
+- `PROJECT_STRUCTURE.md`, `README.md`, `STYLES.md`, and `AGENTS.md` updated for deploy/i18n/theme.
+- This file left as a short “MVP complete” note until the next active task appears.

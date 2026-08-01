@@ -3,9 +3,9 @@
 `PROJECT_STRUCTURE.md` documents how BindScope is organized and how its pieces fit together. It
 should let a human or an agent understand the repository without guessing from filenames.
 
-> **Status:** Stages 1–4 are real — scaffold, engine, SVG keyboard, selection UI, layered seed
-> catalog, and JSON custom-profile import/export exist under `app/`. i18n/theme switchers and Pages
-> deploy are Stage 5. Update this file as each stage lands.
+> **Status:** Stages 1–5 (MVP) are real — scaffold, engine, SVG keyboard, selection UI, layered seed
+> catalog, JSON custom-profile import/export, i18n/theme switchers, and GitHub Pages deploy exist
+> under `app/` / `.github/`. Update this file as the structure changes.
 
 ## Architecture
 
@@ -42,14 +42,15 @@ BindScope/
 │   │   │   └── reservedKeys.ts
 │   │   ├── types/              # Shared typed models
 │   │   ├── utils/              # Key normalization + forgiving search
-│   │   ├── ui/                 # Chrome messages + key-state meta
-│   │   ├── styles/             # Theme tokens (system light/dark)
-│   │   ├── components/         # Search, chips, keyboard, detail, legend
-│   │   ├── lib/                # Selection helpers + JSON import/export
-│   │   └── i18n/               # Locale catalogs — Stage 5
+│   │   ├── ui/                 # Key-state meta; EN messages re-export
+│   │   ├── styles/             # Theme tokens (light / dark / system)
+│   │   ├── components/         # Search, chips, keyboard, detail, prefs
+│   │   ├── lib/                # Selection, import/export, theme prefs
+│   │   └── i18n/               # Locale catalogs + provider (en/es/pt/fr/zh)
 │   ├── public/                 # Static assets
 │   ├── tests/                  # Unit tests
 │   └── dist/                   # Production build output (git-ignored)
+├── .github/workflows/          # GitHub Pages deploy from app/
 ├── docs/                       # Historical and supporting documentation
 ├── Makefile                    # Root task runner
 ├── .env.example
@@ -103,12 +104,13 @@ Paths are relative to `app/src/`.
 | Language | TypeScript in strict mode | In use |
 | UI | React 19 | In use |
 | Build | Vite, static output to `app/dist` | In use |
-| Styling | Tailwind CSS v4 plus CSS custom properties for themes | In use (system light/dark) |
-| i18n | Client-side message catalogs; library chosen at implementation | Strings extractable; switcher Stage 5 |
+| Styling | Tailwind CSS v4 plus CSS custom properties for themes | In use (light/dark/system) |
+| i18n | Light custom catalogs under `app/src/i18n/` (no heavy framework) | In use (en/es/pt/fr/zh) |
 | Keyboard | SVG (every key is an interactive element) | In use (ANSI full) |
-| Validation | Zod | In use (availability input) |
+| Validation | Zod | In use (availability + import) |
 | Unit tests | Vitest | In use |
-| E2E tests | Playwright | Stage 5 |
+| E2E tests | Playwright | Optional / deferred |
+| Deploy | GitHub Actions → Pages from `app/dist` | In use |
 | Quality | ESLint + Prettier | In use |
 
 ## Data Model
@@ -188,8 +190,7 @@ E
 
 **Panels:** game/tool search · selected chips · binding-layer toggles · custom profile
 import/export · safe-key export · keyboard · key detail side panel · interactive legend filters
-(free / partial / heavy / reserved) · empty-selection guidance. Still ahead: language switcher ·
-theme switcher (Stage 5).
+(free / partial / heavy / reserved) · empty-selection guidance · language switcher · theme switcher.
 
 **Yours / tools:** catalog entries with `kind: 'tool'` participate in the same availability
 computation as games; the detail panel labels them as tools. A dedicated `yours` key-state is not

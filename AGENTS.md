@@ -4,11 +4,12 @@ This file is written for AI coding agents working in BindScope. It should help a
 
 ## Project State — Read This First
 
-**Stage 4 is complete.** `app/` is a Vite + React + TypeScript app with a pure availability engine,
-data-driven SVG keyboard, game/tool search, layered seed catalog under `app/src/data/catalog/`,
-JSON custom-profile import/export (`app/src/lib/importExport.ts`), and legend state filters. Chrome
-copy lives in `app/src/ui/messages.ts`; visual tokens in `STYLES.md`. Stage 5 owns GitHub Pages,
-i18n switcher, and theme switcher.
+**Stage 5 (MVP) is complete.** `app/` is a Vite + React + TypeScript app with a pure availability
+engine, data-driven SVG keyboard, game/tool search, layered seed catalog, JSON custom-profile
+import/export, locale catalogs under `app/src/i18n/` (en/es/pt/fr/zh), light/dark/system theme via
+`html[data-theme]`, and GitHub Pages deploy from `.github/workflows/deploy-pages.yml`. Visual tokens
+live in `STYLES.md`. Further work follows **Later Direction** in `PROJECT_ROADMAP.md`, not a new
+numbered stage unless the user defines one.
 
 Use `make install`, `make run`, `make test`, `make lint`, and `make build` from the repo root. Do not
 invent commands; prefer the Makefile.

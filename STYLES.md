@@ -5,12 +5,16 @@ cues, or breakpoints change.
 
 ## Theme
 
-Appearance is driven by CSS custom properties in `app/src/styles/index.css`.
+Appearance is driven by CSS custom properties in `app/src/styles/index.css`. The active mode is
+`html[data-theme="light"|"dark"|"system"]`, set by `app/src/lib/theme.ts` and the header switcher.
+Preference persists in `localStorage` (`bindscope.theme`). `app/src/boot.ts` applies the stored
+value before React mounts.
 
-| Mode | How it works today |
+| Mode | How it works |
 |---|---|
-| System | Follows `prefers-color-scheme` (light / dark token sets) |
-| Light / Dark override | Stage 5 — user switch + local persistence |
+| Light | Forced light token set |
+| Dark | Forced dark token set |
+| System (default) | Follows `prefers-color-scheme` |
 
 Do not scatter raw colors in components. Consume tokens (`var(--bg)`, `var(--key-free-bg)`, …).
 
@@ -45,7 +49,8 @@ container. Horizontal scroll is allowed as a last resort via `min-w-[320px]` on 
 - Detail: `app/src/components/KeyDetailPanel.tsx`
 - Legend: `app/src/components/Legend.tsx` — toggles state filters
 - Search / selection: `GameSearch.tsx`, `SelectedGames.tsx`
-- Chrome copy: `app/src/ui/messages.ts` (extractable for i18n)
+- Prefs: `PrefsControls.tsx` — locale + theme selects
+- Chrome copy: locale catalogs in `app/src/i18n/locales/` via `useI18n()`
 
 ## Design rules
 

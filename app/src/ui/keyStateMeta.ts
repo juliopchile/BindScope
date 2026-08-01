@@ -1,11 +1,11 @@
+import type { MessageKey } from '../i18n'
 import type { KeyAvailabilityState } from '../types'
-import { messages } from './messages'
 
 export interface KeyStateMeta {
   state: KeyAvailabilityState
   /** Short label for legend and aria. */
-  label: string
-  description: string
+  labelKey: MessageKey
+  descriptionKey: MessageKey
   /** Non-color mark drawn on the key (D11). Empty for free. */
   mark: string
   patternId: string
@@ -18,40 +18,40 @@ export const LEGEND_STATES: KeyAvailabilityState[] = ['free', 'partial', 'heavy'
 const META: Record<KeyAvailabilityState, KeyStateMeta> = {
   free: {
     state: 'free',
-    label: messages.summaryFree,
-    description: 'Unused in every selected profile',
+    labelKey: 'summaryFree',
+    descriptionKey: 'stateFreeDesc',
     mark: '',
     patternId: 'pattern-free',
     fillClass: 'key-fill-free',
   },
   partial: {
     state: 'partial',
-    label: messages.summaryPartial,
-    description: 'Used by some selected games',
+    labelKey: 'summaryPartial',
+    descriptionKey: 'statePartialDesc',
     mark: '≈',
     patternId: 'pattern-partial',
     fillClass: 'key-fill-partial',
   },
   heavy: {
     state: 'heavy',
-    label: messages.summaryHeavy,
-    description: 'Used by all selected games',
+    labelKey: 'summaryHeavy',
+    descriptionKey: 'stateHeavyDesc',
     mark: '!',
     patternId: 'pattern-heavy',
     fillClass: 'key-fill-heavy',
   },
   reserved: {
     state: 'reserved',
-    label: messages.summaryReserved,
-    description: 'OS or explicitly unsafe',
+    labelKey: 'summaryReserved',
+    descriptionKey: 'stateReservedDesc',
     mark: '×',
     patternId: 'pattern-reserved',
     fillClass: 'key-fill-reserved',
   },
   unknown: {
     state: 'unknown',
-    label: 'Unknown',
-    description: 'Binding outside the active layout',
+    labelKey: 'summaryUnknown',
+    descriptionKey: 'stateUnknownDesc',
     mark: '?',
     patternId: 'pattern-unknown',
     fillClass: 'key-fill-unknown',

@@ -7,10 +7,10 @@ interactive keyboard, and instantly see **which keys are still free** across all
 
 ## Project Status
 
-**Stage 4 complete — Custom profiles.** Search and select curated games and tools, toggle binding
-layers, import/export profiles as JSON, and download the current free (safe) key set. Imported
-profiles override seed defaults for the same game. Deployment, i18n, and theme switchers are Stage 5.
-See `PROJECT_ROADMAP.md` and `PLAN.md`.
+**Stage 5 complete — Deployment and polish (MVP).** Search and select curated games and tools, toggle
+binding layers, import/export profiles as JSON, switch UI language (en / es / pt / fr / zh) and
+theme (light / dark / system), and download the current free (safe) key set. Static deploy to GitHub
+Pages is wired via Actions. See `PROJECT_ROADMAP.md` and `PLAN.md`.
 
 To run it, see **Getting Started** below.
 
@@ -90,17 +90,25 @@ cp .env.example .env    # then edit PORT
 |---|---|---|
 | `PORT` | `8080` | Port for `make run` / `make serve` |
 | `HOST` | `127.0.0.1` | Bind address; use `0.0.0.0` to reach the server from another device |
+| `VITE_BASE_PATH` | `/` | Vite asset base path; CI sets `/BindScope/` for project Pages |
 
 A one-off override works too: `make run PORT=8090`. If the port is already taken, `make run` says
 what is holding it and suggests the next free one instead of failing obscurely.
 
+Locale and theme preferences persist in the browser (`localStorage` keys `bindscope.locale` and
+`bindscope.theme`). They are chrome-only; seed binding action names stay in their curated language.
+
 ## Deployment
 
-Everything deployable lives in `app/`. The build output from `app/` is static and published to
-GitHub Pages through a GitHub Actions workflow, which requires no server runtime.
+Everything deployable lives in `app/`. On push to `main`, `.github/workflows/deploy-pages.yml` runs
+`npm ci` + `npm run build` in `app/` with `VITE_BASE_PATH=/BindScope/`, then publishes `app/dist` to
+GitHub Pages. No server runtime.
 
-The workflow builds from `app/` rather than using the "deploy from `/docs`" setting, so `docs/` stays
-free for project documentation and never reaches the published site.
+Enable **Settings → Pages → Source: GitHub Actions** once on the repository. The workflow builds from
+`app/` rather than the "deploy from `/docs`" setting, so `docs/` stays free for project documentation
+and never reaches the published site.
+
+Local preview of the production build: `make build` then `npm --prefix app run preview`.
 
 ## Documentation Map
 

@@ -1,6 +1,6 @@
+import { useI18n } from '../i18n/useI18n'
 import type { ExtraGameNames, EnabledLayersByGame, ProfileOverridesByGame } from '../lib/selection'
 import { displayNameForGame, getGame, getSeedProfile } from '../lib/selection'
-import { messages } from '../ui/messages'
 
 interface SelectedGamesProps {
   selectedIds: readonly string[]
@@ -21,10 +21,12 @@ export function SelectedGames({
   onToggleLayer,
   onClearOverride,
 }: SelectedGamesProps) {
+  const { t } = useI18n()
+
   if (selectedIds.length === 0) {
     return (
       <p className="text-sm" style={{ color: 'var(--fg-muted)' }}>
-        {messages.emptySelection}
+        {t('emptySelection')}
       </p>
     )
   }
@@ -35,7 +37,7 @@ export function SelectedGames({
         className="text-xs font-semibold tracking-wide uppercase"
         style={{ color: 'var(--fg-muted)' }}
       >
-        {messages.selectedHeading}
+        {t('selectedHeading')}
       </h3>
       <ul className="flex flex-wrap gap-2">
         {selectedIds.map((gameId) => {
@@ -45,33 +47,33 @@ export function SelectedGames({
           return (
             <li
               key={gameId}
-              className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm"
+              className="inline-flex min-h-10 items-center gap-2 rounded-full border px-3 py-1.5 text-sm"
               style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}
             >
               <span className="font-medium">{name}</span>
               {game?.kind === 'tool' ? (
                 <span className="text-xs" style={{ color: 'var(--fg-muted)' }}>
-                  {messages.kindTool}
+                  {t('kindTool')}
                 </span>
               ) : null}
               {hasOverride ? (
                 <button
                   type="button"
-                  className="text-xs underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2"
+                  className="min-h-8 text-xs underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2"
                   style={{ color: 'var(--fg-muted)' }}
                   onClick={() => onClearOverride(gameId)}
                 >
-                  {messages.clearOverride}
+                  {t('clearOverride')}
                 </button>
               ) : null}
               <button
                 type="button"
-                className="text-xs underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2"
+                className="min-h-8 text-xs underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2"
                 style={{ color: 'var(--fg-muted)' }}
                 onClick={() => onRemove(gameId)}
-                aria-label={`${messages.removeGame} ${name}`}
+                aria-label={`${t('removeGame')} ${name}`}
               >
-                {messages.removeGame}
+                {t('removeGame')}
               </button>
             </li>
           )
@@ -83,7 +85,7 @@ export function SelectedGames({
           className="text-xs font-semibold tracking-wide uppercase"
           style={{ color: 'var(--fg-muted)' }}
         >
-          {messages.layersHeading}
+          {t('layersHeading')}
         </h3>
         {selectedIds.map((gameId) => {
           const name = displayNameForGame(gameId, extraNames)
@@ -92,7 +94,7 @@ export function SelectedGames({
           if (!profile) {
             return hasOverride ? (
               <p key={gameId} className="text-sm" style={{ color: 'var(--fg-muted)' }}>
-                {name}: {messages.overrideActive}
+                {name}: {t('overrideActive')}
               </p>
             ) : null
           }
@@ -107,13 +109,13 @@ export function SelectedGames({
               <legend className="px-1 text-sm font-medium">{name}</legend>
               {hasOverride ? (
                 <p className="mb-2 text-xs" style={{ color: 'var(--fg-muted)' }}>
-                  {messages.overrideActive}
+                  {t('overrideActive')}
                 </p>
               ) : null}
               <ul className="mt-1 space-y-1 text-sm">
                 {profile.layers.map((layer) => (
                   <li key={layer.id}>
-                    <label className="inline-flex cursor-pointer items-center gap-2">
+                    <label className="inline-flex min-h-10 cursor-pointer items-center gap-2">
                       <input
                         type="checkbox"
                         checked={enabled.has(layer.id)}
@@ -124,7 +126,7 @@ export function SelectedGames({
                         {layer.label}
                         {!layer.defaultEnabled ? (
                           <span className="ml-1 text-xs" style={{ color: 'var(--fg-muted)' }}>
-                            (opt-in)
+                            ({t('layerOptIn')})
                           </span>
                         ) : null}
                       </span>

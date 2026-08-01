@@ -1,8 +1,8 @@
 import { GAMES_BY_ID } from '../data/catalog'
+import { useI18n } from '../i18n/useI18n'
 import type { ConflictSummary, KeyboardKey } from '../types'
 import { bindingChordLabel } from '../utils/keyNormalization'
 import { getKeyStateMeta } from '../ui/keyStateMeta'
-import { messages } from '../ui/messages'
 
 interface KeyDetailPanelProps {
   summary: ConflictSummary
@@ -10,29 +10,30 @@ interface KeyDetailPanelProps {
 }
 
 export function KeyDetailPanel({ summary, selectedKey }: KeyDetailPanelProps) {
+  const { t } = useI18n()
   const selected = selectedKey ? summary.keys.find((item) => item.key === selectedKey) : undefined
 
   return (
     <aside
       className="flex h-full flex-col rounded-lg border p-4"
       style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}
-      aria-label={messages.detailHeading}
+      aria-label={t('detailHeading')}
     >
       <h2
         className="text-xs font-semibold tracking-wide uppercase"
         style={{ color: 'var(--fg-muted)' }}
       >
-        {messages.detailHeading}
+        {t('detailHeading')}
       </h2>
 
       {!selected ? (
         <div className="mt-3 space-y-4 text-sm">
-          <p style={{ color: 'var(--fg-muted)' }}>{messages.detailEmpty}</p>
+          <p style={{ color: 'var(--fg-muted)' }}>{t('detailEmpty')}</p>
           <dl className="grid grid-cols-2 gap-3">
-            <Count label={messages.summaryFree} value={summary.freeCount} />
-            <Count label={messages.summaryPartial} value={summary.partialCount} />
-            <Count label={messages.summaryHeavy} value={summary.heavyCount} />
-            <Count label={messages.summaryReserved} value={summary.reservedCount} />
+            <Count label={t('summaryFree')} value={summary.freeCount} />
+            <Count label={t('summaryPartial')} value={summary.partialCount} />
+            <Count label={t('summaryHeavy')} value={summary.heavyCount} />
+            <Count label={t('summaryReserved')} value={summary.reservedCount} />
           </dl>
         </div>
       ) : (
@@ -43,6 +44,7 @@ export function KeyDetailPanel({ summary, selectedKey }: KeyDetailPanelProps) {
 }
 
 function SelectedDetail({ selected }: { selected: NonNullable<ConflictSummary['keys'][number]> }) {
+  const { t } = useI18n()
   const meta = getKeyStateMeta(selected.state)
 
   return (
@@ -50,7 +52,7 @@ function SelectedDetail({ selected }: { selected: NonNullable<ConflictSummary['k
       <div>
         <p className="text-3xl font-semibold">{selected.label}</p>
         <p style={{ color: 'var(--fg-muted)' }}>
-          {meta.label}
+          {t(meta.labelKey)}
           {meta.mark ? ` ${meta.mark}` : ''}
         </p>
         {selected.reservedReason ? (
@@ -62,7 +64,7 @@ function SelectedDetail({ selected }: { selected: NonNullable<ConflictSummary['k
 
       {selected.bindings.length === 0 ? (
         <p style={{ color: 'var(--fg-muted)' }}>
-          {selected.state === 'reserved' ? messages.detailReserved : messages.detailFree}
+          {selected.state === 'reserved' ? t('detailReserved') : t('detailFree')}
         </p>
       ) : (
         <ul className="space-y-2">
@@ -76,7 +78,7 @@ function SelectedDetail({ selected }: { selected: NonNullable<ConflictSummary['k
                 {ref.gameName}
                 {GAMES_BY_ID[ref.gameId]?.kind === 'tool' ? (
                   <span className="ml-2 text-xs font-normal" style={{ color: 'var(--fg-muted)' }}>
-                    {messages.kindTool}
+                    {t('kindTool')}
                   </span>
                 ) : null}
               </p>

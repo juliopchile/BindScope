@@ -18,7 +18,7 @@ methodology.
 | 2. SVG keyboard | Complete | Data-driven SVG keyboard, detail panel, legend, theme tokens, non-color state cues |
 | 3. Selection and seed data | Complete | Game search, layered seed catalog (games + tools), filters, legend |
 | 4. Custom profiles | Complete | JSON import/export, profile precedence, safe-key export |
-| 5. Deployment and polish | Pending | GitHub Pages workflow, i18n switcher, theme switcher, responsive verification, accessibility, performance, E2E |
+| 5. Deployment and polish | Complete | GitHub Pages workflow, i18n (en/es/pt/fr/zh), theme switcher, responsive/a11y polish |
 
 After stage 5 the product enters the longer phases described in **Later Direction**.
 
@@ -92,17 +92,31 @@ Delivered:
 - `ProfileIO` UI + clear-override path; seed layer toggles disabled while an override is active
 - Tests for round-trip, skip-invalid, precedence, and safe-key export (`make test` 46 passing)
 
+### Stage 5: Deployment and polish
+
+Shipped a polished static MVP with deploy, locale, and theme controls.
+
+Delivered:
+
+- `.github/workflows/deploy-pages.yml` — build `app/` with `VITE_BASE_PATH=/BindScope/`, publish
+  `app/dist` to GitHub Pages
+- Light custom i18n under `app/src/i18n/` — catalogs `en`, `es`, `pt`, `fr`, `zh`; switcher +
+  `document.documentElement.lang`; preferences in `localStorage` (chrome only)
+- Theme light / dark / system via `html[data-theme]` on existing CSS tokens; boot script avoids flash
+- Header preference controls; touch-target and aria polish on the existing shell
+- Catalog key-parity tests; `make test` 52 passing; production JS ~91 kB gzip
+- Playwright E2E deferred (optional; not required for stage close)
+
 ## In Progress
 
-No stage is running. Stage 5 is defined in `PLAN.md`, awaiting authorization.
+No numbered stage is running. Next work follows **Later Direction** / Pending Work below.
 
 ## Pending Work
 
 - Grow the hand-curated catalog toward ~20–30 games (layout already extensible)
 - Parsers for real config formats (INI, CFG, XML)
-- Switchable UI localization (i18n) with at least English plus one additional locale
-- Light / dark / system theme switch with persisted preference
-- Responsive verification on phone, tablet, and desktop viewports
+- Optional Playwright smoke / broader E2E
+- Further UI locales beyond en/es/pt/fr/zh if needed
 
 ## Technical Debt
 

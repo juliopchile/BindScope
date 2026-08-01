@@ -1,5 +1,5 @@
 import { useId, useRef, useState } from 'react'
-import { messages } from '../ui/messages'
+import { useI18n } from '../i18n/useI18n'
 
 interface ProfileIOProps {
   onImportFile: (file: File) => Promise<string>
@@ -14,6 +14,7 @@ export function ProfileIO({
   onExportSafeKeys,
   canExport,
 }: ProfileIOProps) {
+  const { t } = useI18n()
   const inputId = useId()
   const inputRef = useRef<HTMLInputElement>(null)
   const [status, setStatus] = useState<string | null>(null)
@@ -28,7 +29,7 @@ export function ProfileIO({
       const message = await onImportFile(file)
       setStatus(message)
     } catch {
-      setStatus(messages.importError)
+      setStatus(t('importError'))
     } finally {
       setBusy(false)
       if (inputRef.current) inputRef.current.value = ''
@@ -36,7 +37,7 @@ export function ProfileIO({
   }
 
   const buttonClass =
-    'rounded-md border px-3 py-1.5 text-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 disabled:cursor-not-allowed disabled:opacity-50'
+    'min-h-10 rounded-md border px-3 py-2 text-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 disabled:cursor-not-allowed disabled:opacity-50'
   const buttonStyle = { borderColor: 'var(--border)', background: 'var(--bg)', color: 'var(--fg)' }
 
   return (
@@ -46,7 +47,7 @@ export function ProfileIO({
         className="text-xs font-semibold tracking-wide uppercase"
         style={{ color: 'var(--fg-muted)' }}
       >
-        {messages.profilesHeading}
+        {t('profilesHeading')}
       </h3>
       <div className="flex flex-wrap gap-2">
         <input
@@ -55,7 +56,7 @@ export function ProfileIO({
           type="file"
           accept="application/json,.json"
           className="sr-only"
-          aria-label={messages.importAriaLabel}
+          aria-label={t('importAriaLabel')}
           disabled={busy}
           onChange={(event) => void handleFileChange(event.target.files)}
         />
@@ -66,7 +67,7 @@ export function ProfileIO({
           disabled={busy}
           onClick={() => inputRef.current?.click()}
         >
-          {messages.importProfiles}
+          {t('importProfiles')}
         </button>
         <button
           type="button"
@@ -75,7 +76,7 @@ export function ProfileIO({
           disabled={!canExport}
           onClick={onExportProfiles}
         >
-          {messages.exportProfiles}
+          {t('exportProfiles')}
         </button>
         <button
           type="button"
@@ -84,11 +85,11 @@ export function ProfileIO({
           disabled={!canExport}
           onClick={onExportSafeKeys}
         >
-          {messages.exportSafeKeys}
+          {t('exportSafeKeys')}
         </button>
       </div>
       {status ? (
-        <p className="text-xs" style={{ color: 'var(--fg-muted)' }} role="status">
+        <p className="text-xs" style={{ color: 'var(--fg-muted)' }} role="status" aria-live="polite">
           {status}
         </p>
       ) : null}
