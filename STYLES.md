@@ -3,60 +3,59 @@
 Visual design tokens and UI conventions for BindScope. Update this file when tokens, key-state
 cues, or breakpoints change.
 
-## Design direction (planned — UI Refresh)
+## Design direction (UI Refresh)
 
-Active plan: `PLAN.md` (phases UR2–UR5). Decision: **D13**. Competitive brief:
-`docs/keybindr-analysis.md` (UR1 complete). Intents below are locked for implementation; UR2+
-replaces the MVP defaults in **Theme** / **Key-state cues** / **Breakpoints** as each phase ships.
+Active plan: `PLAN.md` (UR2 complete; UR3–UR5 pending). Decision: **D13**. Competitive brief:
+`docs/keybindr-analysis.md`.
 
-### Shell hierarchy & chrome
+### Shell hierarchy & chrome (UR2 shipped)
 
-| Topic | Planned direction |
+| Topic | Direction |
 |---|---|
-| Hierarchy | Header → keyboard (± mouse) stage → slim legend/summary; selection/IO/prefs in collapsible menus |
-| Open chrome | Brand, short status, legend — no heavy card wrappers |
-| Closed chrome | Keyboard/mouse visualizer sits in a bordered “stage” surface (Keybindr-like containment, BindScope tokens) |
-| Header actions | Compact cluster: Games, Import/Export, Prefs (pattern from Keybindr; not their gold/black brand) |
-| Detail panel | Collapsed by default; opens on key/mouse selection (desktop side drawer/panel; phone bottom drawer) |
-| Density | Tighter gaps/padding than MVP card stack; avoid always-open tall control columns above the keyboard |
+| Hierarchy | Header → keyboard stage (+ selection detail) → collapsed Games & tools rail |
+| Open chrome | Brand, tagline, prefs — no heavy card wrappers above the keyboard |
+| Closed chrome | Keyboard sits in a bordered `.keyboard-stage` surface |
+| Controls | Minimal `<details>` rail below the stage (full disclosure/menu system = UR3) |
+| Detail panel | Selection-driven; opens beside the stage on desktop when a key is selected; dismiss clears selection |
+| Density | Slim legend + availability counts under the keyboard; controls off the critical path by default |
 
-### Overflow & breakpoints (planned)
+### Overflow & breakpoints (UR2 shipped)
 
 | Class | Width | Layout intent |
 |---|---|---|
-| Phone | `< 1024px` | Single column; visualizer full width; controls in disclosures; detail as drawer on selection |
-| Desktop | `≥ 1024px` | Visualizer-dominant row; disclosures in header/toolbar; detail drawer/panel only when selected |
+| Phone | `< 1024px` | Single column; visualizer full width; controls in collapsed rail; detail stacks under keyboard when selected |
+| Desktop | `≥ 1024px` (`lg`) | Visualizer-dominant; detail beside stage only when a key is selected |
 | Wide target | `≥ 1280px` | ANSI full (alpha + nav + numpad) fully visible without horizontal clipping |
 
-- Content column / stage: aim ~`max-width: 1400px` (Keybindr reference), not MVP `max-w-5xl` on the SVG.
-- SVG: `width: 100%` + layout `viewBox`; remove artificial SVG max-width caps that clip the numpad.
-- Horizontal scroll only as last resort on very narrow widths when even TKL cannot fit labels comfortably.
-- Do **not** auto-switch form factor on resize (reject Keybindr’s force-`layout-60` ≤768px). User preference wins.
+- Content column / stage: `max-width: 1400px`.
+- SVG: `width: 100%` + layout `viewBox`; **no** artificial SVG max-width cap (removed MVP `max-w-5xl`).
+- Horizontal scroll only as last resort on very narrow widths (`overflow-x-auto` wrapper).
+- Do **not** auto-switch form factor on resize. User preference wins (UR4).
 
-### Free-key token intent (UR2)
+### Free-key tokens (UR2 shipped)
 
-| Theme | Intent |
-|---|---|
-| Light | `--key-free-bg` transparent or near-surface gray; `--key-free-border` muted gray (not green) |
-| Dark | Recessive dark gray fill (Keybindr-like ~`#2a2a2a` *feel*, BindScope tokenized); muted stroke/label |
-| System | Follows active light/dark computed theme |
+| Theme | `--key-free-bg` | `--key-free-border` |
+|---|---|---|
+| Light | `transparent` | `#a1a1aa` (muted gray) |
+| Dark | `#27272a` (recessive gray) | `#52525b` |
+| System | Follows active light/dark computed theme | same |
 
-Keep D11 marks/patterns/text for every state. Occupied/conflicted/reserved stay emphatic; free recedes.
-Update legend copy if “free” previously implied “go/green”.
+Occupied / conflicted / reserved stay emphatic. Free recedes. D11 marks/patterns/text remain for every
+state (free uses legend `·` only; no on-key mark).
 
-### Panel collapse rules (UR3)
+### Panel collapse rules (UR3 planned)
 
 | Panel / group | Default | Opens when |
 |---|---|---|
-| Game search + selection + layers | Collapsed | User opens “Games” (or equivalent) disclosure |
-| Import / export / safe-key | Collapsed | User opens Import/Export menu |
-| Locale + theme prefs | Collapsed or header icon menu | User opens Prefs |
-| Key/mouse detail | Collapsed | User selects a key or mouse button; closes on dismiss/deselect |
-| Legend + availability summary | Visible (slim) | Always available; may wrap on phone without stealing hero space |
+| Game search + selection + layers | Collapsed (UR2: native `<details>`) | User opens “Games & tools” |
+| Import / export / safe-key | Inside same rail for now | Same disclosure (UR3 may split) |
+| Locale + theme prefs | Header | Always in header |
+| Key/mouse detail | Collapsed | User selects a key; Close / re-click dismisses |
+| Legend + availability summary | Visible (slim) | Always under keyboard |
 
-All disclosures: keyboard/pointer/touch operable; visible `:focus-visible`; `aria-expanded` + labelled controls.
+UR3 will replace the minimal rail with denser header/toolbar disclosures (`aria-expanded`, focus order).
 
-### Devices (UR4–UR5)
+### Devices (UR4–UR5 planned)
 
 | Topic | Planned direction |
 |---|---|
@@ -69,9 +68,6 @@ All disclosures: keyboard/pointer/touch operable; visible `:focus-visible`; `ari
 
 Do not ship Keybindr Inter/Fira-only stacks, gold-on-black identity, dark-only mode, bind-editor
 modals, or category-color-as-primary-state. BindScope tokens, i18n, and occupancy semantics stay.
-
-Until UR2 lands, the **Theme** / **Key-state cues** / **Breakpoints** sections below still describe the
-current MVP.
 
 ## Theme
 
@@ -94,7 +90,7 @@ State is never conveyed by color alone. Every state uses color **and** a mark / 
 
 | State | Mark | Pattern | Token pair |
 |---|---|---|---|
-| Free | · (legend only) | none | `--key-free-*` |
+| Free | · (legend only) | none | `--key-free-*` (neutral / transparent — not green) |
 | Partial | ≈ | horizontal lines | `--key-partial-*` |
 | Heavy | ! | diagonal cross | `--key-heavy-*` |
 | Reserved | × | checker | `--key-reserved-*` |
@@ -106,19 +102,20 @@ Meta lives in `app/src/ui/keyStateMeta.ts`. Aria labels include the state name.
 
 | Class | Width | Layout intent |
 |---|---|---|
-| Phone | `< 1024px` | Single column: keyboard, then detail |
-| Desktop | `≥ 1024px` (`lg`) | Keyboard + detail side by side |
+| Phone | `< 1024px` | Single column: keyboard stage, then detail (when selected), then controls rail |
+| Desktop | `≥ 1024px` (`lg`) | Keyboard stage full width; detail beside stage only when selected |
+| Wide | `≥ 1280px` | ANSI full fits without clipping inside the 1400px column |
 
 The SVG keyboard uses a `viewBox` from layout data and `width: 100%` so it scales with its
-container. Horizontal scroll is allowed as a last resort via `min-w-[320px]` on the SVG.
+container.
 
 ## Components
 
 - Keyboard: `app/src/components/KeyboardVisualizer.tsx` — data-driven from `KeyboardLayout`; dims
   keys whose state is filtered out via the legend
-- Detail: `app/src/components/KeyDetailPanel.tsx`
+- Detail: `app/src/components/KeyDetailPanel.tsx` — selection-driven; optional dismiss
 - Legend: `app/src/components/Legend.tsx` — toggles state filters
-- Search / selection: `GameSearch.tsx`, `SelectedGames.tsx`
+- Search / selection: `GameSearch.tsx`, `SelectedGames.tsx` (inside collapsed controls rail)
 - Prefs: `PrefsControls.tsx` — locale + theme selects
 - Chrome copy: locale catalogs in `app/src/i18n/locales/` via `useI18n()`
 
@@ -127,3 +124,4 @@ container. Horizontal scroll is allowed as a last resort via `min-w-[320px]` on 
 - Clean, high-contrast, minimal. The keyboard should look like a keyboard.
 - Obvious hover/focus/selected states; visible `:focus-visible`.
 - No gratuitous animation or flashy branding.
+- Free keys must read as neutral/recessive, never traffic-light green.

@@ -110,6 +110,10 @@ export default function App() {
     })
   }
 
+  function handleSelectKey(key: KeyboardKey) {
+    setSelectedKey((prev) => (prev === key ? null : key))
+  }
+
   async function handleImportFile(file: File): Promise<string> {
     const text = await readFileAsText(file)
     const result = parseImportDocument(text)
@@ -173,10 +177,10 @@ export default function App() {
   return (
     <div className="min-h-screen">
       <header
-        className="border-b px-4 py-4"
+        className="border-b px-4 py-3"
         style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
       >
-        <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-3">
+        <div className="mx-auto flex max-w-[1400px] flex-wrap items-end justify-between gap-3">
           <div className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
             <h1 className="text-xl font-semibold">{t('appTitle')}</h1>
             <p className="text-sm" style={{ color: 'var(--fg-muted)' }}>
@@ -187,36 +191,16 @@ export default function App() {
         </div>
       </header>
 
-      <main className="mx-auto grid max-w-6xl gap-4 px-4 py-4 lg:grid-cols-[minmax(0,1fr)_280px]">
-        <div className="space-y-4">
+      <main className="mx-auto max-w-[1400px] space-y-3 px-4 py-4">
+        <div
+          className={
+            selectedKey
+              ? 'grid gap-3 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-start'
+              : undefined
+          }
+        >
           <section
-            className="rounded-lg border p-4"
-            style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}
-          >
-            <GameSearch catalog={CATALOG_GAMES} selectedIds={selectedIdSet} onAdd={addGame} />
-            <div className="mt-4 border-t pt-4" style={{ borderColor: 'var(--border)' }}>
-              <SelectedGames
-                selectedIds={selectedIds}
-                enabledLayersByGame={enabledLayersByGame}
-                overridesByGame={overridesByGame}
-                extraNames={extraNames}
-                onRemove={removeGame}
-                onToggleLayer={toggleLayer}
-                onClearOverride={clearOverride}
-              />
-            </div>
-            <div className="mt-4 border-t pt-4" style={{ borderColor: 'var(--border)' }}>
-              <ProfileIO
-                onImportFile={handleImportFile}
-                onExportProfiles={handleExportProfiles}
-                onExportSafeKeys={handleExportSafeKeys}
-                canExport={effectiveProfiles.length > 0}
-              />
-            </div>
-          </section>
-
-          <section
-            className="rounded-lg border p-4"
+            className="keyboard-stage rounded-lg border p-3 sm:p-4"
             style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}
             aria-labelledby="keyboard-heading"
           >
@@ -237,18 +221,86 @@ export default function App() {
               layout={ANSI_FULL_LAYOUT}
               keys={summary.keys}
               selectedKey={selectedKey}
-              onSelectKey={setSelectedKey}
+              onSelectKey={handleSelectKey}
               activeFilters={activeFilters}
             />
 
-            <div className="mt-4 border-t pt-3" style={{ borderColor: 'var(--border)' }}>
-              <Legend activeFilters={activeFilters} onToggleFilter={toggleFilter} />
+            <div
+              className="mt-3 flex flex-col gap-3 border-t pt-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between"
+              style={{ borderColor: 'var(--border)' }}
+            >
+              <div className="min-w-0 flex-1">
+                <Legend activeFilters={activeFilters} onToggleFilter={toggleFilter} />
+              </div>
+              <dl
+                className="flex flex-wrap gap-x-4 gap-y-1 text-sm"
+                aria-label={t('summaryHeading')}
+              >
+                <SummaryCount label={t('summaryFree')} value={summary.freeCount} />
+                <SummaryCount label={t('summaryPartial')} value={summary.partialCount} />
+                <SummaryCount label={t('summaryHeavy')} value={summary.heavyCount} />
+                <SummaryCount label={t('summaryReserved')} value={summary.reservedCount} />
+              </dl>
             </div>
           </section>
+
+          {selectedKey ? (
+            <KeyDetailPanel
+              summary={summary}
+              selectedKey={selectedKey}
+              onDismiss={() => setSelectedKey(null)}
+            />
+          ) : null}
         </div>
 
-        <KeyDetailPanel summary={summary} selectedKey={selectedKey} />
+        <details
+          className="controls-rail rounded-lg border"
+          style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}
+        >
+          <summary
+            className="cursor-pointer list-none px-4 py-3 text-sm font-medium marker:content-none [&::-webkit-details-marker]:hidden"
+            style={{ color: 'var(--fg)' }}
+          >
+            <span className="flex items-center justify-between gap-2">
+              <span>{t('controlsToggle')}</span>
+              <span className="text-xs font-normal" style={{ color: 'var(--fg-muted)' }}>
+                {t('controlsToggleHint')}
+              </span>
+            </span>
+          </summary>
+          <div className="space-y-4 border-t px-4 py-4" style={{ borderColor: 'var(--border)' }}>
+            <GameSearch catalog={CATALOG_GAMES} selectedIds={selectedIdSet} onAdd={addGame} />
+            <div className="border-t pt-4" style={{ borderColor: 'var(--border)' }}>
+              <SelectedGames
+                selectedIds={selectedIds}
+                enabledLayersByGame={enabledLayersByGame}
+                overridesByGame={overridesByGame}
+                extraNames={extraNames}
+                onRemove={removeGame}
+                onToggleLayer={toggleLayer}
+                onClearOverride={clearOverride}
+              />
+            </div>
+            <div className="border-t pt-4" style={{ borderColor: 'var(--border)' }}>
+              <ProfileIO
+                onImportFile={handleImportFile}
+                onExportProfiles={handleExportProfiles}
+                onExportSafeKeys={handleExportSafeKeys}
+                canExport={effectiveProfiles.length > 0}
+              />
+            </div>
+          </div>
+        </details>
       </main>
+    </div>
+  )
+}
+
+function SummaryCount({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="flex items-baseline gap-1.5">
+      <dt style={{ color: 'var(--fg-muted)' }}>{label}</dt>
+      <dd className="font-semibold tabular-nums">{value}</dd>
     </div>
   )
 }

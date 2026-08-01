@@ -55,7 +55,7 @@ export function KeyboardVisualizer({
         role="group"
         aria-label={t('keyboardAriaLabel')}
         viewBox={`0 0 ${layout.width} ${layout.height}`}
-        className="mx-auto h-auto w-full min-w-[320px] max-w-5xl"
+        className="mx-auto block h-auto w-full"
       >
         <KeyPatterns />
         {layout.keys.map((layoutKey) => {

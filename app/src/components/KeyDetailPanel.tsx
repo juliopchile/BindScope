@@ -6,12 +6,13 @@ import { getKeyStateMeta } from '../ui/keyStateMeta'
 
 interface KeyDetailPanelProps {
   summary: ConflictSummary
-  selectedKey: KeyboardKey | null
+  selectedKey: KeyboardKey
+  onDismiss?: () => void
 }
 
-export function KeyDetailPanel({ summary, selectedKey }: KeyDetailPanelProps) {
+export function KeyDetailPanel({ summary, selectedKey, onDismiss }: KeyDetailPanelProps) {
   const { t } = useI18n()
-  const selected = selectedKey ? summary.keys.find((item) => item.key === selectedKey) : undefined
+  const selected = summary.keys.find((item) => item.key === selectedKey)
 
   return (
     <aside
@@ -19,23 +20,29 @@ export function KeyDetailPanel({ summary, selectedKey }: KeyDetailPanelProps) {
       style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}
       aria-label={t('detailHeading')}
     >
-      <h2
-        className="text-xs font-semibold tracking-wide uppercase"
-        style={{ color: 'var(--fg-muted)' }}
-      >
-        {t('detailHeading')}
-      </h2>
+      <div className="flex items-start justify-between gap-2">
+        <h2
+          className="text-xs font-semibold tracking-wide uppercase"
+          style={{ color: 'var(--fg-muted)' }}
+        >
+          {t('detailHeading')}
+        </h2>
+        {onDismiss ? (
+          <button
+            type="button"
+            onClick={onDismiss}
+            className="rounded-md border px-2 py-1 text-xs"
+            style={{ borderColor: 'var(--border)', color: 'var(--fg-muted)' }}
+          >
+            {t('detailDismiss')}
+          </button>
+        ) : null}
+      </div>
 
       {!selected ? (
-        <div className="mt-3 space-y-4 text-sm">
-          <p style={{ color: 'var(--fg-muted)' }}>{t('detailEmpty')}</p>
-          <dl className="grid grid-cols-2 gap-3">
-            <Count label={t('summaryFree')} value={summary.freeCount} />
-            <Count label={t('summaryPartial')} value={summary.partialCount} />
-            <Count label={t('summaryHeavy')} value={summary.heavyCount} />
-            <Count label={t('summaryReserved')} value={summary.reservedCount} />
-          </dl>
-        </div>
+        <p className="mt-3 text-sm" style={{ color: 'var(--fg-muted)' }}>
+          {t('detailEmpty')}
+        </p>
       ) : (
         <SelectedDetail selected={selected} />
       )}
@@ -93,15 +100,6 @@ function SelectedDetail({ selected }: { selected: NonNullable<ConflictSummary['k
           ))}
         </ul>
       )}
-    </div>
-  )
-}
-
-function Count({ label, value }: { label: string; value: number }) {
-  return (
-    <div>
-      <dt style={{ color: 'var(--fg-muted)' }}>{label}</dt>
-      <dd className="text-xl font-semibold">{value}</dd>
     </div>
   )
 }

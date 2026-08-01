@@ -10,9 +10,10 @@ import/export, locale catalogs under `app/src/i18n/` (en/es/pt/fr/zh), light/dar
 `html[data-theme]`, and GitHub Pages deploy from `.github/workflows/deploy-pages.yml`. Visual tokens
 live in `STYLES.md`.
 
-**Active work:** UI Refresh track (UR2–UR5) in `PLAN.md` — keyboard-first shell inspired by Keybindr
+**Active work:** UI Refresh track (UR3–UR5) in `PLAN.md` — keyboard-first shell inspired by Keybindr
 IA (D13), not a clone. Requirements in `qa.md`; competitive brief in `docs/keybindr-analysis.md`
-(UR1 complete). Do not start UR2+ implementation until the user/orchestrator authorizes that phase.
+(UR1 complete; UR2 shell + free-key retoken complete). Do not start UR3+ implementation until the
+user/orchestrator authorizes that phase.
 
 Use `make install`, `make run`, `make test`, `make lint`, and `make build` from the repo root. Do not
 invent commands; prefer the Makefile.
@@ -93,5 +94,5 @@ points there as they appear.
 | `STYLES.md` | Visual design tokens, key-state cues, breakpoints, component rules | Exists |
 | `qa.md` | Post-MVP UI QA notes (UI Refresh requirements) | Exists |
 | `docs/keybindr-analysis.md` | UR1 competitive brief (Keybindr IA adopt/reject) | Exists |
-| `PLAN.md` | Active UI Refresh phases UR2–UR5 (UR1 done) | Active |
+| `PLAN.md` | Active UI Refresh phases UR3–UR5 (UR1–UR2 done) | Active |
 | `CONTRIBUTING.md` | Binding-data submission workflow | Create only if community contributions open |

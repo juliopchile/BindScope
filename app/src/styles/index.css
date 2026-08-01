@@ -17,8 +17,8 @@ html[data-theme='light'] {
   --accent: #2563eb;
   --focus: #2563eb;
 
-  --key-free-bg: #ecfdf5;
-  --key-free-border: #059669;
+  --key-free-bg: transparent;
+  --key-free-border: #a1a1aa;
   --key-partial-bg: #fffbeb;
   --key-partial-border: #d97706;
   --key-heavy-bg: #fef2f2;
@@ -44,13 +44,13 @@ html[data-theme='dark'] {
   --accent: #60a5fa;
   --focus: #60a5fa;
 
-  --key-free-bg: #052e1a;
-  --key-free-border: #34d399;
+  --key-free-bg: #27272a;
+  --key-free-border: #52525b;
   --key-partial-bg: #422006;
   --key-partial-border: #fbbf24;
   --key-heavy-bg: #450a0a;
   --key-heavy-border: #f87171;
-  --key-reserved-bg: #27272a;
+  --key-reserved-bg: #3f3f46;
   --key-reserved-border: #a1a1aa;
   --key-unknown-bg: #18181b;
   --key-unknown-border: #71717a;
@@ -76,13 +76,13 @@ html[data-theme='system'] {
     --accent: #60a5fa;
     --focus: #60a5fa;
 
-    --key-free-bg: #052e1a;
-    --key-free-border: #34d399;
+    --key-free-bg: #27272a;
+    --key-free-border: #52525b;
     --key-partial-bg: #422006;
     --key-partial-border: #fbbf24;
     --key-heavy-bg: #450a0a;
     --key-heavy-border: #f87171;
-    --key-reserved-bg: #27272a;
+    --key-reserved-bg: #3f3f46;
     --key-reserved-border: #a1a1aa;
     --key-unknown-bg: #18181b;
     --key-unknown-border: #71717a;
@@ -170,7 +170,8 @@ body {
 }
 
 .legend-swatch--free {
-  background: var(--key-free-bg);
+  /* Transparent free fill still needs a readable swatch face on surface cards */
+  background: color-mix(in srgb, var(--key-free-border) 12%, var(--surface));
   border-color: var(--key-free-border);
 }
 .legend-swatch--partial {

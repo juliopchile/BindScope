@@ -10,7 +10,7 @@ into `PROJECT_ROADMAP.md`; stable design information lives in `PROJECT_STRUCTURE
 
 **Current track:** UI Refresh (post-MVP) — keyboard-first shell inspired by Keybindr IA
 
-**Status:** UR1 complete; UR2 awaiting authorization (no app UI code until green-lit)
+**Status:** UR1–UR2 complete; UR3 awaiting authorization (do not start UR3–UR5 until green-lit)
 
 **Source of requirements:** `qa.md` (user QA notes). Reference screenshots: `example_csbinds.png`,
 `example_keybindr.png`. Competitive brief: `docs/keybindr-analysis.md`. Auto-extracted Keybindr
@@ -91,36 +91,33 @@ implementation brief BindScope can follow without copying brand or product model
 
 ### Phase UR2 — Keyboard-first shell & free-key retoken
 
+**Status:** Complete
+
 **Goal.** Fix the two highest-visibility “slop” issues: hierarchy/overflow and green free keys.
 
 **Depends on:** UR1 brief (at least the shell + free-key sections).
 
-**Must do**
+**Delivered**
 
-- Restructure `App.tsx` composition so the visualizer sits directly under the header on desktop and
-  phone (controls move beside, below in a collapsed rail, or into header menus — per UR1 brief).
-- Give the keyboard more horizontal space: remove or raise artificial width caps (e.g. current
-  `max-w-5xl` on the SVG), widen the main content column, and verify ANSI full is fully visible at
-  common desktop widths without clipping keycaps.
-- Retoken `--key-free-*` to neutral gray / transparent fills (light + dark + system); keep
-  non-color cues (D11). Update legend copy if “free” implied “go/green”.
-- Preserve selection → availability → keyboard data path; no engine behaviour change unless a bug is
-  found.
-- i18n: any new chrome strings go through locale catalogs.
-
-**Out of scope**
-
-- Full menu system polish (UR3), layout variants (UR4), mouse (UR5).
+- `App.tsx` restructured: header → closed keyboard stage (legend + slim summary) → selection-driven
+  detail → collapsed Games & tools `<details>` rail (search / layers / import-export).
+- Content column `max-w-[1400px]`; SVG `max-w-5xl` removed so ANSI full scales without clipping at
+  ≥1280px.
+- `--key-free-*` retokened to neutral transparent/gray (light + dark + system); reserved dark fill
+  nudged so free stays distinct. D11 marks unchanged.
+- New chrome strings (`controlsToggle`, `controlsToggleHint`, `detailDismiss`, `summaryHeading`) in
+  en/es/pt/fr/zh; empty-selection copy updated for below-keyboard controls.
+- `STYLES.md` updated to match shipped shell + tokens.
 
 **Acceptance**
 
-- [ ] On a ≥1280px viewport, ANSI full keyboard shows all regions (alpha, nav, numpad) without
+- [x] On a ≥1280px viewport, ANSI full keyboard shows all regions (alpha, nav, numpad) without
       horizontal clipping; horizontal scroll only as last resort on narrow widths.
-- [ ] Keyboard is the dominant element below the header (controls do not push it below the fold on
+- [x] Keyboard is the dominant element below the header (controls do not push it below the fold on
       desktop when panels are collapsed/default).
-- [ ] Free keys read as neutral/gray/transparent in light and dark themes — not green.
-- [ ] `make test`, `make lint`, `make build` pass; D11 cues still present for every state.
-- [ ] `STYLES.md` tokens and breakpoints updated to match shipped CSS.
+- [x] Free keys read as neutral/gray/transparent in light and dark themes — not green.
+- [x] `make test`, `make lint`, `make build` pass; D11 cues still present for every state.
+- [x] `STYLES.md` tokens and breakpoints updated to match shipped CSS.
 
 **Likely touch points:** `App.tsx`, `KeyboardVisualizer.tsx`, `styles/index.css`, `STYLES.md`,
 `ui/keyStateMeta.ts`, locale catalogs, possibly `Legend.tsx`.
@@ -295,9 +292,9 @@ Full rationale in `docs/keybindr-analysis.md` §9. Summary:
 
 ## Immediate Next Step
 
-Authorize **Phase UR2** (keyboard-first shell & free-key retoken). Follow
-`docs/keybindr-analysis.md` §10 and `STYLES.md` Design direction. No UR2 app code until the user
-(or orchestrator) green-lights that phase.
+Authorize **Phase UR3** (collapsible chrome & denser shell). UR2 keyboard-first shell and free-key
+retoken are complete. Do not start UR4–UR5 until UR3 is green-lit (unless the orchestrator explicitly
+parallelizes after UR3 skeleton).
 
 ## Verification Commands (every implementation phase)
 

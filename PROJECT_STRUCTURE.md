@@ -34,7 +34,7 @@ BindScope/
 │   ├── vite.config.ts
 │   ├── src/
 │   │   ├── main.tsx            # Script entry point
-│   │   ├── App.tsx             # Selection + keyboard + detail composition
+│   │   ├── App.tsx             # Keyboard-first shell: stage + selection detail + controls rail
 │   │   ├── domain/             # Pure availability engine
 │   │   ├── data/
 │   │   │   ├── catalog/        # Seed games/tools (one file each) + index
@@ -189,7 +189,7 @@ E
 ```
 
 **Panels:** game/tool search · selected chips · binding-layer toggles · custom profile
-import/export · safe-key export · keyboard · key detail side panel · interactive legend filters
+import/export · safe-key export · keyboard · selection-driven key detail · interactive legend filters
 (free / partial / heavy / reserved) · empty-selection guidance · language switcher · theme switcher.
 
 **Yours / tools:** catalog entries with `kind: 'tool'` participate in the same availability
@@ -218,8 +218,8 @@ profile catalog exists.
 
 | Viewport class | Intent |
 |---|---|
-| Desktop (wide) | Multi-region shell: games · keyboard · detail |
-| Tablet | Reflow or collapse side panels; keyboard remains the focus |
+| Desktop (wide) | Keyboard-first stage (~1400px); detail beside stage when selected; controls in collapsed rail |
+| Tablet | Reflow; keyboard remains the focus; controls stay collapsed by default |
 | Phone | Single-column stack; essential controls reachable without horizontal page scroll |
 
 The SVG keyboard scales with its container, stays readable, and remains operable with pointer, touch,

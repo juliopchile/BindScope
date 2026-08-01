@@ -120,17 +120,22 @@ shell, neutral free keys, closed visualizer stage, compact header menus, Full/TK
 CS-binds-style mouse SVG with first-class availability ids. Reject Keybindr brand, dark-only theme,
 bind-editor workflows, and auto-force 60% on mobile. Open questions resolved in the brief.
 
+**UR2 (complete):** Keyboard-first shell — visualizer stage directly under the header; Games & tools
+in a collapsed rail below; selection-driven detail. Content column ~1400px; SVG `max-w-5xl` removed
+so ANSI full fits at ≥1280px. Free keys retokened to neutral transparent/gray (light + dark + system);
+D11 cues retained. Engine path unchanged.
+
 | Phase | Status | Summary |
 |---|---|---|
 | UR1. Competitive analysis & design brief | Complete | Live Keybindr + screenshots → `docs/keybindr-analysis.md`; STYLES planned direction; open Qs resolved |
-| UR2. Keyboard-first shell & free-key retoken | Planned | Hero keyboard, fix truncation, neutral/gray free keys |
+| UR2. Keyboard-first shell & free-key retoken | Complete | Hero keyboard stage, 1400px column, neutral free keys; controls rail collapsed by default |
 | UR3. Collapsible chrome & denser shell | Planned | Menus / disclosures; controls off the critical path |
 | UR4. Keyboard form-factor selector | Planned | At least ANSI Full + TKL; persisted preference |
 | UR5. Mouse visualizer | Planned | Data-driven mouse SVG; first-class availability ids |
 
 ## Pending Work
 
-- UI Refresh UR2–UR5 (see In Progress / `PLAN.md`; UR1 brief complete)
+- UI Refresh UR3–UR5 (see In Progress / `PLAN.md`; UR1–UR2 complete)
 - Grow the hand-curated catalog toward ~20–30 games (layout already extensible)
 - Parsers for real config formats (INI, CFG, XML)
 - Optional Playwright smoke / broader E2E
