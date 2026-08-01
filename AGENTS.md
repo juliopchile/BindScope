@@ -8,8 +8,11 @@ This file is written for AI coding agents working in BindScope. It should help a
 engine, data-driven SVG keyboard, game/tool search, layered seed catalog, JSON custom-profile
 import/export, locale catalogs under `app/src/i18n/` (en/es/pt/fr/zh), light/dark/system theme via
 `html[data-theme]`, and GitHub Pages deploy from `.github/workflows/deploy-pages.yml`. Visual tokens
-live in `STYLES.md`. Further work follows **Later Direction** in `PROJECT_ROADMAP.md`, not a new
-numbered stage unless the user defines one.
+live in `STYLES.md`.
+
+**Active work:** UI Refresh track (UR2–UR5) in `PLAN.md` — keyboard-first shell inspired by Keybindr
+IA (D13), not a clone. Requirements in `qa.md`; competitive brief in `docs/keybindr-analysis.md`
+(UR1 complete). Do not start UR2+ implementation until the user/orchestrator authorizes that phase.
 
 Use `make install`, `make run`, `make test`, `make lint`, and `make build` from the repo root. Do not
 invent commands; prefer the Makefile.
@@ -88,4 +91,7 @@ points there as they appear.
 |---|---|---|
 | `DECISIONS.md` | Architectural tradeoffs and their rationale | Exists |
 | `STYLES.md` | Visual design tokens, key-state cues, breakpoints, component rules | Exists |
+| `qa.md` | Post-MVP UI QA notes (UI Refresh requirements) | Exists |
+| `docs/keybindr-analysis.md` | UR1 competitive brief (Keybindr IA adopt/reject) | Exists |
+| `PLAN.md` | Active UI Refresh phases UR2–UR5 (UR1 done) | Active |
 | `CONTRIBUTING.md` | Binding-data submission workflow | Create only if community contributions open |

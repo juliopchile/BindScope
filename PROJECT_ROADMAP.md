@@ -109,10 +109,28 @@ Delivered:
 
 ## In Progress
 
-No numbered stage is running. Next work follows **Later Direction** / Pending Work below.
+**UI Refresh track (post-MVP)** — keyboard-first shell, Keybindr-inspired IA (not a clone). Detailed
+phase plan lives in `PLAN.md`. Requirements source: `qa.md`. Decision: **D13**. Brief:
+`docs/keybindr-analysis.md`.
+
+**UR1 (complete):** Explored live `keybindr.github.io` (React SPA, CSS tokens, layout registry
+Full/TKL/75%/60%, mouse/HOTAS *tables* only — no mouse SVG; help states viz unsupported) and
+cross-checked `keybindr.app` (separate product with chrome form-factor control). Adopt keyboard-first
+shell, neutral free keys, closed visualizer stage, compact header menus, Full/TKL selector, and a
+CS-binds-style mouse SVG with first-class availability ids. Reject Keybindr brand, dark-only theme,
+bind-editor workflows, and auto-force 60% on mobile. Open questions resolved in the brief.
+
+| Phase | Status | Summary |
+|---|---|---|
+| UR1. Competitive analysis & design brief | Complete | Live Keybindr + screenshots → `docs/keybindr-analysis.md`; STYLES planned direction; open Qs resolved |
+| UR2. Keyboard-first shell & free-key retoken | Planned | Hero keyboard, fix truncation, neutral/gray free keys |
+| UR3. Collapsible chrome & denser shell | Planned | Menus / disclosures; controls off the critical path |
+| UR4. Keyboard form-factor selector | Planned | At least ANSI Full + TKL; persisted preference |
+| UR5. Mouse visualizer | Planned | Data-driven mouse SVG; first-class availability ids |
 
 ## Pending Work
 
+- UI Refresh UR2–UR5 (see In Progress / `PLAN.md`; UR1 brief complete)
 - Grow the hand-curated catalog toward ~20–30 games (layout already extensible)
 - Parsers for real config formats (INI, CFG, XML)
 - Optional Playwright smoke / broader E2E
@@ -142,7 +160,8 @@ Known risks that become debt if neglected:
 
 | Phase | Scope |
 |---|---|
-| V2 | Modifier combinations, action-name search, layout variants (60%, TKL, ISO), more UI locales |
+| UI Refresh (UR1–UR5) | Active plan in `PLAN.md`: Keybindr-inspired shell, free-key retoken, collapsible chrome, layout selector, mouse visualizer |
+| V2 | Modifier combinations, action-name search, remaining layout variants (60%, ISO), more UI locales — TKL/Full may land earlier in UR4 |
 | V3 | Real config file import, Steam sync, cloud profiles, game detection |
 | V4 | Recommendations: *"the best push-to-talk key for your library"* |
 

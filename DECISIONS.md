@@ -152,6 +152,25 @@ full app across device classes.
 **Consequences.** Do not treat “desktop first, mobile never” as acceptable. Do not ship a keyboard
 that only fits a wide monitor. Touch targets and focus order matter as much as visual polish.
 
+## D13 — Keybindr-Inspired Shell, Not a Clone
+
+**Context.** Post-MVP QA (`qa.md`) found the UI dense in the wrong places: controls above the
+keyboard, green “free” keys, truncation of the full layout, missing form-factor and mouse visuals.
+Keybindr (https://keybindr.github.io/) is the clearest public reference for a keyboard-first binding
+shell. An auto-extracted token dump in `qa.md` is incomplete and unverified.
+
+**Decision.** Study Keybindr’s information architecture, density, free-key neutrality, layout
+selector, and mouse presentation, and adopt those **patterns** in BindScope’s UI Refresh track
+(`PLAN.md` phases UR1–UR5). Do **not** clone Keybindr’s brand, typography (e.g. Inter-only),
+orange-on-black identity, or single-profile editor product model. BindScope remains the multi-profile
+availability product (D1). Visual tokens stay BindScope-owned (D11); domain stays pure (D5); devices
+stay data-driven SVG (D4).
+
+**Consequences.** Phase UR1 must produce an adopt/reject brief (`docs/keybindr-analysis.md`) before
+large shell refactors. Free keys should read as neutral/recessive, not “success green.” New chrome
+(collapsible menus, layout selector, mouse) is in scope for the UI Refresh track; becoming a Keybindr
+substitute is not.
+
 ## Maintenance Rule
 
 Add an entry when a decision constrains future design. Do not document reversible, low-impact choices

@@ -10,7 +10,10 @@ interactive keyboard, and instantly see **which keys are still free** across all
 **Stage 5 complete — Deployment and polish (MVP).** Search and select curated games and tools, toggle
 binding layers, import/export profiles as JSON, switch UI language (en / es / pt / fr / zh) and
 theme (light / dark / system), and download the current free (safe) key set. Static deploy to GitHub
-Pages is wired via Actions. See `PROJECT_ROADMAP.md` and `PLAN.md`.
+Pages is wired via Actions.
+
+**Next:** UI Refresh track (keyboard-first shell, layout selector, mouse visualizer) — see `PLAN.md`
+and `PROJECT_ROADMAP.md`. QA notes: `qa.md`.
 
 To run it, see **Getting Started** below.
 
@@ -121,6 +124,8 @@ Local preview of the production build: `make build` then `npm --prefix app run p
 | `PLAN.md` | Active work only: current task, blockers, next step |
 | `AGENTS.md` | AI agent instructions: reading order, invariants, commands |
 | `STYLES.md` | Theme tokens, key-state cues, breakpoints |
+| `qa.md` | Post-MVP UI QA notes (requirements source for the UI Refresh track) |
+| `docs/keybindr-analysis.md` | UR1 competitive brief: Keybindr IA adopt/reject for UR2–UR5 |
 | `docs/source-conversation.md` | Conversation that produced the concept; immutable historical record |
 
 ## Documentation Rule

@@ -3,9 +3,9 @@
 `PROJECT_STRUCTURE.md` documents how BindScope is organized and how its pieces fit together. It
 should let a human or an agent understand the repository without guessing from filenames.
 
-> **Status:** Stages 1–5 (MVP) are real — scaffold, engine, SVG keyboard, selection UI, layered seed
-> catalog, JSON custom-profile import/export, i18n/theme switchers, and GitHub Pages deploy exist
-> under `app/` / `.github/`. Update this file as the structure changes.
+> **Status:** Stages 1–5 (MVP) are real under `app/` / `.github/`. UI Refresh (UR1–UR5) is planned in
+> `PLAN.md` — keyboard-first shell, layout selector, mouse visualizer. Update this file as the
+> structure changes.
 
 ## Architecture
 
@@ -196,8 +196,10 @@ import/export · safe-key export · keyboard · key detail side panel · interac
 computation as games; the detail panel labels them as tools. A dedicated `yours` key-state is not
 required in the engine.
 
-**Layouts:** ANSI full-size, TKL, and a scalable compact abstraction. Data-driven, never hardcoded in
-component logic; ISO and regional variants must remain possible.
+**Layouts:** ANSI full-size shipped today (`LayoutId: 'ansi-full'`). TKL / compact / ISO remain the
+target model — data-driven, never hardcoded in component logic. UI Refresh **UR4** exposes a
+form-factor selector (see `PLAN.md`). Mouse visualizer is **UR5** (companion device SVG + normalized
+button ids), not yet in the tree.
 
 **Design:** clean, high-contrast, minimal but professional. The keyboard must look like a keyboard.
 Obvious hover and selected states. No visual noise, no gratuitous animation, no flashy branding.
