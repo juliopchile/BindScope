@@ -5,15 +5,15 @@ cues, or breakpoints change.
 
 ## Design direction (UI Refresh)
 
-Active plan: `PLAN.md` (UR1–UR3 complete; UR4–UR5 pending). Decision: **D13**. Competitive brief:
+Active plan: `PLAN.md` (UR1–UR4 complete; UR5 pending). Decision: **D13**. Competitive brief:
 `docs/keybindr-analysis.md`.
 
-### Shell hierarchy & chrome (UR3 shipped)
+### Shell hierarchy & chrome (UR3–UR4 shipped)
 
 | Topic | Direction |
 |---|---|
 | Hierarchy | Header (brand + action cluster) → keyboard stage (+ selection detail) |
-| Open chrome | Brand, tagline; compact toolbar triggers (Games, Import / Export, Preferences) |
+| Open chrome | Brand, tagline; visible layout selector; compact toolbar triggers (Games, Import / Export, Preferences) |
 | Closed chrome | Keyboard sits in a bordered `.keyboard-stage` surface |
 | Controls | Exclusive header disclosures via `ChromeToolbar` — collapsed by default |
 | Detail panel | Selection-driven; beside stage on desktop; bottom drawer + backdrop on phone |
@@ -30,7 +30,7 @@ Active plan: `PLAN.md` (UR1–UR3 complete; UR4–UR5 pending). Decision: **D13*
 - Content column / stage: `max-width: 1400px`.
 - SVG: `width: 100%` + layout `viewBox`; **no** artificial SVG max-width cap.
 - Horizontal scroll only as last resort on very narrow widths (`overflow-x-auto` wrapper).
-- Do **not** auto-switch form factor on resize. User preference wins (UR4).
+- Do **not** auto-switch form factor on resize. User preference wins (UR4 shipped).
 
 ### Free-key tokens (UR2 shipped)
 
@@ -50,6 +50,7 @@ state (free uses legend `·` only; no on-key mark).
 | Games (search + selection + layers) | Collapsed | User opens **Games** in the header toolbar |
 | Import / export / safe-key | Collapsed | User opens **Import / Export** |
 | Locale + theme prefs | Collapsed | User opens **Preferences** |
+| Keyboard form factor | Visible | Header toolbar select (Full / TKL); persists `bindscope.layout` |
 | Key/mouse detail | Collapsed | User selects a key; Close / backdrop / re-click dismisses |
 | Legend + availability summary | Visible (slim) | Always under keyboard |
 
@@ -61,11 +62,11 @@ Toolbar behaviour:
 - Games trigger may show a selected-count badge.
 - Open panel is a full-width region under the header row (scrolls internally if tall).
 
-### Devices (UR4–UR5 planned)
+### Devices (UR4 shipped; UR5 planned)
 
-| Topic | Planned direction |
+| Topic | Direction |
 |---|---|
-| Form factor | Toolbar selector: at least Full + TKL; persist `localStorage`; default ANSI Full |
+| Form factor | Toolbar selector: ANSI Full (default) + TKL; persist `localStorage` (`bindscope.layout`); no auto-switch on resize |
 | Mouse | Data-driven SVG beside/below keyboard in the same stage; CS-binds placement pattern |
 | Mouse ids | Canonical `Mouse1`…`Mouse5` (+ wheel if needed) in normalization; first-class in availability |
 | Mouse chrome | Optional show/hide; same free/partial/heavy/reserved token language as keys |
@@ -117,7 +118,8 @@ container.
 
 ## Components
 
-- Toolbar: `app/src/components/ChromeToolbar.tsx` — exclusive header disclosures
+- Toolbar: `app/src/components/ChromeToolbar.tsx` — exclusive header disclosures + visible layout select
+- Layout selector: `app/src/components/LayoutSelector.tsx` — Full / TKL; preference via `lib/preferences.ts`
 - Keyboard: `app/src/components/KeyboardVisualizer.tsx` — data-driven from `KeyboardLayout`; dims
   keys whose state is filtered out via the legend
 - Detail: `app/src/components/KeyDetailPanel.tsx` — selection-driven; desktop side panel / phone drawer

@@ -60,4 +60,7 @@ export const es: MessageCatalog = {
   themeLight: 'Claro',
   themeDark: 'Oscuro',
   themeSystem: 'Sistema',
+  layoutLabel: 'Teclado',
+  layoutAnsiFull: 'Completo',
+  layoutAnsiTkl: 'TKL',
 }

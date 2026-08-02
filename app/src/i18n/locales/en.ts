@@ -59,6 +59,9 @@ export const en = {
   themeLight: 'Light',
   themeDark: 'Dark',
   themeSystem: 'System',
+  layoutLabel: 'Keyboard',
+  layoutAnsiFull: 'Full',
+  layoutAnsiTkl: 'TKL',
 } as const
 
 export type MessageKey = keyof typeof en

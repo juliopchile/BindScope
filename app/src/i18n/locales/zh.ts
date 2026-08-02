@@ -59,4 +59,7 @@ export const zh: MessageCatalog = {
   themeLight: '浅色',
   themeDark: '深色',
   themeSystem: '跟随系统',
+  layoutLabel: '键盘',
+  layoutAnsiFull: '全尺寸',
+  layoutAnsiTkl: 'TKL',
 }

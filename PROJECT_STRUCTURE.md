@@ -189,17 +189,18 @@ E
 ```
 
 **Panels:** game/tool search · selected chips · binding-layer toggles · custom profile
-import/export · safe-key export · keyboard · selection-driven key detail · interactive legend filters
-(free / partial / heavy / reserved) · empty-selection guidance · language switcher · theme switcher.
+import/export · safe-key export · keyboard form-factor selector (Full / TKL) · keyboard ·
+selection-driven key detail · interactive legend filters (free / partial / heavy / reserved) ·
+empty-selection guidance · language switcher · theme switcher.
 
 **Yours / tools:** catalog entries with `kind: 'tool'` participate in the same availability
 computation as games; the detail panel labels them as tools. A dedicated `yours` key-state is not
 required in the engine.
 
-**Layouts:** ANSI full-size shipped today (`LayoutId: 'ansi-full'`). TKL / compact / ISO remain the
-target model — data-driven, never hardcoded in component logic. UI Refresh **UR4** exposes a
-form-factor selector (see `PLAN.md`). Mouse visualizer is **UR5** (companion device SVG + normalized
-button ids), not yet in the tree.
+**Layouts:** ANSI Full (`ansi-full`, default) and ANSI TKL (`ansi-tkl`, no numpad) via
+`LayoutId` + `LAYOUT_REGISTRY` in `data/keyboardLayouts.ts`. Form-factor selector lives in the
+header toolbar; preference persists in `localStorage` (`bindscope.layout`). Compact / ISO remain V2.
+Mouse visualizer is **UR5** (companion device SVG + normalized button ids), not yet in the tree.
 
 **Design:** clean, high-contrast, minimal but professional. The keyboard must look like a keyboard.
 Obvious hover and selected states. No visual noise, no gratuitous animation, no flashy branding.

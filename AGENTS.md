@@ -10,10 +10,10 @@ import/export, locale catalogs under `app/src/i18n/` (en/es/pt/fr/zh), light/dar
 `html[data-theme]`, and GitHub Pages deploy from `.github/workflows/deploy-pages.yml`. Visual tokens
 live in `STYLES.md`.
 
-**Active work:** UI Refresh track (UR4–UR5) in `PLAN.md` — keyboard-first shell inspired by Keybindr
+**Active work:** UI Refresh track (UR5) in `PLAN.md` — keyboard-first shell inspired by Keybindr
 IA (D13), not a clone. Requirements in `qa.md`; competitive brief in `docs/keybindr-analysis.md`
-(UR1–UR3 complete: analysis, keyboard-first shell + free-key retoken, collapsible header chrome).
-Do not start UR4+ implementation until the user/orchestrator authorizes that phase.
+(UR1–UR4 complete: analysis, keyboard-first shell + free-key retoken, collapsible header chrome,
+Full/TKL form-factor selector). Do not start UR5 until the user/orchestrator authorizes that phase.
 
 Use `make install`, `make run`, `make test`, `make lint`, and `make build` from the repo root. Do not
 invent commands; prefer the Makefile.

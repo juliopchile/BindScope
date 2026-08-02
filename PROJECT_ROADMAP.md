@@ -130,17 +130,22 @@ Preferences as exclusive disclosures (`aria-expanded`, Escape / outside-click). 
 keyboard + legend stay primary. Phone key detail uses a bottom drawer + backdrop; desktop keeps the
 side panel. All new chrome strings localized (en/es/pt/fr/zh).
 
+**UR4 (complete):** Form-factor selector in the header toolbar — ANSI Full (default) and ANSI TKL
+(no numpad). Preference persists in `localStorage` (`bindscope.layout`); no auto-switch on narrow
+viewports. Selected layout drives the SVG visualizer and `computeAvailability`. Compact/ISO deferred
+to V2.
+
 | Phase | Status | Summary |
 |---|---|---|
 | UR1. Competitive analysis & design brief | Complete | Live Keybindr + screenshots → `docs/keybindr-analysis.md`; STYLES planned direction; open Qs resolved |
 | UR2. Keyboard-first shell & free-key retoken | Complete | Hero keyboard stage, 1400px column, neutral free keys |
 | UR3. Collapsible chrome & denser shell | Complete | Header disclosures (Games / Import-Export / Prefs); phone detail drawer |
-| UR4. Keyboard form-factor selector | Planned | At least ANSI Full + TKL; persisted preference |
+| UR4. Keyboard form-factor selector | Complete | ANSI Full + TKL registry; toolbar selector; persisted preference |
 | UR5. Mouse visualizer | Planned | Data-driven mouse SVG; first-class availability ids |
 
 ## Pending Work
 
-- UI Refresh UR4–UR5 (see In Progress / `PLAN.md`; UR1–UR3 complete)
+- UI Refresh UR5 (see In Progress / `PLAN.md`; UR1–UR4 complete)
 - Grow the hand-curated catalog toward ~20–30 games (layout already extensible)
 - Parsers for real config formats (INI, CFG, XML)
 - Optional Playwright smoke / broader E2E
@@ -171,7 +176,7 @@ Known risks that become debt if neglected:
 | Phase | Scope |
 |---|---|
 | UI Refresh (UR1–UR5) | Active plan in `PLAN.md`: Keybindr-inspired shell, free-key retoken, collapsible chrome, layout selector, mouse visualizer |
-| V2 | Modifier combinations, action-name search, remaining layout variants (60%, ISO), more UI locales — TKL/Full may land earlier in UR4 |
+| V2 | Modifier combinations, action-name search, remaining layout variants (60%, ISO), more UI locales |
 | V3 | Real config file import, Steam sync, cloud profiles, game detection |
 | V4 | Recommendations: *"the best push-to-talk key for your library"* |
 

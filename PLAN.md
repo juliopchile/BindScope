@@ -10,7 +10,7 @@ into `PROJECT_ROADMAP.md`; stable design information lives in `PROJECT_STRUCTURE
 
 **Current track:** UI Refresh (post-MVP) — keyboard-first shell inspired by Keybindr IA
 
-**Status:** UR1–UR3 complete; UR4 awaiting authorization (do not start UR4–UR5 until green-lit)
+**Status:** UR1–UR4 complete; UR5 awaiting authorization (do not start UR5 until green-lit)
 
 **Source of requirements:** `qa.md` (user QA notes). Reference screenshots: `example_csbinds.png`,
 `example_keybindr.png`. Competitive brief: `docs/keybindr-analysis.md`. Auto-extracted Keybindr
@@ -161,36 +161,36 @@ structured rather than a dashboard dump.
 
 ### Phase UR4 — Keyboard form-factor selector
 
+**Status:** Complete
+
 **Goal.** Let the user switch keyboard type (at least Full and TKL), matching competitor expectation
 and unblocking horizontal clarity on smaller widths.
 
 **Depends on:** UR2 (visualizer sizing). Can run after or in parallel planning with UR3 if UR2 is
 done; prefer after UR3 so the selector has a stable toolbar home.
 
-**Must do**
+**Delivered**
 
-- Extend layout data beyond `ansi-full`: at least `ansi-tkl` (no numpad). Optional compact/60% only
-  if UR1 brief prioritizes it and time remains.
-- Expand `LayoutId` / registry; selector UI persisted (`localStorage`, same prefs pattern as theme /
-  locale).
-- Engine already accepts any `KeyboardLayout`; wire selected layout into `computeAvailability`.
-- Tests for layout registry invariants (unique key ids, dimensions).
-
-**Out of scope**
-
-- ISO / regional variants (can land later under roadmap V2).
-- Mouse (UR5).
+- Layout registry: `ansi-full` + `ansi-tkl` (shared alpha/nav helpers; TKL omits numpad, narrower
+  `viewBox`). Optional 60%/ISO deferred to V2.
+- Visible `LayoutSelector` in `ChromeToolbar` actions (before Games / Import / Prefs); preference
+  persisted as `bindscope.layout` (default `ansi-full`; no viewport auto-switch).
+- Selected layout wired into `computeAvailability` + `KeyboardVisualizer`; selection cleared when
+  the active key is absent from the new layout.
+- Registry invariant tests; layout chrome strings in en/es/pt/fr/zh.
 
 **Acceptance**
 
-- [ ] User can switch Full ↔ TKL; keyboard and availability summary update immediately.
-- [ ] Preference survives reload.
-- [ ] TKL view has no empty numpad gap and improves fit on mid-width viewports.
-- [ ] `LayoutId` / `PROJECT_STRUCTURE.md` / `STYLES.md` updated.
-- [ ] `make test` / `lint` / `build` pass.
+- [x] User can switch Full ↔ TKL; keyboard and availability summary update immediately.
+- [x] Preference survives reload.
+- [x] TKL view has no empty numpad gap and improves fit on mid-width viewports.
+- [x] `LayoutId` / `PROJECT_STRUCTURE.md` / `STYLES.md` updated.
+- [x] `make test` / `lint` / `build` pass.
 
-**Likely touch points:** `data/keyboardLayouts.ts`, `types/index.ts`, new selector component,
-`App.tsx`, `lib/preferences.ts`, tests, docs.
+**Out of scope (unchanged)**
+
+- ISO / regional variants (V2).
+- Mouse (UR5).
 
 ---
 
@@ -292,8 +292,7 @@ Full rationale in `docs/keybindr-analysis.md` §9. Summary:
 
 ## Immediate Next Step
 
-Authorize **Phase UR4** (keyboard form-factor selector). Prefer UR4 before UR5 so the selector has a
-stable toolbar home and mid-width fit improves. Do not start UR4–UR5 until green-lit.
+Authorize **Phase UR5** (mouse visualizer). Do not start UR5 until green-lit.
 
 ## Verification Commands (every implementation phase)
 

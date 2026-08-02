@@ -3,12 +3,13 @@ import { ChromeToolbar, type ChromePanelId } from './components/ChromeToolbar'
 import { GameSearch } from './components/GameSearch'
 import { KeyboardVisualizer } from './components/KeyboardVisualizer'
 import { KeyDetailPanel } from './components/KeyDetailPanel'
+import { LayoutSelector } from './components/LayoutSelector'
 import { Legend } from './components/Legend'
 import { PrefsControls } from './components/PrefsControls'
 import { ProfileIO } from './components/ProfileIO'
 import { SelectedGames } from './components/SelectedGames'
 import { CATALOG_GAMES, GAMES_BY_ID, pickRandomStarter } from './data/catalog'
-import { ANSI_FULL_LAYOUT } from './data/keyboardLayouts'
+import { getLayout } from './data/keyboardLayouts'
 import { RESERVED_KEY_RULES } from './data/reservedKeys'
 import { computeAvailability, resolveProfiles } from './domain/availability'
 import { useI18n } from './i18n/useI18n'
@@ -20,6 +21,10 @@ import {
   serializeProfilesDocument,
 } from './lib/importExport'
 import {
+  readStoredLayout,
+  writeStoredLayout,
+} from './lib/preferences'
+import {
   buildEnabledLayers,
   gamesNameMapForSelection,
   profilesForSelection,
@@ -27,7 +32,7 @@ import {
   type ExtraGameNames,
   type ProfileOverridesByGame,
 } from './lib/selection'
-import type { Game, KeyboardKey, KeyAvailabilityState } from './types'
+import type { Game, KeyboardKey, KeyAvailabilityState, LayoutId } from './types'
 import { LEGEND_STATES } from './ui/keyStateMeta'
 
 function createInitialSelection(): {
@@ -51,17 +56,29 @@ export default function App() {
   const [activeFilters, setActiveFilters] = useState<Set<KeyAvailabilityState>>(() => new Set())
   const [selectedKey, setSelectedKey] = useState<KeyboardKey | null>(null)
   const [openPanel, setOpenPanel] = useState<ChromePanelId | null>(null)
+  const [layoutId, setLayoutId] = useState<LayoutId>(() => readStoredLayout())
 
+  const layout = getLayout(layoutId)
   const profiles = profilesForSelection(selectedIds, enabledLayersByGame, overridesByGame)
   const gamesById = gamesNameMapForSelection(selectedIds, extraNames)
   const summary = computeAvailability({
     profiles,
-    layout: ANSI_FULL_LAYOUT,
+    layout,
     reservedRules: RESERVED_KEY_RULES,
     gamesById,
   })
   const selectedIdSet = new Set(selectedIds)
   const effectiveProfiles = resolveProfiles(profiles)
+
+  function handleLayoutChange(nextId: LayoutId) {
+    setLayoutId(nextId)
+    writeStoredLayout(nextId)
+    const nextLayout = getLayout(nextId)
+    setSelectedKey((prev) => {
+      if (!prev) return prev
+      return nextLayout.keys.some((key) => key.id === prev) ? prev : null
+    })
+  }
 
   function addGame(gameId: string) {
     if (selectedIdSet.has(gameId)) return
@@ -195,6 +212,7 @@ export default function App() {
               </p>
             </div>
           }
+          layoutControl={<LayoutSelector value={layoutId} onChange={handleLayoutChange} />}
           openPanel={openPanel}
           onOpenPanelChange={setOpenPanel}
           gamesBadge={selectedIds.length}
@@ -253,7 +271,7 @@ export default function App() {
             </div>
 
             <KeyboardVisualizer
-              layout={ANSI_FULL_LAYOUT}
+              layout={layout}
               keys={summary.keys}
               selectedKey={selectedKey}
               onSelectKey={handleSelectKey}

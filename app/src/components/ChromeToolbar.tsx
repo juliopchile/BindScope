@@ -11,6 +11,8 @@ export type ChromePanelId = 'games' | 'io' | 'prefs'
 
 interface ChromeToolbarProps {
   leading: ReactNode
+  /** Visible form-factor control (UR4); sits before disclosure triggers. */
+  layoutControl?: ReactNode
   openPanel: ChromePanelId | null
   onOpenPanelChange: (panel: ChromePanelId | null) => void
   gamesBadge?: number
@@ -23,6 +25,7 @@ const PANEL_ORDER: ChromePanelId[] = ['games', 'io', 'prefs']
 
 export function ChromeToolbar({
   leading,
+  layoutControl,
   openPanel,
   onOpenPanelChange,
   gamesBadge,
@@ -100,6 +103,7 @@ export function ChromeToolbar({
           role="toolbar"
           aria-label={t('chromeToolbarAriaLabel')}
         >
+          {layoutControl}
           {PANEL_ORDER.map((panel) => {
             const expanded = openPanel === panel
             return (

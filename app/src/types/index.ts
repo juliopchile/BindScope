@@ -157,4 +157,4 @@ export interface SafeKeysDocument {
   notes?: string
 }
 
-export type LayoutId = 'ansi-full'
+export type LayoutId = 'ansi-full' | 'ansi-tkl'

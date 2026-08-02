@@ -1,8 +1,11 @@
-import type { KeyboardLayout } from '../types'
+import type { KeyboardLayout, LayoutId } from '../types'
 
 const U = 48
 const H = 48
 const GAP = 6
+
+/** Form-factor ids shipped in UR4. Compact / ISO remain V2. */
+export const LAYOUT_IDS: readonly LayoutId[] = ['ansi-full', 'ansi-tkl']
 
 function key(
   id: KeyboardLayout['keys'][number]['id'],
@@ -180,11 +183,44 @@ const alpha = alphaBlock()
 const nav = navCluster(alpha[alpha.length - 1]!.x + U * 4, H + GAP * 2)
 const pad = numpad(nav[0]!.x + U * 3 + GAP * 6, H + GAP * 2)
 
+const LAYOUT_HEIGHT = (H + GAP) * 6 + H
+
+function layoutWidth(keys: KeyboardLayout['keys']): number {
+  let right = 0
+  for (const key of keys) {
+    right = Math.max(right, key.x + key.width)
+  }
+  return right + GAP * 2
+}
+
 export const ANSI_FULL_LAYOUT: KeyboardLayout = {
   id: 'ansi-full',
   name: 'ANSI Full',
   description: 'Full-size ANSI keyboard with numpad',
-  width: pad[pad.length - 1]!.x + U + GAP * 2,
-  height: (H + GAP) * 6 + H,
+  width: layoutWidth([...alpha, ...nav, ...pad]),
+  height: LAYOUT_HEIGHT,
   keys: [...alpha, ...nav, ...pad],
+}
+
+/** Tenkeyless: alpha + nav cluster, no numpad — tighter mid-width fit. */
+export const ANSI_TKL_LAYOUT: KeyboardLayout = {
+  id: 'ansi-tkl',
+  name: 'ANSI TKL',
+  description: 'Tenkeyless ANSI keyboard without numpad',
+  width: layoutWidth([...alpha, ...nav]),
+  height: LAYOUT_HEIGHT,
+  keys: [...alpha, ...nav],
+}
+
+export const LAYOUT_REGISTRY: Record<LayoutId, KeyboardLayout> = {
+  'ansi-full': ANSI_FULL_LAYOUT,
+  'ansi-tkl': ANSI_TKL_LAYOUT,
+}
+
+export function isLayoutId(value: string): value is LayoutId {
+  return (LAYOUT_IDS as readonly string[]).includes(value)
+}
+
+export function getLayout(id: LayoutId): KeyboardLayout {
+  return LAYOUT_REGISTRY[id]
 }
