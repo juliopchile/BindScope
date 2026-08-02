@@ -23,7 +23,8 @@ parsers; German and Japanese UI locales.
 **V2.5 Visual polish complete** — full/TKL system keys + NumLock, even keyboard geometry, aligned
 header toolbar, horizontal binding-layer toggles. See `PROJECT_ROADMAP.md`.
 
-**Next:** authorize **V3** (Steam sync, cloud profiles, game detection) when ready.
+**Next:** authorize **SF — Support footer** (donate + GitHub links; see `PLAN.md`), then **V3**
+(Steam sync, cloud profiles, game detection) when ready.
 
 To run it, see **Getting Started** below.
 

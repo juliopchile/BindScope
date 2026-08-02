@@ -110,8 +110,9 @@ Delivered:
 
 ## Post-MVP Tracks
 
-**Next authorization:** **V3** (Steam sync, cloud profiles adapter, game detection). V2.5 Visual
-polish is **complete**. Do not open V3 until the user explicitly authorizes it.
+**Next authorization:** **SF — Support footer** (see `PLAN.md`), then **V3** (Steam sync, cloud
+profiles adapter, game detection). V2.5 Visual polish is **complete**. Do not open SF or V3
+implementation until the user explicitly authorizes them.
 
 ### V2.5 — Visual polish (complete)
 
@@ -229,7 +230,11 @@ Seed action names stay untranslated (D10). Product Depth track closed.
 
 ## Pending Work
 
-- **V3 / V4** — Steam sync, cloud profiles, game detection, recommendations (authorize V3 next)
+- **SF — Support footer** — Keybindr-style footer: donate (Ko-fi + crypto / wallet or public
+  address), GitHub source, GitHub issues. Documented in `PLAN.md`; blocked on owner URLs/address
+  and explicit authorization.
+- **V3 / V4** — Steam sync, cloud profiles, game detection, recommendations (after SF / when
+  authorized)
 
 ## Technical Debt
 
@@ -259,7 +264,8 @@ Known risks that become debt if neglected:
 | Product Depth (PD1–PD7) | **Complete** — catalog, chords, action search, layouts, Playwright, parsers, de/ja locales |
 | V2 (via PD2–PD4, PD7) | ~~Modifier combinations~~, ~~action-name search~~, ~~60%/ISO layouts~~, ~~more UI locales~~ |
 | **V2.5 Visual polish** | **Complete** — keyboard geometry + system keys, header/toolbar alignment, horizontal binding layers |
-| V3 | Steam sync, cloud profiles (adapter — D3), game detection — **next authorization** |
+| **SF — Support footer** | **Planned** — donate (Ko-fi + crypto), repo + issues links; see `PLAN.md` |
+| V3 | Steam sync, cloud profiles (adapter — D3), game detection |
 | V4 | Recommendations: *"the best push-to-talk key for your library"* |
 
 Real config import (**PD6**, complete) is the defensible advantage: once BindScope reads the user's
