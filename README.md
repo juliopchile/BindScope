@@ -12,8 +12,9 @@ binding layers, import/export profiles as JSON, switch UI language (en / es / pt
 theme (light / dark / system), and download the current free (safe) key set. Static deploy to GitHub
 Pages is wired via Actions.
 
-**Next:** UI Refresh track (UR3 collapsible chrome, layout selector, mouse visualizer) — see `PLAN.md`
-and `PROJECT_ROADMAP.md`. QA notes: `qa.md`.
+**Next:** UI Refresh track (UR4 layout selector, then UR5 mouse visualizer) — see `PLAN.md`
+and `PROJECT_ROADMAP.md`. QA notes: `qa.md`. UR1–UR3 (analysis, keyboard-first shell, collapsible
+chrome) are complete.
 
 To run it, see **Getting Started** below.
 

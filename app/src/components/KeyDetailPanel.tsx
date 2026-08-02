@@ -16,7 +16,7 @@ export function KeyDetailPanel({ summary, selectedKey, onDismiss }: KeyDetailPan
 
   return (
     <aside
-      className="flex h-full flex-col rounded-lg border p-4"
+      className="key-detail-panel flex h-full flex-col rounded-lg border p-4"
       style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}
       aria-label={t('detailHeading')}
     >

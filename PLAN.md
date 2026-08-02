@@ -10,7 +10,7 @@ into `PROJECT_ROADMAP.md`; stable design information lives in `PROJECT_STRUCTURE
 
 **Current track:** UI Refresh (post-MVP) — keyboard-first shell inspired by Keybindr IA
 
-**Status:** UR1–UR2 complete; UR3 awaiting authorization (do not start UR3–UR5 until green-lit)
+**Status:** UR1–UR3 complete; UR4 awaiting authorization (do not start UR4–UR5 until green-lit)
 
 **Source of requirements:** `qa.md` (user QA notes). Reference screenshots: `example_csbinds.png`,
 `example_keybindr.png`. Competitive brief: `docs/keybindr-analysis.md`. Auto-extracted Keybindr
@@ -126,36 +126,36 @@ implementation brief BindScope can follow without copying brand or product model
 
 ### Phase UR3 — Collapsible chrome & denser shell
 
+**Status:** Complete
+
 **Goal.** Replace always-open stacked cards with menus / disclosure panels so the page feels
 structured rather than a dashboard dump.
 
 **Depends on:** UR2 shell skeleton.
 
-**Must do**
+**Delivered**
 
-- Collapsible (or modal/drawer) regions for: game search + selection + layers, profile
-  import/export / safe-key export, optional detail panel behaviour on small screens.
-- Header or toolbar actions patterned after Keybindr’s compact action cluster (e.g. “Games”,
-  “Import / Export”, prefs) without copying Keybindr branding or orange-on-black identity.
-- Default state: chrome collapsed enough that keyboard + legend remain primary.
-- Keyboard, pointer, and touch operable disclosures; visible focus; `aria-expanded` / labelled
-  controls.
-- Responsive rules updated (phone stack vs desktop). Document in `STYLES.md`.
-
-**Out of scope**
-
-- Layout form-factor selector (UR4), mouse SVG (UR5).
+- `ChromeToolbar` header action cluster: **Games**, **Import / Export**, **Preferences** — exclusive
+  disclosures with `aria-expanded` / `aria-controls`, Escape + outside-click dismiss, focus return.
+- Replaced UR2 `<details>` Games & tools rail; prefs moved into the Preferences disclosure.
+- Games panel: search + selection + layers; Import / Export: `ProfileIO`; default collapsed so
+  keyboard + legend dominate the first viewport.
+- Phone detail: fixed bottom drawer + backdrop (`< 1024px`); desktop keeps selection side panel.
+- New i18n keys (`menuGames`, `menuImportExport`, `menuPrefs`, …) in en/es/pt/fr/zh; empty-selection
+  copy points at the header Games control.
+- `STYLES.md` updated for disclosure/responsive behaviour.
 
 **Acceptance**
 
-- [ ] User can open/close primary control groups without leaving the page.
-- [ ] With all groups collapsed, first viewport is dominated by the keyboard (desktop).
-- [ ] Empty selection, import errors, and detail empty states still reachable and localized.
-- [ ] No hardcoded chrome strings; a11y checks for disclosures pass manual keyboard QA.
-- [ ] `make test` / `lint` / `build` pass.
+- [x] User can open/close primary control groups without leaving the page.
+- [x] With all groups collapsed, first viewport is dominated by the keyboard (desktop).
+- [x] Empty selection, import errors, and detail empty states still reachable and localized.
+- [x] No hardcoded chrome strings; disclosures keyboard-operable with `aria-expanded`.
+- [x] `make test` / `lint` / `build` pass.
 
-**Likely touch points:** new disclosure/menu components under `components/`, `App.tsx`,
-`PrefsControls`, `ProfileIO`, `SelectedGames`, `KeyDetailPanel`, i18n catalogs, `STYLES.md`.
+**Out of scope (unchanged)**
+
+- Layout form-factor selector (UR4), mouse SVG (UR5).
 
 ---
 
@@ -292,9 +292,8 @@ Full rationale in `docs/keybindr-analysis.md` §9. Summary:
 
 ## Immediate Next Step
 
-Authorize **Phase UR3** (collapsible chrome & denser shell). UR2 keyboard-first shell and free-key
-retoken are complete. Do not start UR4–UR5 until UR3 is green-lit (unless the orchestrator explicitly
-parallelizes after UR3 skeleton).
+Authorize **Phase UR4** (keyboard form-factor selector). Prefer UR4 before UR5 so the selector has a
+stable toolbar home and mid-width fit improves. Do not start UR4–UR5 until green-lit.
 
 ## Verification Commands (every implementation phase)
 

@@ -5,30 +5,30 @@ cues, or breakpoints change.
 
 ## Design direction (UI Refresh)
 
-Active plan: `PLAN.md` (UR2 complete; UR3–UR5 pending). Decision: **D13**. Competitive brief:
+Active plan: `PLAN.md` (UR1–UR3 complete; UR4–UR5 pending). Decision: **D13**. Competitive brief:
 `docs/keybindr-analysis.md`.
 
-### Shell hierarchy & chrome (UR2 shipped)
+### Shell hierarchy & chrome (UR3 shipped)
 
 | Topic | Direction |
 |---|---|
-| Hierarchy | Header → keyboard stage (+ selection detail) → collapsed Games & tools rail |
-| Open chrome | Brand, tagline, prefs — no heavy card wrappers above the keyboard |
+| Hierarchy | Header (brand + action cluster) → keyboard stage (+ selection detail) |
+| Open chrome | Brand, tagline; compact toolbar triggers (Games, Import / Export, Preferences) |
 | Closed chrome | Keyboard sits in a bordered `.keyboard-stage` surface |
-| Controls | Minimal `<details>` rail below the stage (full disclosure/menu system = UR3) |
-| Detail panel | Selection-driven; opens beside the stage on desktop when a key is selected; dismiss clears selection |
-| Density | Slim legend + availability counts under the keyboard; controls off the critical path by default |
+| Controls | Exclusive header disclosures via `ChromeToolbar` — collapsed by default |
+| Detail panel | Selection-driven; beside stage on desktop; bottom drawer + backdrop on phone |
+| Density | Slim legend + availability counts under the keyboard; heavy controls off the critical path |
 
-### Overflow & breakpoints (UR2 shipped)
+### Overflow & breakpoints
 
 | Class | Width | Layout intent |
 |---|---|---|
-| Phone | `< 1024px` | Single column; visualizer full width; controls in collapsed rail; detail stacks under keyboard when selected |
+| Phone | `< 1024px` | Single column; visualizer full width; chrome panels under header; detail as bottom drawer |
 | Desktop | `≥ 1024px` (`lg`) | Visualizer-dominant; detail beside stage only when a key is selected |
 | Wide target | `≥ 1280px` | ANSI full (alpha + nav + numpad) fully visible without horizontal clipping |
 
 - Content column / stage: `max-width: 1400px`.
-- SVG: `width: 100%` + layout `viewBox`; **no** artificial SVG max-width cap (removed MVP `max-w-5xl`).
+- SVG: `width: 100%` + layout `viewBox`; **no** artificial SVG max-width cap.
 - Horizontal scroll only as last resort on very narrow widths (`overflow-x-auto` wrapper).
 - Do **not** auto-switch form factor on resize. User preference wins (UR4).
 
@@ -43,17 +43,23 @@ Active plan: `PLAN.md` (UR2 complete; UR3–UR5 pending). Decision: **D13**. Com
 Occupied / conflicted / reserved stay emphatic. Free recedes. D11 marks/patterns/text remain for every
 state (free uses legend `·` only; no on-key mark).
 
-### Panel collapse rules (UR3 planned)
+### Panel / disclosure rules (UR3 shipped)
 
 | Panel / group | Default | Opens when |
 |---|---|---|
-| Game search + selection + layers | Collapsed (UR2: native `<details>`) | User opens “Games & tools” |
-| Import / export / safe-key | Inside same rail for now | Same disclosure (UR3 may split) |
-| Locale + theme prefs | Header | Always in header |
-| Key/mouse detail | Collapsed | User selects a key; Close / re-click dismisses |
+| Games (search + selection + layers) | Collapsed | User opens **Games** in the header toolbar |
+| Import / export / safe-key | Collapsed | User opens **Import / Export** |
+| Locale + theme prefs | Collapsed | User opens **Preferences** |
+| Key/mouse detail | Collapsed | User selects a key; Close / backdrop / re-click dismisses |
 | Legend + availability summary | Visible (slim) | Always under keyboard |
 
-UR3 will replace the minimal rail with denser header/toolbar disclosures (`aria-expanded`, focus order).
+Toolbar behaviour:
+
+- Exclusive open: only one chrome panel at a time.
+- Triggers use `aria-expanded`, `aria-controls`, `aria-haspopup="true"`.
+- Escape closes the open panel and returns focus to its trigger; pointer-down outside closes.
+- Games trigger may show a selected-count badge.
+- Open panel is a full-width region under the header row (scrolls internally if tall).
 
 ### Devices (UR4–UR5 planned)
 
@@ -72,7 +78,7 @@ modals, or category-color-as-primary-state. BindScope tokens, i18n, and occupanc
 ## Theme
 
 Appearance is driven by CSS custom properties in `app/src/styles/index.css`. The active mode is
-`html[data-theme="light"|"dark"|"system"]`, set by `app/src/lib/theme.ts` and the header switcher.
+`html[data-theme="light"|"dark"|"system"]`, set by `app/src/lib/theme.ts` and the Preferences panel.
 Preference persists in `localStorage` (`bindscope.theme`). `app/src/boot.ts` applies the stored
 value before React mounts.
 
@@ -102,7 +108,7 @@ Meta lives in `app/src/ui/keyStateMeta.ts`. Aria labels include the state name.
 
 | Class | Width | Layout intent |
 |---|---|---|
-| Phone | `< 1024px` | Single column: keyboard stage, then detail (when selected), then controls rail |
+| Phone | `< 1024px` | Keyboard stage; detail as fixed bottom drawer when selected; chrome in header disclosures |
 | Desktop | `≥ 1024px` (`lg`) | Keyboard stage full width; detail beside stage only when selected |
 | Wide | `≥ 1280px` | ANSI full fits without clipping inside the 1400px column |
 
@@ -111,12 +117,14 @@ container.
 
 ## Components
 
+- Toolbar: `app/src/components/ChromeToolbar.tsx` — exclusive header disclosures
 - Keyboard: `app/src/components/KeyboardVisualizer.tsx` — data-driven from `KeyboardLayout`; dims
   keys whose state is filtered out via the legend
-- Detail: `app/src/components/KeyDetailPanel.tsx` — selection-driven; optional dismiss
+- Detail: `app/src/components/KeyDetailPanel.tsx` — selection-driven; desktop side panel / phone drawer
 - Legend: `app/src/components/Legend.tsx` — toggles state filters
-- Search / selection: `GameSearch.tsx`, `SelectedGames.tsx` (inside collapsed controls rail)
-- Prefs: `PrefsControls.tsx` — locale + theme selects
+- Search / selection: `GameSearch.tsx`, `SelectedGames.tsx` (inside Games disclosure)
+- Profile IO: `ProfileIO.tsx` (inside Import / Export disclosure)
+- Prefs: `PrefsControls.tsx` — locale + theme (inside Preferences disclosure)
 - Chrome copy: locale catalogs in `app/src/i18n/locales/` via `useI18n()`
 
 ## Design rules

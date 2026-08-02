@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ChromeToolbar, type ChromePanelId } from './components/ChromeToolbar'
 import { GameSearch } from './components/GameSearch'
 import { KeyboardVisualizer } from './components/KeyboardVisualizer'
 import { KeyDetailPanel } from './components/KeyDetailPanel'
@@ -49,6 +50,7 @@ export default function App() {
   const [extraNames, setExtraNames] = useState<ExtraGameNames>({})
   const [activeFilters, setActiveFilters] = useState<Set<KeyAvailabilityState>>(() => new Set())
   const [selectedKey, setSelectedKey] = useState<KeyboardKey | null>(null)
+  const [openPanel, setOpenPanel] = useState<ChromePanelId | null>(null)
 
   const profiles = profilesForSelection(selectedIds, enabledLayersByGame, overridesByGame)
   const gamesById = gamesNameMapForSelection(selectedIds, extraNames)
@@ -112,6 +114,10 @@ export default function App() {
 
   function handleSelectKey(key: KeyboardKey) {
     setSelectedKey((prev) => (prev === key ? null : key))
+  }
+
+  function dismissDetail() {
+    setSelectedKey(null)
   }
 
   async function handleImportFile(file: File): Promise<string> {
@@ -180,22 +186,51 @@ export default function App() {
         className="border-b px-4 py-3"
         style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
       >
-        <div className="mx-auto flex max-w-[1400px] flex-wrap items-end justify-between gap-3">
-          <div className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
-            <h1 className="text-xl font-semibold">{t('appTitle')}</h1>
-            <p className="text-sm" style={{ color: 'var(--fg-muted)' }}>
-              {t('appTagline')}
-            </p>
-          </div>
-          <PrefsControls />
-        </div>
+        <ChromeToolbar
+          leading={
+            <div className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
+              <h1 className="text-xl font-semibold">{t('appTitle')}</h1>
+              <p className="text-sm" style={{ color: 'var(--fg-muted)' }}>
+                {t('appTagline')}
+              </p>
+            </div>
+          }
+          openPanel={openPanel}
+          onOpenPanelChange={setOpenPanel}
+          gamesBadge={selectedIds.length}
+          gamesPanel={
+            <div className="space-y-4">
+              <GameSearch catalog={CATALOG_GAMES} selectedIds={selectedIdSet} onAdd={addGame} />
+              <div className="border-t pt-4" style={{ borderColor: 'var(--border)' }}>
+                <SelectedGames
+                  selectedIds={selectedIds}
+                  enabledLayersByGame={enabledLayersByGame}
+                  overridesByGame={overridesByGame}
+                  extraNames={extraNames}
+                  onRemove={removeGame}
+                  onToggleLayer={toggleLayer}
+                  onClearOverride={clearOverride}
+                />
+              </div>
+            </div>
+          }
+          ioPanel={
+            <ProfileIO
+              onImportFile={handleImportFile}
+              onExportProfiles={handleExportProfiles}
+              onExportSafeKeys={handleExportSafeKeys}
+              canExport={effectiveProfiles.length > 0}
+            />
+          }
+          prefsPanel={<PrefsControls />}
+        />
       </header>
 
       <main className="mx-auto max-w-[1400px] space-y-3 px-4 py-4">
         <div
           className={
             selectedKey
-              ? 'grid gap-3 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-start'
+              ? 'lg:grid lg:grid-cols-[minmax(0,1fr)_280px] lg:items-start lg:gap-3'
               : undefined
           }
         >
@@ -245,52 +280,21 @@ export default function App() {
           </section>
 
           {selectedKey ? (
-            <KeyDetailPanel
-              summary={summary}
-              selectedKey={selectedKey}
-              onDismiss={() => setSelectedKey(null)}
-            />
+            <>
+              <button
+                type="button"
+                className="key-detail-backdrop"
+                aria-label={t('detailDismiss')}
+                onClick={dismissDetail}
+              />
+              <KeyDetailPanel
+                summary={summary}
+                selectedKey={selectedKey}
+                onDismiss={dismissDetail}
+              />
+            </>
           ) : null}
         </div>
-
-        <details
-          className="controls-rail rounded-lg border"
-          style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}
-        >
-          <summary
-            className="cursor-pointer list-none px-4 py-3 text-sm font-medium marker:content-none [&::-webkit-details-marker]:hidden"
-            style={{ color: 'var(--fg)' }}
-          >
-            <span className="flex items-center justify-between gap-2">
-              <span>{t('controlsToggle')}</span>
-              <span className="text-xs font-normal" style={{ color: 'var(--fg-muted)' }}>
-                {t('controlsToggleHint')}
-              </span>
-            </span>
-          </summary>
-          <div className="space-y-4 border-t px-4 py-4" style={{ borderColor: 'var(--border)' }}>
-            <GameSearch catalog={CATALOG_GAMES} selectedIds={selectedIdSet} onAdd={addGame} />
-            <div className="border-t pt-4" style={{ borderColor: 'var(--border)' }}>
-              <SelectedGames
-                selectedIds={selectedIds}
-                enabledLayersByGame={enabledLayersByGame}
-                overridesByGame={overridesByGame}
-                extraNames={extraNames}
-                onRemove={removeGame}
-                onToggleLayer={toggleLayer}
-                onClearOverride={clearOverride}
-              />
-            </div>
-            <div className="border-t pt-4" style={{ borderColor: 'var(--border)' }}>
-              <ProfileIO
-                onImportFile={handleImportFile}
-                onExportProfiles={handleExportProfiles}
-                onExportSafeKeys={handleExportSafeKeys}
-                canExport={effectiveProfiles.length > 0}
-              />
-            </div>
-          </div>
-        </details>
       </main>
     </div>
   )

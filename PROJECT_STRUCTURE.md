@@ -3,9 +3,9 @@
 `PROJECT_STRUCTURE.md` documents how BindScope is organized and how its pieces fit together. It
 should let a human or an agent understand the repository without guessing from filenames.
 
-> **Status:** Stages 1–5 (MVP) are real under `app/` / `.github/`. UI Refresh (UR1–UR5) is planned in
-> `PLAN.md` — keyboard-first shell, layout selector, mouse visualizer. Update this file as the
-> structure changes.
+> **Status:** Stages 1–5 (MVP) are real under `app/` / `.github/`. UI Refresh UR1–UR3 are shipped
+> (keyboard-first shell, free-key retoken, collapsible header chrome); UR4–UR5 remain in `PLAN.md`.
+> Update this file as the structure changes.
 
 ## Architecture
 
@@ -34,7 +34,7 @@ BindScope/
 │   ├── vite.config.ts
 │   ├── src/
 │   │   ├── main.tsx            # Script entry point
-│   │   ├── App.tsx             # Keyboard-first shell: stage + selection detail + controls rail
+│   │   ├── App.tsx             # Keyboard-first shell: header chrome + stage + selection detail
 │   │   ├── domain/             # Pure availability engine
 │   │   ├── data/
 │   │   │   ├── catalog/        # Seed games/tools (one file each) + index
@@ -44,7 +44,7 @@ BindScope/
 │   │   ├── utils/              # Key normalization + forgiving search
 │   │   ├── ui/                 # Key-state meta; EN messages re-export
 │   │   ├── styles/             # Theme tokens (light / dark / system)
-│   │   ├── components/         # Search, chips, keyboard, detail, prefs
+│   │   ├── components/         # ChromeToolbar, search, keyboard, detail, prefs, IO
 │   │   ├── lib/                # Selection, import/export, theme prefs
 │   │   └── i18n/               # Locale catalogs + provider (en/es/pt/fr/zh)
 │   ├── public/                 # Static assets
@@ -218,9 +218,9 @@ profile catalog exists.
 
 | Viewport class | Intent |
 |---|---|
-| Desktop (wide) | Keyboard-first stage (~1400px); detail beside stage when selected; controls in collapsed rail |
-| Tablet | Reflow; keyboard remains the focus; controls stay collapsed by default |
-| Phone | Single-column stack; essential controls reachable without horizontal page scroll |
+| Desktop (wide) | Keyboard-first stage (~1400px); detail beside stage when selected; controls in header disclosures |
+| Tablet | Reflow; keyboard remains the focus; chrome panels collapsed by default |
+| Phone | Single-column stack; key detail as bottom drawer; essential controls in header disclosures |
 
 The SVG keyboard scales with its container, stays readable, and remains operable with pointer, touch,
 and keyboard input. Touch targets for interactive keys and controls must be large enough for fingers.
