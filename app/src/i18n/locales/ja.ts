@@ -45,7 +45,6 @@ export const ja: MessageCatalog = {
   kindGame: 'ゲーム',
   kindTool: 'ツール（自分用）',
   addGame: '追加',
-  starterNote: 'スタータープールからランダムなタイトルで開始しました。',
   profilesHeading: 'カスタムプロフィール',
   importProfiles: 'ファイルをインポート',
   exportProfiles: 'プロフィールをエクスポート',

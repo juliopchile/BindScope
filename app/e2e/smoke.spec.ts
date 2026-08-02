@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test'
 
-/** Seed outside STARTER_POOL so Add is always available. */
+/** Seed catalog title used for the add-game path (first load starts empty). */
 const SEED_TITLE = 'OBS Studio'
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
+    localStorage.clear()
     localStorage.setItem('bindscope.locale', 'en')
   })
 })

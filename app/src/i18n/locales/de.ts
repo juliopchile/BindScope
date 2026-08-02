@@ -45,7 +45,6 @@ export const de: MessageCatalog = {
   kindGame: 'Spiel',
   kindTool: 'Tool (Deins)',
   addGame: 'Hinzufügen',
-  starterNote: 'Gestartet mit einem zufälligen Titel aus dem Starter-Pool.',
   profilesHeading: 'Benutzerdefinierte Profile',
   importProfiles: 'Datei importieren',
   exportProfiles: 'Profile exportieren',

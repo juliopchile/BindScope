@@ -58,8 +58,8 @@ const ENTRIES: CatalogEntry[] = [
 ]
 
 /**
- * Pool used for the random first-load selection. Edit freely;
- * ids must exist in the catalog.
+ * Featured catalog ids retained for docs/tests. First load starts empty;
+ * selection persists in `localStorage` (`bindscope.selection`).
  */
 export const STARTER_POOL = [
   'league-of-legends',
@@ -97,17 +97,6 @@ export const GAMES_NAME_BY_ID: Record<string, { name: string }> = Object.fromEnt
 
 export function getCatalogByKind(kind: CatalogKind): Game[] {
   return CATALOG_GAMES.filter((game) => game.kind === kind)
-}
-
-export function pickRandomStarter(
-  pool: readonly string[] = STARTER_POOL,
-  random: () => number = Math.random,
-): string {
-  if (pool.length === 0) {
-    throw new Error('STARTER_POOL must not be empty')
-  }
-  const index = Math.floor(random() * pool.length)
-  return pool[index] ?? pool[0]!
 }
 
 export { defaultEnabledLayerIds, toInputProfile }

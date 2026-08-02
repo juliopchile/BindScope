@@ -115,8 +115,11 @@ cp .env.example .env    # then edit PORT
 A one-off override works too: `make run PORT=8090`. If the port is already taken, `make run` says
 what is holding it and suggests the next free one instead of failing obscurely.
 
-Locale and theme preferences persist in the browser (`localStorage` keys `bindscope.locale` and
-`bindscope.theme`). They are chrome-only; seed binding action names stay in their curated language.
+Locale, theme, layout, mouse/chord chrome prefs, and the current game selection (ids, enabled
+layers, imported overrides) persist in the browser (`localStorage` keys `bindscope.locale`,
+`bindscope.theme`, `bindscope.layout`, `bindscope.showMouse`, `bindscope.showChordMarks`,
+`bindscope.selection`). Locale/theme are chrome-only; seed binding action names stay in their
+curated language. First visit starts with an empty selection.
 
 ## Deployment
 

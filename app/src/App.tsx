@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ActionSearch } from './components/ActionSearch'
 import { ChromeToolbar, type ChromePanelId } from './components/ChromeToolbar'
 import { GameSearch } from './components/GameSearch'
@@ -18,7 +18,6 @@ import {
   CATALOG_INPUT_PROFILES,
   GAMES_BY_ID,
   GAMES_NAME_BY_ID,
-  pickRandomStarter,
 } from './data/catalog'
 import { getLayout } from './data/keyboardLayouts'
 import { getMouseLayout, isMouseKeyId } from './data/mouseLayout'
@@ -39,9 +38,11 @@ import {
 } from './lib/parsers'
 import {
   readStoredLayout,
+  readStoredSelection,
   readStoredShowChordMarks,
   readStoredShowMouse,
   writeStoredLayout,
+  writeStoredSelection,
   writeStoredShowChordMarks,
   writeStoredShowMouse,
 } from './lib/preferences'
@@ -50,6 +51,7 @@ import {
   buildEnabledLayers,
   gamesNameMapForSelection,
   profilesForSelection,
+  sanitizeEnabledLayers,
   type EnabledLayersByGame,
   type ExtraGameNames,
   type ProfileOverridesByGame,
@@ -60,10 +62,39 @@ import { LEGEND_STATES } from './ui/keyStateMeta'
 function createInitialSelection(): {
   selectedIds: string[]
   layers: EnabledLayersByGame
+  overrides: ProfileOverridesByGame
+  extraNames: ExtraGameNames
 } {
-  const starter = pickRandomStarter()
-  const selectedIds = [starter]
-  return { selectedIds, layers: buildEnabledLayers(selectedIds) }
+  const empty = {
+    selectedIds: [] as string[],
+    layers: {} as EnabledLayersByGame,
+    overrides: {} as ProfileOverridesByGame,
+    extraNames: {} as ExtraGameNames,
+  }
+  const stored = readStoredSelection()
+  if (!stored) return empty
+
+  const overrides: ProfileOverridesByGame = {}
+  for (const [gameId, profile] of Object.entries(stored.overridesByGame)) {
+    overrides[gameId] = profile
+  }
+  const extraNames: ExtraGameNames = { ...stored.extraNames }
+  const selectedIds = stored.selectedIds.filter(
+    (id) => Boolean(GAMES_BY_ID[id]) || Boolean(overrides[id]),
+  )
+  // Drop override/extra entries that are no longer selected.
+  for (const gameId of Object.keys(overrides)) {
+    if (!selectedIds.includes(gameId)) delete overrides[gameId]
+  }
+  for (const gameId of Object.keys(extraNames)) {
+    if (!selectedIds.includes(gameId)) delete extraNames[gameId]
+  }
+  return {
+    selectedIds,
+    layers: sanitizeEnabledLayers(selectedIds, stored.enabledLayersByGame),
+    overrides,
+    extraNames,
+  }
 }
 
 export default function App() {
@@ -73,8 +104,10 @@ export default function App() {
   const [enabledLayersByGame, setEnabledLayersByGame] = useState<EnabledLayersByGame>(
     initial.layers,
   )
-  const [overridesByGame, setOverridesByGame] = useState<ProfileOverridesByGame>({})
-  const [extraNames, setExtraNames] = useState<ExtraGameNames>({})
+  const [overridesByGame, setOverridesByGame] = useState<ProfileOverridesByGame>(
+    initial.overrides,
+  )
+  const [extraNames, setExtraNames] = useState<ExtraGameNames>(initial.extraNames)
   const [activeFilters, setActiveFilters] = useState<Set<KeyAvailabilityState>>(() => new Set())
   const [selectedKey, setSelectedKey] = useState<KeyboardKey | null>(null)
   const [openPanel, setOpenPanel] = useState<ChromePanelId | null>(null)
@@ -82,6 +115,15 @@ export default function App() {
   const [showMouse, setShowMouse] = useState(() => readStoredShowMouse())
   const [showChordMarks, setShowChordMarks] = useState(() => readStoredShowChordMarks())
   const [chordsOnly, setChordsOnly] = useState(false)
+
+  useEffect(() => {
+    writeStoredSelection({
+      selectedIds,
+      enabledLayersByGame,
+      overridesByGame,
+      extraNames,
+    })
+  }, [selectedIds, enabledLayersByGame, overridesByGame, extraNames])
 
   const layout = getLayout(layoutId)
   const mouseLayout = getMouseLayout()
@@ -379,9 +421,11 @@ export default function App() {
                 >
                   {showMouse ? t('devicesHeading') : t('keyboardHeading')}
                 </h2>
-                <p className="text-xs" style={{ color: 'var(--fg-muted)' }}>
-                  {t('starterNote')}
-                </p>
+                {selectedIds.length === 0 ? (
+                  <p className="text-xs" style={{ color: 'var(--fg-muted)' }}>
+                    {t('emptySelection')}
+                  </p>
+                ) : null}
               </div>
               <ActionSearch
                 selectedProfiles={effectiveProfiles}

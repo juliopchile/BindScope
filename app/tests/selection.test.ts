@@ -3,7 +3,6 @@ import {
   CATALOG_ENTRIES,
   defaultEnabledLayerIds,
   GAMES_BY_ID,
-  pickRandomStarter,
   SEED_PROFILES_BY_GAME_ID,
   STARTER_POOL,
   toInputProfile,
@@ -12,6 +11,7 @@ import {
   buildEnabledLayers,
   isStateVisible,
   profilesForSelection,
+  sanitizeEnabledLayers,
 } from '../src/lib/selection'
 import { normalizeKey } from '../src/utils/keyNormalization'
 import { makeProfile } from './fixtures'
@@ -124,12 +124,12 @@ describe('selection helpers', () => {
     expect(isStateVisible('free', new Set())).toBe(true)
     expect(isStateVisible('heavy', new Set(['free']))).toBe(false)
   })
-})
 
-describe('pickRandomStarter', () => {
-  it('picks from the editable starter pool', () => {
-    const pick = pickRandomStarter(STARTER_POOL, () => 0)
-    expect(STARTER_POOL).toContain(pick)
-    expect(pick).toBe(STARTER_POOL[0])
+  it('sanitizes stored layers against current seed layer ids', () => {
+    const sanitized = sanitizeEnabledLayers(
+      ['warframe'],
+      { warframe: ['movement', 'does-not-exist'] },
+    )
+    expect(sanitized.warframe).toEqual(['movement'])
   })
 })

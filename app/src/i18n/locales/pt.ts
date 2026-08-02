@@ -44,7 +44,6 @@ export const pt: MessageCatalog = {
   kindGame: 'Jogo',
   kindTool: 'Ferramenta (Suas)',
   addGame: 'Adicionar',
-  starterNote: 'Começou com um título aleatório do grupo inicial.',
   profilesHeading: 'Perfis personalizados',
   importProfiles: 'Importar arquivo',
   exportProfiles: 'Exportar perfis',

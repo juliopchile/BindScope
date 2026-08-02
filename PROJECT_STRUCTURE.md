@@ -75,8 +75,9 @@ Hand-curated static modules under `app/src/data/catalog/`:
 | `catalog/bind.ts` | Compact binding factory for seed authors |
 
 To add a title: create a file exporting a `CatalogEntry`, then append it to the `ENTRIES` array in
-`index.ts`. Edit `STARTER_POOL` to change the random first-load set. Current curated size (PD1):
-**26** entries (22 games + 4 tools).
+`index.ts`. `STARTER_POOL` is a featured-id list for docs/tests only — first load starts with an
+empty selection and restores from `localStorage` (`bindscope.selection`). Current curated size
+(PD1): **26** entries (22 games + 4 tools).
 
 Each seed profile uses **layers** (`BindingLayer`: `id`, `label`, `defaultEnabled`, `bindings`).
 Default-enabled layers apply on select; deeper layers are opt-in checkboxes in the UI. Every binding

@@ -43,7 +43,6 @@ export const zh: MessageCatalog = {
   kindGame: '游戏',
   kindTool: '工具（我的）',
   addGame: '添加',
-  starterNote: '已从起始池随机选择一个标题。',
   profilesHeading: '自定义配置',
   importProfiles: '导入文件',
   exportProfiles: '导出配置',

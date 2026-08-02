@@ -28,6 +28,29 @@ export function buildEnabledLayers(
 }
 
 /**
+ * Keep stored layer ids that still exist on the seed; drop unknown ids.
+ * Games without a seed (import-only) keep the stored list as-is.
+ */
+export function sanitizeEnabledLayers(
+  selectedGameIds: readonly string[],
+  stored: EnabledLayersByGame,
+): EnabledLayersByGame {
+  const previous: EnabledLayersByGame = {}
+  for (const gameId of selectedGameIds) {
+    const seed = SEED_PROFILES_BY_GAME_ID[gameId]
+    const storedLayers = stored[gameId]
+    if (!seed) {
+      if (storedLayers) previous[gameId] = storedLayers
+      continue
+    }
+    if (!storedLayers) continue
+    const valid = new Set(seed.layers.map((layer) => layer.id))
+    previous[gameId] = storedLayers.filter((id) => valid.has(id))
+  }
+  return buildEnabledLayers(selectedGameIds, previous)
+}
+
+/**
  * Seed flatten plus any imported/custom overrides. The engine's
  * `resolveProfiles` prefers custom/imported over official for the same gameId.
  */

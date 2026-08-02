@@ -43,7 +43,6 @@ export const en = {
   kindGame: 'Game',
   kindTool: 'Tool (Yours)',
   addGame: 'Add',
-  starterNote: 'Started with a random title from the starter pool.',
   profilesHeading: 'Custom profiles',
   importProfiles: 'Import file',
   exportProfiles: 'Export profiles',
