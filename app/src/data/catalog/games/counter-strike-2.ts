@@ -50,6 +50,11 @@ export const counterStrike2: CatalogEntry = {
           bind('KeyU', 'Team message'),
           bind('KeyM', 'Select team'),
           bind('Tab', 'Scoreboard'),
+          bind('Mouse1', 'Primary attack'),
+          bind('Mouse2', 'Secondary attack'),
+          bind('Mouse3', 'Player ping'),
+          bind('WheelUp', 'Previous weapon'),
+          bind('WheelDown', 'Next weapon'),
         ],
       },
       {

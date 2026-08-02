@@ -1,4 +1,7 @@
-/** Canonical key id (KeyboardEvent.code style), e.g. KeyW, Digit1, F5. */
+/**
+ * Canonical input target id. Keyboard uses KeyboardEvent.code style
+ * (KeyW, Digit1, F5). Mouse uses Mouse1…Mouse5, WheelUp, WheelDown.
+ */
 export type KeyboardKey = string
 
 export type Modifier = 'shift' | 'ctrl' | 'alt' | 'meta'
@@ -99,6 +102,15 @@ export interface KeyboardLayout {
   height: number
   keys: LayoutKey[]
 }
+
+/**
+ * Companion pointing-device layout (same key model as the keyboard).
+ * Geometry lives in `data/mouseLayout.ts`; ids participate in availability.
+ */
+export type MouseLayout = KeyboardLayout
+
+/** Extra device layouts fed into availability alongside the keyboard (UR5). */
+export type DeviceLayout = KeyboardLayout
 
 /** Conflict scoring: free → partial → heavy → reserved (+ unknown for out-of-layout). */
 export type KeyAvailabilityState = 'free' | 'partial' | 'heavy' | 'reserved' | 'unknown'

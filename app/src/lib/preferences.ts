@@ -7,10 +7,12 @@ export type ThemePreference = 'light' | 'dark' | 'system'
 const LOCALE_KEY = 'bindscope.locale'
 const THEME_KEY = 'bindscope.theme'
 const LAYOUT_KEY = 'bindscope.layout'
+const SHOW_MOUSE_KEY = 'bindscope.showMouse'
 
 export const THEME_PREFERENCES: readonly ThemePreference[] = ['light', 'dark', 'system']
 export const DEFAULT_THEME: ThemePreference = 'system'
 export const DEFAULT_LAYOUT: LayoutId = 'ansi-full'
+export const DEFAULT_SHOW_MOUSE = true
 export { LAYOUT_IDS, isLayoutId }
 
 export function isThemePreference(value: string): value is ThemePreference {
@@ -66,6 +68,25 @@ export function readStoredLayout(): LayoutId {
 export function writeStoredLayout(layoutId: LayoutId): void {
   try {
     localStorage.setItem(LAYOUT_KEY, layoutId)
+  } catch {
+    /* ignore */
+  }
+}
+
+export function readStoredShowMouse(): boolean {
+  try {
+    const raw = localStorage.getItem(SHOW_MOUSE_KEY)
+    if (raw === '0' || raw === 'false') return false
+    if (raw === '1' || raw === 'true') return true
+  } catch {
+    /* ignore */
+  }
+  return DEFAULT_SHOW_MOUSE
+}
+
+export function writeStoredShowMouse(show: boolean): void {
+  try {
+    localStorage.setItem(SHOW_MOUSE_KEY, show ? '1' : '0')
   } catch {
     /* ignore */
   }

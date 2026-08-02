@@ -13,6 +13,7 @@ import {
   SKYRIM_CUSTOM,
   SKYRIM_DEFAULT,
   TEST_LAYOUT,
+  TEST_MOUSE_LAYOUT,
   TEST_RESERVED,
   WARFRAME_DEFAULT,
 } from './fixtures'
@@ -168,5 +169,74 @@ describe('availability computation', () => {
     const w = summary.keys.find((k) => k.key === 'KeyW')
     expect(w?.bindings).toHaveLength(2)
     expect(w?.bindings.some((b) => b.binding.modifiers?.includes('shift'))).toBe(true)
+  })
+
+  it('includes mouse device keys in the availability universe', () => {
+    const mouseOnly = makeProfile({
+      id: 'fps-mouse',
+      gameId: 'skyrim',
+      name: 'FPS Mouse',
+      sourceType: 'official',
+      bindings: [
+        { key: 'Mouse1', action: 'Attack' },
+        { key: 'Mouse2', action: 'Aim' },
+        { key: 'WheelUp', action: 'Prev weapon' },
+      ],
+    })
+
+    const withoutMouse = computeAvailability({
+      profiles: [mouseOnly],
+      layout: TEST_LAYOUT,
+      reservedRules: [],
+      gamesById: GAMES_BY_ID,
+    })
+    expect(withoutMouse.keys.find((k) => k.key === 'Mouse1')?.state).toBe('unknown')
+    expect(withoutMouse.unknownCount).toBe(3)
+
+    const withMouse = computeAvailability({
+      profiles: [mouseOnly],
+      layout: TEST_LAYOUT,
+      deviceLayouts: [TEST_MOUSE_LAYOUT],
+      reservedRules: [],
+      gamesById: GAMES_BY_ID,
+    })
+
+    expect(withMouse.keys.find((k) => k.key === 'Mouse1')?.state).toBe('heavy')
+    expect(withMouse.keys.find((k) => k.key === 'Mouse2')?.state).toBe('heavy')
+    expect(withMouse.keys.find((k) => k.key === 'WheelUp')?.state).toBe('heavy')
+    expect(withMouse.keys.find((k) => k.key === 'Mouse3')?.state).toBe('free')
+    expect(withMouse.keys.find((k) => k.key === 'Mouse4')?.state).toBe('free')
+    expect(withMouse.unknownCount).toBe(0)
+    expect(withMouse.keys.find((k) => k.key === 'Mouse1')?.bindings[0]?.binding.action).toBe(
+      'Attack',
+    )
+  })
+
+  it('scores partial mouse conflicts across profiles like keyboard keys', () => {
+    const a = makeProfile({
+      id: 'a',
+      gameId: 'skyrim',
+      name: 'A',
+      sourceType: 'official',
+      bindings: [{ key: 'Mouse1', action: 'Fire' }],
+    })
+    const b = makeProfile({
+      id: 'b',
+      gameId: 'genshin',
+      name: 'B',
+      sourceType: 'official',
+      bindings: [{ key: 'Mouse2', action: 'Camera' }],
+    })
+
+    const summary = computeAvailability({
+      profiles: [a, b],
+      layout: TEST_LAYOUT,
+      deviceLayouts: [TEST_MOUSE_LAYOUT],
+      reservedRules: [],
+      gamesById: GAMES_BY_ID,
+    })
+
+    expect(summary.keys.find((k) => k.key === 'Mouse1')?.state).toBe('partial')
+    expect(summary.keys.find((k) => k.key === 'Mouse2')?.state).toBe('partial')
   })
 })

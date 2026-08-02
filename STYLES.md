@@ -5,19 +5,19 @@ cues, or breakpoints change.
 
 ## Design direction (UI Refresh)
 
-Active plan: `PLAN.md` (UR1–UR4 complete; UR5 pending). Decision: **D13**. Competitive brief:
-`docs/keybindr-analysis.md`.
+UI Refresh UR1–UR5 is **complete**. Decision: **D13**. Competitive brief: `docs/keybindr-analysis.md`.
+Closed-track summary: `PLAN.md`.
 
-### Shell hierarchy & chrome (UR3–UR4 shipped)
+### Shell hierarchy & chrome (UR3–UR5 shipped)
 
 | Topic | Direction |
 |---|---|
-| Hierarchy | Header (brand + action cluster) → keyboard stage (+ selection detail) |
+| Hierarchy | Header (brand + action cluster) → keyboard/mouse stage (+ selection detail) |
 | Open chrome | Brand, tagline; visible layout selector; compact toolbar triggers (Games, Import / Export, Preferences) |
-| Closed chrome | Keyboard sits in a bordered `.keyboard-stage` surface |
+| Closed chrome | Devices sit in a bordered `.keyboard-stage` surface |
 | Controls | Exclusive header disclosures via `ChromeToolbar` — collapsed by default |
 | Detail panel | Selection-driven; beside stage on desktop; bottom drawer + backdrop on phone |
-| Density | Slim legend + availability counts under the keyboard; heavy controls off the critical path |
+| Density | Slim legend + availability counts under the devices; heavy controls off the critical path |
 
 ### Overflow & breakpoints
 
@@ -49,10 +49,10 @@ state (free uses legend `·` only; no on-key mark).
 |---|---|---|
 | Games (search + selection + layers) | Collapsed | User opens **Games** in the header toolbar |
 | Import / export / safe-key | Collapsed | User opens **Import / Export** |
-| Locale + theme prefs | Collapsed | User opens **Preferences** |
+| Locale + theme + show mouse | Collapsed | User opens **Preferences** |
 | Keyboard form factor | Visible | Header toolbar select (Full / TKL); persists `bindscope.layout` |
-| Key/mouse detail | Collapsed | User selects a key; Close / backdrop / re-click dismisses |
-| Legend + availability summary | Visible (slim) | Always under keyboard |
+| Key/mouse detail | Collapsed | User selects a key or mouse button; Close / backdrop / re-click dismisses |
+| Legend + availability summary | Visible (slim) | Always under the device stage |
 
 Toolbar behaviour:
 
@@ -62,14 +62,14 @@ Toolbar behaviour:
 - Games trigger may show a selected-count badge.
 - Open panel is a full-width region under the header row (scrolls internally if tall).
 
-### Devices (UR4 shipped; UR5 planned)
+### Devices (UR4–UR5 shipped)
 
 | Topic | Direction |
 |---|---|
 | Form factor | Toolbar selector: ANSI Full (default) + TKL; persist `localStorage` (`bindscope.layout`); no auto-switch on resize |
-| Mouse | Data-driven SVG beside/below keyboard in the same stage; CS-binds placement pattern |
-| Mouse ids | Canonical `Mouse1`…`Mouse5` (+ wheel if needed) in normalization; first-class in availability |
-| Mouse chrome | Optional show/hide; same free/partial/heavy/reserved token language as keys |
+| Mouse | Data-driven SVG beside keyboard on `lg+`, stacked below on narrow; CS-binds placement pattern |
+| Mouse ids | Canonical `Mouse1`…`Mouse5`, `WheelUp`, `WheelDown` in normalization; first-class via `deviceLayouts` |
+| Mouse chrome | Preferences “Show mouse” (`bindscope.showMouse`, default on); same free/partial/heavy/reserved tokens as keys |
 
 ### Explicit non-copies (D13)
 
@@ -109,8 +109,8 @@ Meta lives in `app/src/ui/keyStateMeta.ts`. Aria labels include the state name.
 
 | Class | Width | Layout intent |
 |---|---|---|
-| Phone | `< 1024px` | Keyboard stage; detail as fixed bottom drawer when selected; chrome in header disclosures |
-| Desktop | `≥ 1024px` (`lg`) | Keyboard stage full width; detail beside stage only when selected |
+| Phone | `< 1024px` | Keyboard stage; mouse stacks under keyboard; detail as fixed bottom drawer when selected; chrome in header disclosures |
+| Desktop | `≥ 1024px` (`lg`) | Keyboard + mouse side-by-side in stage; detail beside stage only when selected |
 | Wide | `≥ 1280px` | ANSI full fits without clipping inside the 1400px column |
 
 The SVG keyboard uses a `viewBox` from layout data and `width: 100%` so it scales with its
@@ -122,11 +122,13 @@ container.
 - Layout selector: `app/src/components/LayoutSelector.tsx` — Full / TKL; preference via `lib/preferences.ts`
 - Keyboard: `app/src/components/KeyboardVisualizer.tsx` — data-driven from `KeyboardLayout`; dims
   keys whose state is filtered out via the legend
+- Mouse: `app/src/components/MouseVisualizer.tsx` — data-driven from `MouseLayout` (`data/mouseLayout.ts`);
+  same key-state fill/pattern/mark tokens as keyboard; selectable buttons share the detail panel
 - Detail: `app/src/components/KeyDetailPanel.tsx` — selection-driven; desktop side panel / phone drawer
 - Legend: `app/src/components/Legend.tsx` — toggles state filters
 - Search / selection: `GameSearch.tsx`, `SelectedGames.tsx` (inside Games disclosure)
 - Profile IO: `ProfileIO.tsx` (inside Import / Export disclosure)
-- Prefs: `PrefsControls.tsx` — locale + theme (inside Preferences disclosure)
+- Prefs: `PrefsControls.tsx` — locale + theme + show mouse (inside Preferences disclosure)
 - Chrome copy: locale catalogs in `app/src/i18n/locales/` via `useI18n()`
 
 ## Design rules

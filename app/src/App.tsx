@@ -5,11 +5,13 @@ import { KeyboardVisualizer } from './components/KeyboardVisualizer'
 import { KeyDetailPanel } from './components/KeyDetailPanel'
 import { LayoutSelector } from './components/LayoutSelector'
 import { Legend } from './components/Legend'
+import { MouseVisualizer } from './components/MouseVisualizer'
 import { PrefsControls } from './components/PrefsControls'
 import { ProfileIO } from './components/ProfileIO'
 import { SelectedGames } from './components/SelectedGames'
 import { CATALOG_GAMES, GAMES_BY_ID, pickRandomStarter } from './data/catalog'
 import { getLayout } from './data/keyboardLayouts'
+import { getMouseLayout, isMouseKeyId } from './data/mouseLayout'
 import { RESERVED_KEY_RULES } from './data/reservedKeys'
 import { computeAvailability, resolveProfiles } from './domain/availability'
 import { useI18n } from './i18n/useI18n'
@@ -22,7 +24,9 @@ import {
 } from './lib/importExport'
 import {
   readStoredLayout,
+  readStoredShowMouse,
   writeStoredLayout,
+  writeStoredShowMouse,
 } from './lib/preferences'
 import {
   buildEnabledLayers,
@@ -57,13 +61,16 @@ export default function App() {
   const [selectedKey, setSelectedKey] = useState<KeyboardKey | null>(null)
   const [openPanel, setOpenPanel] = useState<ChromePanelId | null>(null)
   const [layoutId, setLayoutId] = useState<LayoutId>(() => readStoredLayout())
+  const [showMouse, setShowMouse] = useState(() => readStoredShowMouse())
 
   const layout = getLayout(layoutId)
+  const mouseLayout = getMouseLayout()
   const profiles = profilesForSelection(selectedIds, enabledLayersByGame, overridesByGame)
   const gamesById = gamesNameMapForSelection(selectedIds, extraNames)
   const summary = computeAvailability({
     profiles,
     layout,
+    deviceLayouts: showMouse ? [mouseLayout] : undefined,
     reservedRules: RESERVED_KEY_RULES,
     gamesById,
   })
@@ -76,8 +83,18 @@ export default function App() {
     const nextLayout = getLayout(nextId)
     setSelectedKey((prev) => {
       if (!prev) return prev
-      return nextLayout.keys.some((key) => key.id === prev) ? prev : null
+      if (nextLayout.keys.some((key) => key.id === prev)) return prev
+      if (showMouse && isMouseKeyId(prev)) return prev
+      return null
     })
+  }
+
+  function handleShowMouseChange(next: boolean) {
+    setShowMouse(next)
+    writeStoredShowMouse(next)
+    if (!next) {
+      setSelectedKey((prev) => (prev && isMouseKeyId(prev) ? null : prev))
+    }
   }
 
   function addGame(gameId: string) {
@@ -240,7 +257,9 @@ export default function App() {
               canExport={effectiveProfiles.length > 0}
             />
           }
-          prefsPanel={<PrefsControls />}
+          prefsPanel={
+            <PrefsControls showMouse={showMouse} onShowMouseChange={handleShowMouseChange} />
+          }
         />
       </header>
 
@@ -263,20 +282,35 @@ export default function App() {
                 className="text-xs font-semibold tracking-wide uppercase"
                 style={{ color: 'var(--fg-muted)' }}
               >
-                {t('keyboardHeading')}
+                {showMouse ? t('devicesHeading') : t('keyboardHeading')}
               </h2>
               <p className="text-xs" style={{ color: 'var(--fg-muted)' }}>
                 {t('starterNote')}
               </p>
             </div>
 
-            <KeyboardVisualizer
-              layout={layout}
-              keys={summary.keys}
-              selectedKey={selectedKey}
-              onSelectKey={handleSelectKey}
-              activeFilters={activeFilters}
-            />
+            <div className="flex flex-col items-stretch gap-4 lg:flex-row lg:items-start lg:gap-3">
+              <div className="min-w-0 flex-1">
+                <KeyboardVisualizer
+                  layout={layout}
+                  keys={summary.keys}
+                  selectedKey={selectedKey}
+                  onSelectKey={handleSelectKey}
+                  activeFilters={activeFilters}
+                />
+              </div>
+              {showMouse ? (
+                <div className="mx-auto w-full max-w-[180px] shrink-0 lg:mx-0 lg:w-[160px] lg:pt-1">
+                  <MouseVisualizer
+                    layout={mouseLayout}
+                    keys={summary.keys}
+                    selectedKey={selectedKey}
+                    onSelectKey={handleSelectKey}
+                    activeFilters={activeFilters}
+                  />
+                </div>
+              ) : null}
+            </div>
 
             <div
               className="mt-3 flex flex-col gap-3 border-t pt-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between"

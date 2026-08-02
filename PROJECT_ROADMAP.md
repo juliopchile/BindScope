@@ -109,31 +109,33 @@ Delivered:
 
 ## In Progress
 
-**UI Refresh track (post-MVP)** — keyboard-first shell, Keybindr-inspired IA (not a clone). Detailed
-phase plan lives in `PLAN.md`. Requirements source: `qa.md`. Decision: **D13**. Brief:
-`docs/keybindr-analysis.md`.
+No active implementation track. UI Refresh (UR1–UR5) is complete — see Completed Work / History
+summaries below. Next work is from **Pending Work** / **Later Direction**.
 
-**UR1 (complete):** Explored live `keybindr.github.io` (React SPA, CSS tokens, layout registry
-Full/TKL/75%/60%, mouse/HOTAS *tables* only — no mouse SVG; help states viz unsupported) and
-cross-checked `keybindr.app` (separate product with chrome form-factor control). Adopt keyboard-first
-shell, neutral free keys, closed visualizer stage, compact header menus, Full/TKL selector, and a
-CS-binds-style mouse SVG with first-class availability ids. Reject Keybindr brand, dark-only theme,
-bind-editor workflows, and auto-force 60% on mobile. Open questions resolved in the brief.
+### UI Refresh track (complete)
 
-**UR2 (complete):** Keyboard-first shell — visualizer stage directly under the header; selection-driven
-detail. Content column ~1400px; SVG `max-w-5xl` removed so ANSI full fits at ≥1280px. Free keys
-retokened to neutral transparent/gray (light + dark + system); D11 cues retained. Engine path
-unchanged. (UR2’s temporary `<details>` controls rail was replaced in UR3.)
+Keyboard-first shell, Keybindr-inspired IA (not a clone). Requirements: `qa.md`. Decision: **D13**.
+Brief: `docs/keybindr-analysis.md`.
+
+**UR1 (complete):** Explored live `keybindr.github.io` and cross-checked `keybindr.app`. Adopt
+keyboard-first shell, neutral free keys, closed visualizer stage, compact header menus, Full/TKL
+selector, and a CS-binds-style mouse SVG with first-class availability ids. Reject Keybindr brand,
+dark-only theme, bind-editor workflows, and auto-force 60% on mobile.
+
+**UR2 (complete):** Keyboard-first shell — visualizer stage under the header; selection-driven detail.
+Content column ~1400px; free keys retokened to neutral transparent/gray; D11 cues retained.
 
 **UR3 (complete):** Compact header action cluster (`ChromeToolbar`): Games, Import / Export,
-Preferences as exclusive disclosures (`aria-expanded`, Escape / outside-click). Default collapsed so
-keyboard + legend stay primary. Phone key detail uses a bottom drawer + backdrop; desktop keeps the
-side panel. All new chrome strings localized (en/es/pt/fr/zh).
+Preferences as exclusive disclosures. Phone detail bottom drawer; desktop side panel.
 
-**UR4 (complete):** Form-factor selector in the header toolbar — ANSI Full (default) and ANSI TKL
-(no numpad). Preference persists in `localStorage` (`bindscope.layout`); no auto-switch on narrow
-viewports. Selected layout drives the SVG visualizer and `computeAvailability`. Compact/ISO deferred
-to V2.
+**UR4 (complete):** Form-factor selector — ANSI Full (default) and ANSI TKL. Preference
+`bindscope.layout`; no auto-switch on narrow viewports.
+
+**UR5 (complete):** Data-driven mouse SVG (`MouseVisualizer` + `mouseLayout.ts`) beside/below the
+keyboard. Canonical ids `Mouse1`…`Mouse5`, `WheelUp`/`WheelDown` in normalization. Mouse layout fed
+into `computeAvailability` via `deviceLayouts` when shown. Same state tokens as keys; detail panel
+shared. Optional show/hide in Preferences (`bindscope.showMouse`). Demo binds on CS2. No bind
+editing, no gamepad/HOTAS.
 
 | Phase | Status | Summary |
 |---|---|---|
@@ -141,11 +143,10 @@ to V2.
 | UR2. Keyboard-first shell & free-key retoken | Complete | Hero keyboard stage, 1400px column, neutral free keys |
 | UR3. Collapsible chrome & denser shell | Complete | Header disclosures (Games / Import-Export / Prefs); phone detail drawer |
 | UR4. Keyboard form-factor selector | Complete | ANSI Full + TKL registry; toolbar selector; persisted preference |
-| UR5. Mouse visualizer | Planned | Data-driven mouse SVG; first-class availability ids |
+| UR5. Mouse visualizer | Complete | Mouse SVG + first-class availability ids; show/hide pref; CS2 demo binds |
 
 ## Pending Work
 
-- UI Refresh UR5 (see In Progress / `PLAN.md`; UR1–UR4 complete)
 - Grow the hand-curated catalog toward ~20–30 games (layout already extensible)
 - Parsers for real config formats (INI, CFG, XML)
 - Optional Playwright smoke / broader E2E
@@ -175,7 +176,7 @@ Known risks that become debt if neglected:
 
 | Phase | Scope |
 |---|---|
-| UI Refresh (UR1–UR5) | Active plan in `PLAN.md`: Keybindr-inspired shell, free-key retoken, collapsible chrome, layout selector, mouse visualizer |
+| UI Refresh (UR1–UR5) | **Complete** — keyboard-first shell, free-key retoken, collapsible chrome, Full/TKL selector, mouse visualizer (see In Progress summary) |
 | V2 | Modifier combinations, action-name search, remaining layout variants (60%, ISO), more UI locales |
 | V3 | Real config file import, Steam sync, cloud profiles, game detection |
 | V4 | Recommendations: *"the best push-to-talk key for your library"* |

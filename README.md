@@ -3,7 +3,7 @@
 > AI agents: read `AGENTS.md` before working in this repository.
 
 BindScope lets you select several games at once, overlay their default or custom keymaps on an
-interactive keyboard, and instantly see **which keys are still free** across all of them.
+interactive keyboard and mouse, and instantly see **which keys are still free** across all of them.
 
 ## Project Status
 
@@ -12,9 +12,10 @@ binding layers, import/export profiles as JSON, switch UI language (en / es / pt
 theme (light / dark / system), and download the current free (safe) key set. Static deploy to GitHub
 Pages is wired via Actions.
 
-**Next:** UI Refresh track (UR5 mouse visualizer) — see `PLAN.md`
-and `PROJECT_ROADMAP.md`. QA notes: `qa.md`. UR1–UR3 (analysis, keyboard-first shell, collapsible
-chrome) are complete.
+**UI Refresh (UR1–UR5) complete:** keyboard-first shell, neutral free keys, collapsible chrome,
+Full/TKL selector, and mouse visualizer with first-class availability ids. See `PROJECT_ROADMAP.md`.
+`PLAN.md` holds a closed-track summary until a new phase opens. Next: Later Direction (catalog, V2,
+parsers). QA notes: `qa.md`.
 
 To run it, see **Getting Started** below.
 
@@ -44,9 +45,9 @@ available = allKeys − union(usedKeys)
 That line is the entire engine. Everything else is data quality and UX.
 
 **User flow:** the user selects Skyrim, Genshin Impact, and Warframe. The app overlays the three
-keymaps on an interactive keyboard and distinguishes keys used by every game, keys used by some,
-keys free across all of them, and keys reserved by the operating system or by the app's own safety
-rules. The user can load a custom profile for any game and the result updates instantly.
+keymaps on an interactive keyboard and mouse and distinguishes keys used by every game, keys used by
+some, keys free across all of them, and keys reserved by the operating system or by the app's own
+safety rules. The user can load a custom profile for any game and the result updates instantly.
 
 ## Project Constraints
 

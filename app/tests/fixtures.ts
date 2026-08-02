@@ -16,6 +16,24 @@ export const TEST_LAYOUT: KeyboardLayout = {
   ],
 }
 
+/** Companion mouse fixture — subset of product mouse ids. */
+export const TEST_MOUSE_LAYOUT: KeyboardLayout = {
+  id: 'test-mouse',
+  name: 'Test Mouse',
+  description: 'Mouse buttons for availability tests',
+  width: 140,
+  height: 240,
+  keys: [
+    { id: 'Mouse1', label: '1', x: 0, y: 0, width: 40, height: 40 },
+    { id: 'Mouse2', label: '2', x: 40, y: 0, width: 40, height: 40 },
+    { id: 'Mouse3', label: '3', x: 80, y: 0, width: 40, height: 40 },
+    { id: 'Mouse4', label: '4', x: 0, y: 40, width: 40, height: 40 },
+    { id: 'Mouse5', label: '5', x: 40, y: 40, width: 40, height: 40 },
+    { id: 'WheelUp', label: '↑', x: 80, y: 40, width: 40, height: 20 },
+    { id: 'WheelDown', label: '↓', x: 80, y: 60, width: 40, height: 20 },
+  ],
+}
+
 export const TEST_RESERVED: ReservedKeyRule[] = [
   {
     id: 'f11-fullscreen',

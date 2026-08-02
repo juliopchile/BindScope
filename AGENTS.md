@@ -5,15 +5,15 @@ This file is written for AI coding agents working in BindScope. It should help a
 ## Project State — Read This First
 
 **Stage 5 (MVP) is complete.** `app/` is a Vite + React + TypeScript app with a pure availability
-engine, data-driven SVG keyboard, game/tool search, layered seed catalog, JSON custom-profile
+engine, data-driven SVG keyboard + mouse, game/tool search, layered seed catalog, JSON custom-profile
 import/export, locale catalogs under `app/src/i18n/` (en/es/pt/fr/zh), light/dark/system theme via
 `html[data-theme]`, and GitHub Pages deploy from `.github/workflows/deploy-pages.yml`. Visual tokens
 live in `STYLES.md`.
 
-**Active work:** UI Refresh track (UR5) in `PLAN.md` — keyboard-first shell inspired by Keybindr
-IA (D13), not a clone. Requirements in `qa.md`; competitive brief in `docs/keybindr-analysis.md`
-(UR1–UR4 complete: analysis, keyboard-first shell + free-key retoken, collapsible header chrome,
-Full/TKL form-factor selector). Do not start UR5 until the user/orchestrator authorizes that phase.
+**Active work:** UI Refresh track (UR1–UR5) is **complete**. Next work is from **Later Direction** in
+`PROJECT_ROADMAP.md` (catalog growth, V2, parsers). `PLAN.md` holds only a closed-track summary until
+a new active phase is opened. Requirements archive: `qa.md`; competitive brief:
+`docs/keybindr-analysis.md` (D13).
 
 Use `make install`, `make run`, `make test`, `make lint`, and `make build` from the repo root. Do not
 invent commands; prefer the Makefile.
@@ -94,5 +94,5 @@ points there as they appear.
 | `STYLES.md` | Visual design tokens, key-state cues, breakpoints, component rules | Exists |
 | `qa.md` | Post-MVP UI QA notes (UI Refresh requirements) | Exists |
 | `docs/keybindr-analysis.md` | UR1 competitive brief (Keybindr IA adopt/reject) | Exists |
-| `PLAN.md` | Active UI Refresh phases UR4–UR5 (UR1–UR3 done) | Active |
+| `PLAN.md` | Closed UI Refresh summary; open only when a new active phase starts | Closed track |
 | `CONTRIBUTING.md` | Binding-data submission workflow | Create only if community contributions open |

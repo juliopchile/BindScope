@@ -3,9 +3,11 @@ export const en = {
   appTitle: 'BindScope',
   appTagline: 'Which keys are still free across your games?',
   keyboardHeading: 'Keyboard',
+  devicesHeading: 'Keyboard & mouse',
   keyboardAriaLabel: 'Keyboard availability map',
+  mouseAriaLabel: 'Mouse availability map',
   detailHeading: 'Detail',
-  detailEmpty: 'Select a key to see which games bind it.',
+  detailEmpty: 'Select a key or mouse button to see which games bind it.',
   detailFree: 'This key is free across all selected profiles.',
   detailReserved: 'Reserved — not safe to bind.',
   detailDismiss: 'Close',
@@ -37,7 +39,7 @@ export const en = {
   layersHeading: 'Binding layers',
   layerOptIn: 'opt-in',
   filtersHeading: 'Show states',
-  filterHint: 'Click a legend item to show or hide that state on the keyboard.',
+  filterHint: 'Click a legend item to show or hide that state on the keyboard and mouse.',
   kindGame: 'Game',
   kindTool: 'Tool (Yours)',
   addGame: 'Add',
@@ -53,7 +55,7 @@ export const en = {
     'Imported {count} profile(s); skipped {skippedBindings} bad binding(s) and {skippedProfiles} empty profile(s).',
   importError: 'Could not import that file.',
   importAriaLabel: 'Import binding profiles from JSON',
-  prefsAriaLabel: 'Language and appearance',
+  prefsAriaLabel: 'Language, appearance, and devices',
   languageLabel: 'Language',
   themeLabel: 'Theme',
   themeLight: 'Light',
@@ -62,6 +64,7 @@ export const en = {
   layoutLabel: 'Keyboard',
   layoutAnsiFull: 'Full',
   layoutAnsiTkl: 'TKL',
+  showMouseLabel: 'Show mouse',
 } as const
 
 export type MessageKey = keyof typeof en

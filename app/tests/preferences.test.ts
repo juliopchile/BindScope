@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   DEFAULT_LAYOUT,
+  DEFAULT_SHOW_MOUSE,
   DEFAULT_THEME,
   isLayoutId,
   isThemePreference,
@@ -22,6 +23,10 @@ describe('preferences helpers', () => {
     expect(LAYOUT_IDS).toEqual(['ansi-full', 'ansi-tkl'])
     expect(isLayoutId('ansi-tkl')).toBe(true)
     expect(isLayoutId('layout-60')).toBe(false)
+  })
+
+  it('defaults to showing the mouse visualizer', () => {
+    expect(DEFAULT_SHOW_MOUSE).toBe(true)
   })
 
   it('shares locale validation with i18n', () => {

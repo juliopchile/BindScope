@@ -6,7 +6,12 @@ import { useTheme } from '../lib/useTheme'
 const selectClass =
   'min-h-10 min-w-[7.5rem] rounded-md border px-2 py-2 text-sm focus-visible:outline focus-visible:outline-2'
 
-export function PrefsControls() {
+interface PrefsControlsProps {
+  showMouse: boolean
+  onShowMouseChange: (show: boolean) => void
+}
+
+export function PrefsControls({ showMouse, onShowMouseChange }: PrefsControlsProps) {
   const { locale, setLocale, t } = useI18n()
   const { theme, setTheme } = useTheme()
 
@@ -54,6 +59,19 @@ export function PrefsControls() {
             </option>
           ))}
         </select>
+      </label>
+
+      <label
+        className="flex min-h-10 items-center gap-2 self-end rounded-md border px-3 py-2 text-sm"
+        style={{ borderColor: 'var(--border)', color: 'var(--fg)' }}
+      >
+        <input
+          type="checkbox"
+          checked={showMouse}
+          onChange={(event) => onShowMouseChange(event.target.checked)}
+          aria-label={t('showMouseLabel')}
+        />
+        <span>{t('showMouseLabel')}</span>
       </label>
     </div>
   )

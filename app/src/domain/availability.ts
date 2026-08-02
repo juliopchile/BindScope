@@ -64,6 +64,8 @@ const reservedRuleSchema = z.object({
 export const availabilityInputSchema = z.object({
   profiles: z.array(profileSchema),
   layout: layoutSchema,
+  /** Companion devices (mouse, …) whose keys join the availability universe. */
+  deviceLayouts: z.array(layoutSchema).optional(),
   reservedRules: z.array(reservedRuleSchema).optional(),
   profilePrecedence: z.array(z.string().min(1)).optional(),
   gamesById: z.record(z.object({ name: z.string().min(1) })),
@@ -167,7 +169,8 @@ export function parseAvailabilityInput(input: unknown): AvailabilityInput {
 
 export function computeAvailability(rawInput: AvailabilityInput): ConflictSummary {
   const input = parseAvailabilityInput(rawInput)
-  const { layout, reservedRules = [], profilePrecedence = [], gamesById } = input
+  const { layout, deviceLayouts = [], reservedRules = [], profilePrecedence = [], gamesById } =
+    input
   const profiles = resolveProfiles(input.profiles, profilePrecedence)
   const precedence =
     profilePrecedence.length > 0 ? profilePrecedence : profiles.map((profile) => profile.id)
@@ -193,8 +196,9 @@ export function computeAvailability(rawInput: AvailabilityInput): ConflictSummar
     }
   }
 
-  const layoutKeyIds = new Set(layout.keys.map((k) => k.id))
-  const keys: KeyAvailability[] = layout.keys.map((layoutKey) => {
+  const layoutKeys = [...layout.keys, ...deviceLayouts.flatMap((device) => device.keys)]
+  const layoutKeyIds = new Set(layoutKeys.map((k) => k.id))
+  const keys: KeyAvailability[] = layoutKeys.map((layoutKey) => {
     const bindings = bindingsByKey.get(layoutKey.id) ?? []
     const reserved = findBareReserved(layoutKey.id, reservedRules)
     const state = classifyKeyState(bindings, selectedProfileCount, reserved)

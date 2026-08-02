@@ -96,6 +96,38 @@ const ALIAS_MAP: Record<string, KeyboardKey> = {
   NUMPADDIVIDE: 'NumpadDivide',
   NUMPADENTER: 'NumpadEnter',
   NUMPADDECIMAL: 'NumpadDecimal',
+  // Mouse buttons / wheel (Keybindr + Source-engine style aliases)
+  MOUSE1: 'Mouse1',
+  MOUSE_1: 'Mouse1',
+  MOUSEBUTTON1: 'Mouse1',
+  LMB: 'Mouse1',
+  LEFTCLICK: 'Mouse1',
+  MOUSE2: 'Mouse2',
+  MOUSE_2: 'Mouse2',
+  MOUSEBUTTON2: 'Mouse2',
+  RMB: 'Mouse2',
+  RIGHTCLICK: 'Mouse2',
+  MOUSE3: 'Mouse3',
+  MOUSE_3: 'Mouse3',
+  MOUSEBUTTON3: 'Mouse3',
+  MMB: 'Mouse3',
+  MIDDLECLICK: 'Mouse3',
+  MOUSE4: 'Mouse4',
+  MOUSE_4: 'Mouse4',
+  MOUSEBUTTON4: 'Mouse4',
+  XBUTTON1: 'Mouse4',
+  MOUSE5: 'Mouse5',
+  MOUSE_5: 'Mouse5',
+  MOUSEBUTTON5: 'Mouse5',
+  XBUTTON2: 'Mouse5',
+  WHEELUP: 'WheelUp',
+  MWHEELUP: 'WheelUp',
+  MOUSEWHEELUP: 'WheelUp',
+  SCROLLUP: 'WheelUp',
+  WHEELDOWN: 'WheelDown',
+  MWHEELDOWN: 'WheelDown',
+  MOUSEWHEELDOWN: 'WheelDown',
+  SCROLLDOWN: 'WheelDown',
 }
 
 for (let i = 1; i <= 12; i++) {
@@ -178,6 +210,13 @@ const CANONICAL_CODES = new Set<string>([
   'NumpadDivide',
   'NumpadEnter',
   'NumpadDecimal',
+  'Mouse1',
+  'Mouse2',
+  'Mouse3',
+  'Mouse4',
+  'Mouse5',
+  'WheelUp',
+  'WheelDown',
 ])
 
 export function normalizeModifier(input: string): Modifier | null {
@@ -242,6 +281,13 @@ export function formatKeyLabel(key: KeyboardKey): string {
   if (key === 'CapsLock') return 'Caps'
   if (key === 'Escape') return 'Esc'
   if (key === 'PrintScreen') return 'PrtSc'
+  if (key === 'Mouse1') return 'M1'
+  if (key === 'Mouse2') return 'M2'
+  if (key === 'Mouse3') return 'M3'
+  if (key === 'Mouse4') return 'M4'
+  if (key === 'Mouse5') return 'M5'
+  if (key === 'WheelUp') return 'Wheel↑'
+  if (key === 'WheelDown') return 'Wheel↓'
   return key
 }
 

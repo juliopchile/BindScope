@@ -3,8 +3,7 @@
 `PROJECT_STRUCTURE.md` documents how BindScope is organized and how its pieces fit together. It
 should let a human or an agent understand the repository without guessing from filenames.
 
-> **Status:** Stages 1–5 (MVP) are real under `app/` / `.github/`. UI Refresh UR1–UR3 are shipped
-> (keyboard-first shell, free-key retoken, collapsible header chrome); UR4–UR5 remain in `PLAN.md`.
+> **Status:** Stages 1–5 (MVP) and UI Refresh UR1–UR5 are shipped under `app/` / `.github/`.
 > Update this file as the structure changes.
 
 ## Architecture
@@ -12,8 +11,8 @@ should let a human or an agent understand the repository without guessing from f
 ```
 Seed catalog (static)   ─┐
 Selected games + layers ─┤
-Imported overrides      ─┼─→  domain/availability  ─→  Conflict summary  ─→  SVG keyboard
-Layout definition       ─┤          (pure)                (per key)          Detail + filters
+Imported overrides      ─┼─→  domain/availability  ─→  Conflict summary  ─→  SVG keyboard + mouse
+Keyboard + device layouts┤          (pure)                (per key)          Detail + filters
 Reserved-key rules      ─┘                                         └─→ safe-key / profile JSON export
 ```
 
@@ -39,12 +38,13 @@ BindScope/
 │   │   ├── data/
 │   │   │   ├── catalog/        # Seed games/tools (one file each) + index
 │   │   │   ├── keyboardLayouts.ts
+│   │   │   ├── mouseLayout.ts  # Standard mouse button geometry + ids
 │   │   │   └── reservedKeys.ts
 │   │   ├── types/              # Shared typed models
 │   │   ├── utils/              # Key normalization + forgiving search
 │   │   ├── ui/                 # Key-state meta; EN messages re-export
 │   │   ├── styles/             # Theme tokens (light / dark / system)
-│   │   ├── components/         # ChromeToolbar, search, keyboard, detail, prefs, IO
+│   │   ├── components/         # ChromeToolbar, keyboard, mouse, detail, prefs, IO
 │   │   ├── lib/                # Selection, import/export, theme prefs
 │   │   └── i18n/               # Locale catalogs + provider (en/es/pt/fr/zh)
 │   ├── public/                 # Static assets
@@ -88,7 +88,7 @@ Paths are relative to `app/src/`.
 | Directory | Responsibility |
 |---|---|
 | `domain/` | Availability and conflict computation. Pure, no React or browser APIs |
-| `data/` | Game catalog, seed profiles, layout definitions, reserved-key rules |
+| `data/` | Game catalog, seed profiles, keyboard/mouse layouts, reserved-key rules |
 | `data/catalog/` | File-per-title seeds; tools marked `kind: 'tool'` |
 | `i18n/` | UI message catalogs and locale selection helpers. No domain logic |
 | `components/` | Presentation. Contains no business rules |
@@ -118,11 +118,15 @@ Paths are relative to `app/src/`.
 Minimum typed models:
 
 `Game` · `CatalogKind` · `CatalogEntry` · `SeedProfile` · `BindingLayer` · `ProfileSource` ·
-`InputProfile` · `Binding` · `KeyboardKey` · `KeyboardLayout` · `ConflictSummary` ·
-`ReservedKeyRule` · `ImportExportDocument` · `SafeKeysDocument`
+`InputProfile` · `Binding` · `KeyboardKey` · `KeyboardLayout` · `MouseLayout` · `DeviceLayout` ·
+`ConflictSummary` · `ReservedKeyRule` · `ImportExportDocument` · `SafeKeysDocument`
 
 **`Binding`** — key identifier, action name, optional context, optional modifiers, source metadata,
 verification state, and notes.
+
+**`KeyboardKey`** — canonical input target id. Keyboard uses KeyboardEvent.code style (`KeyW`,
+`Digit1`). Mouse uses `Mouse1`…`Mouse5`, `WheelUp`, `WheelDown`. All layers compare these ids, never
+raw display labels.
 
 **`BindingLayer` / `SeedProfile`** — curated seed shape; layers flatten into `InputProfile` for the
 engine based on UI toggles.
@@ -131,6 +135,11 @@ engine based on UI toggles.
 
 **`InputProfile`** — profile id, game id, name, source type, version or patch label, bindings list,
 and verification status.
+
+**`KeyboardLayout` / `MouseLayout` / `DeviceLayout`** — data-driven SVG geometry (`id`, `name`,
+`width`/`height`, `keys[]` with position/size). The mouse layout lives in `data/mouseLayout.ts`.
+`computeAvailability` accepts optional `deviceLayouts` whose keys join the keyboard layout in the
+availability universe (first-class, not companion-only cosmetics).
 
 The key representation **must be normalized**: the same physical key is identified the same way
 throughout the app. The model must not assume bare keys forever; modifier chords and multiple layers
@@ -150,9 +159,9 @@ Runtime view shape:
 
 ## Availability Engine
 
-A standalone module that takes the selected profiles, the layout definition, and the reserved-key
-rules, and returns the used/free key summary plus per-key conflict metadata. Deterministic, pure, and
-testable in isolation.
+A standalone module that takes the selected profiles, the keyboard layout, optional companion
+device layouts (mouse), and the reserved-key rules, and returns the used/free key summary plus
+per-key conflict metadata. Deterministic, pure, and testable in isolation.
 
 It must handle:
 
@@ -189,9 +198,9 @@ E
 ```
 
 **Panels:** game/tool search · selected chips · binding-layer toggles · custom profile
-import/export · safe-key export · keyboard form-factor selector (Full / TKL) · keyboard ·
-selection-driven key detail · interactive legend filters (free / partial / heavy / reserved) ·
-empty-selection guidance · language switcher · theme switcher.
+import/export · safe-key export · keyboard form-factor selector (Full / TKL) · keyboard + mouse
+visualizers · show-mouse preference · selection-driven key/mouse detail · interactive legend filters
+(free / partial / heavy / reserved) · empty-selection guidance · language switcher · theme switcher.
 
 **Yours / tools:** catalog entries with `kind: 'tool'` participate in the same availability
 computation as games; the detail panel labels them as tools. A dedicated `yours` key-state is not
@@ -200,7 +209,12 @@ required in the engine.
 **Layouts:** ANSI Full (`ansi-full`, default) and ANSI TKL (`ansi-tkl`, no numpad) via
 `LayoutId` + `LAYOUT_REGISTRY` in `data/keyboardLayouts.ts`. Form-factor selector lives in the
 header toolbar; preference persists in `localStorage` (`bindscope.layout`). Compact / ISO remain V2.
-Mouse visualizer is **UR5** (companion device SVG + normalized button ids), not yet in the tree.
+
+**Mouse:** standard five-button + wheel layout in `data/mouseLayout.ts` (`Mouse1`…`Mouse5`,
+`WheelUp`, `WheelDown`). Rendered beside the keyboard on wide viewports (stacked below on narrow)
+inside the same visualizer stage. When shown, mouse ids are passed as `deviceLayouts` into
+`computeAvailability` and use the same free/partial/heavy/reserved token language. Toggle persists
+as `bindscope.showMouse` (default on). No bind-editing on click; no gamepad/HOTAS.
 
 **Design:** clean, high-contrast, minimal but professional. The keyboard must look like a keyboard.
 Obvious hover and selected states. No visual noise, no gratuitous animation, no flashy branding.
