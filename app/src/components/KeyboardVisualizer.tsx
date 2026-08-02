@@ -17,33 +17,6 @@ interface KeyboardVisualizerProps {
   showChordMarks?: boolean
 }
 
-function KeyPatterns() {
-  return (
-    <defs>
-      <pattern id="pattern-free" width="8" height="8" patternUnits="userSpaceOnUse">
-        <rect width="8" height="8" fill="transparent" />
-      </pattern>
-      <pattern id="pattern-partial" width="8" height="8" patternUnits="userSpaceOnUse">
-        <path d="M0 4 H8" className="pattern-stroke" strokeWidth="2" opacity="0.45" />
-      </pattern>
-      <pattern id="pattern-heavy" width="8" height="8" patternUnits="userSpaceOnUse">
-        <path d="M0 0 L8 8 M8 0 L0 8" className="pattern-stroke" strokeWidth="1.5" opacity="0.5" />
-      </pattern>
-      <pattern id="pattern-reserved" width="6" height="6" patternUnits="userSpaceOnUse">
-        <path
-          d="M0 0 H3 V3 H0 Z M3 3 H6 V6 H3 Z"
-          className="pattern-stroke"
-          fill="var(--pattern-stroke)"
-          opacity="0.3"
-        />
-      </pattern>
-      <pattern id="pattern-unknown" width="8" height="8" patternUnits="userSpaceOnUse">
-        <path d="M0 8 L8 0" className="pattern-stroke" strokeWidth="1" opacity="0.3" />
-      </pattern>
-    </defs>
-  )
-}
-
 function keyLabelX(layoutKey: LayoutKey): number {
   return layoutKey.labelX ?? layoutKey.x + layoutKey.width / 2
 }
@@ -66,29 +39,21 @@ function KeyCapShape({
   className,
   strokeWidth,
   selected,
-  fill,
-  pointerEvents,
 }: {
   layoutKey: LayoutKey
   className?: string
   strokeWidth: number
   selected: boolean
-  fill?: string
-  pointerEvents?: 'none'
 }) {
   const selectedStroke = selected ? { stroke: 'var(--accent)' } : undefined
-  const stroke = fill !== undefined ? 'none' : undefined
 
   if (layoutKey.pathD) {
     return (
       <path
         d={layoutKey.pathD}
         className={className}
-        stroke={stroke}
         strokeWidth={strokeWidth}
         style={selectedStroke}
-        fill={fill}
-        pointerEvents={pointerEvents}
       />
     )
   }
@@ -101,11 +66,8 @@ function KeyCapShape({
       height={layoutKey.height}
       rx={5}
       className={className}
-      stroke={stroke}
       strokeWidth={strokeWidth}
       style={selectedStroke}
-      fill={fill}
-      pointerEvents={pointerEvents}
     />
   )
 }
@@ -130,7 +92,6 @@ export function KeyboardVisualizer({
         viewBox={`0 0 ${layout.width} ${layout.height}`}
         className="mx-auto block h-auto w-full"
       >
-        <KeyPatterns />
         {layout.keys.map((layoutKey) => {
           const availability = byKey.get(layoutKey.id)
           const state = availability?.state ?? 'free'
@@ -170,13 +131,6 @@ export function KeyboardVisualizer({
                 className={meta.fillClass}
                 strokeWidth={selected ? 3 : 1.5}
                 selected={selected}
-              />
-              <KeyCapShape
-                layoutKey={layoutKey}
-                strokeWidth={0}
-                selected={false}
-                fill={`url(#${meta.patternId})`}
-                pointerEvents="none"
               />
               <text
                 className="key-label"

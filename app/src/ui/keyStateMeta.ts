@@ -8,7 +8,6 @@ export interface KeyStateMeta {
   descriptionKey: MessageKey
   /** Non-color mark drawn on the key (D11). Empty for free. */
   mark: string
-  patternId: string
   fillClass: string
 }
 
@@ -21,7 +20,6 @@ const META: Record<KeyAvailabilityState, KeyStateMeta> = {
     labelKey: 'summaryFree',
     descriptionKey: 'stateFreeDesc',
     mark: '',
-    patternId: 'pattern-free',
     fillClass: 'key-fill-free',
   },
   partial: {
@@ -29,7 +27,6 @@ const META: Record<KeyAvailabilityState, KeyStateMeta> = {
     labelKey: 'summaryPartial',
     descriptionKey: 'statePartialDesc',
     mark: '≈',
-    patternId: 'pattern-partial',
     fillClass: 'key-fill-partial',
   },
   heavy: {
@@ -37,7 +34,6 @@ const META: Record<KeyAvailabilityState, KeyStateMeta> = {
     labelKey: 'summaryHeavy',
     descriptionKey: 'stateHeavyDesc',
     mark: '!',
-    patternId: 'pattern-heavy',
     fillClass: 'key-fill-heavy',
   },
   reserved: {
@@ -45,7 +41,6 @@ const META: Record<KeyAvailabilityState, KeyStateMeta> = {
     labelKey: 'summaryReserved',
     descriptionKey: 'stateReservedDesc',
     mark: '×',
-    patternId: 'pattern-reserved',
     fillClass: 'key-fill-reserved',
   },
   unknown: {
@@ -53,7 +48,6 @@ const META: Record<KeyAvailabilityState, KeyStateMeta> = {
     labelKey: 'summaryUnknown',
     descriptionKey: 'stateUnknownDesc',
     mark: '?',
-    patternId: 'pattern-unknown',
     fillClass: 'key-fill-unknown',
   },
 }

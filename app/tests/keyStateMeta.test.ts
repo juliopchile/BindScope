@@ -13,8 +13,8 @@ describe('key state meta', () => {
     }
   })
 
-  it('maps each state to a distinct pattern id', () => {
-    const ids = LEGEND_STATES.map((state) => getKeyStateMeta(state).patternId)
-    expect(new Set(ids).size).toBe(ids.length)
+  it('maps each state to a distinct fill class', () => {
+    const classes = LEGEND_STATES.map((state) => getKeyStateMeta(state).fillClass)
+    expect(new Set(classes).size).toBe(classes.length)
   })
 })

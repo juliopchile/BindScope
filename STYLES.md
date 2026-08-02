@@ -54,8 +54,8 @@ Shipped `LayoutId`s: `ansi-full` (default), `ansi-tkl`, `ansi-60`, `iso-full`.
 | Dark | `#27272a` (recessive gray) | `#52525b` |
 | System | Follows active light/dark computed theme | same |
 
-Occupied / conflicted / reserved stay emphatic. Free recedes. D11 marks/patterns/text remain for every
-state (free uses legend `·` only; no on-key mark).
+Occupied / conflicted / reserved stay emphatic. Free recedes. D11 marks/text remain for every
+state (free uses legend `·` only; no on-key mark). Hatch/checker fill patterns are retired.
 
 ### Panel / disclosure rules (UR3 shipped)
 
@@ -107,15 +107,17 @@ Do not scatter raw colors in components. Consume tokens (`var(--bg)`, `var(--key
 
 ## Key-state cues (D11)
 
-State is never conveyed by color alone. Every state uses color **and** a mark / pattern / text label.
+State is never conveyed by color alone. Every state uses a solid color fill **and** a mark / text
+label (corner glyphs on keys; legend labels). Overlay fill patterns (hatch, checker, diagonals)
+are not used — keys and legend swatches share the same solid `--key-*-bg` / border tokens.
 
-| State | Mark | Pattern | Token pair |
-|---|---|---|---|
-| Free | · (legend only) | none | `--key-free-*` (neutral / transparent — not green) |
-| Partial | ≈ | horizontal lines | `--key-partial-*` |
-| Heavy | ! | diagonal cross | `--key-heavy-*` |
-| Reserved | × | checker | `--key-reserved-*` |
-| Unknown | ? | light diagonal | `--key-unknown-*` |
+| State | Mark | Token pair |
+|---|---|---|
+| Free | · (legend only) | `--key-free-*` (neutral / transparent — not green) |
+| Partial | ≈ | `--key-partial-*` |
+| Heavy | ! | `--key-heavy-*` |
+| Reserved | × | `--key-reserved-*` |
+| Unknown | ? | `--key-unknown-*` |
 
 Chord occupancy (modifier+key) is an **additive cue**, not a new availability state. Keys with at
 least one chord binding show a bottom-left `+` mark (`.key-chord-mark`) when “Show chord marks” is
@@ -148,7 +150,7 @@ container.
 - Keyboard: `app/src/components/KeyboardVisualizer.tsx` — data-driven from `KeyboardLayout`; dims
   keys whose state is filtered out via the legend; optional `+` chord marks
 - Mouse: `app/src/components/MouseVisualizer.tsx` — data-driven from `MouseLayout` (`data/mouseLayout.ts`);
-  same key-state fill/pattern/mark tokens as keyboard; selectable buttons share the detail panel
+  same key-state fill/mark tokens as keyboard; selectable buttons share the detail panel
 - Detail: `app/src/components/KeyDetailPanel.tsx` — selection-driven; bare vs chord binding groups
 - Legend: `app/src/components/Legend.tsx` — toggles state filters + chords-only filter
 - Search / selection: `GameSearch.tsx`, `SelectedGames.tsx` (layer toggles horizontal flex-wrap)

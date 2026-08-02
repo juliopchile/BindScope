@@ -17,37 +17,6 @@ interface MouseVisualizerProps {
   showChordMarks?: boolean
 }
 
-function MousePatterns() {
-  return (
-    <defs>
-      <pattern id="mouse-pattern-free" width="8" height="8" patternUnits="userSpaceOnUse">
-        <rect width="8" height="8" fill="transparent" />
-      </pattern>
-      <pattern id="mouse-pattern-partial" width="8" height="8" patternUnits="userSpaceOnUse">
-        <path d="M0 4 H8" className="pattern-stroke" strokeWidth="2" opacity="0.45" />
-      </pattern>
-      <pattern id="mouse-pattern-heavy" width="8" height="8" patternUnits="userSpaceOnUse">
-        <path d="M0 0 L8 8 M8 0 L0 8" className="pattern-stroke" strokeWidth="1.5" opacity="0.5" />
-      </pattern>
-      <pattern id="mouse-pattern-reserved" width="6" height="6" patternUnits="userSpaceOnUse">
-        <path
-          d="M0 0 H3 V3 H0 Z M3 3 H6 V6 H3 Z"
-          className="pattern-stroke"
-          fill="var(--pattern-stroke)"
-          opacity="0.3"
-        />
-      </pattern>
-      <pattern id="mouse-pattern-unknown" width="8" height="8" patternUnits="userSpaceOnUse">
-        <path d="M0 8 L8 0" className="pattern-stroke" strokeWidth="1" opacity="0.3" />
-      </pattern>
-    </defs>
-  )
-}
-
-function patternIdFor(state: KeyAvailabilityState): string {
-  return `mouse-${getKeyStateMeta(state).patternId}`
-}
-
 export function MouseVisualizer({
   layout,
   keys,
@@ -68,8 +37,6 @@ export function MouseVisualizer({
         viewBox={`0 0 ${layout.width} ${layout.height}`}
         className="mx-auto block h-auto w-full max-w-[180px]"
       >
-        <MousePatterns />
-
         {/* Body outline — decorative, not selectable */}
         <path
           d="M 30 18
@@ -125,16 +92,6 @@ export function MouseVisualizer({
                 className={meta.fillClass}
                 strokeWidth={selected ? 3 : 1.5}
                 style={selected ? { stroke: 'var(--accent)' } : undefined}
-              />
-              <rect
-                x={layoutKey.x}
-                y={layoutKey.y}
-                width={layoutKey.width}
-                height={layoutKey.height}
-                rx={rx}
-                fill={`url(#${patternIdFor(state)})`}
-                stroke="none"
-                pointerEvents="none"
               />
               <text
                 className="key-label"
