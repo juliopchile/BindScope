@@ -109,8 +109,18 @@ Delivered:
 
 ## In Progress
 
-No active implementation track. UI Refresh (UR1–UR5) is complete — see Completed Work / History
-summaries below. Next work is from **Pending Work** / **Later Direction**.
+**Product Depth track (post–UI Refresh)** — planned in `PLAN.md` (phases PD1–PD7). No phase is
+authorized for implementation until the user green-lights one (default next: **PD1** catalog growth).
+
+| Phase | Status | Summary |
+|---|---|---|
+| PD1. Catalog growth (~20–30 titles) | Planned | Hand-curated seeds; verification states; catalog tests |
+| PD2. Modifier combinations UI | Planned | Surface chords already in the model (V2 slice) |
+| PD3. Action-name search | Planned | Find bindings by action text; focus key/mouse |
+| PD4. Layout variants 60% / ISO | Planned | Extend form-factor selector beyond Full/TKL |
+| PD5. Playwright smoke | Planned | Optional thin E2E; can parallelize after PD1 |
+| PD6. Config parsers (INI / CFG / XML) | Planned | Client-side real-config import → InputProfile |
+| PD7. Further UI locales | Planned | As needed; chrome only |
 
 ### UI Refresh track (complete)
 
@@ -147,10 +157,16 @@ editing, no gamepad/HOTAS.
 
 ## Pending Work
 
-- Grow the hand-curated catalog toward ~20–30 games (layout already extensible)
-- Parsers for real config formats (INI, CFG, XML)
-- Optional Playwright smoke / broader E2E
-- Further UI locales beyond en/es/pt/fr/zh if needed
+Detailed acceptance criteria and order live in `PLAN.md` (Product Depth PD1–PD7). Summary:
+
+- **PD1** — Grow the hand-curated catalog toward ~20–30 titles (layout/registry already extensible)
+- **PD2** — Modifier combinations in the UI (V2)
+- **PD3** — Action-name search (V2)
+- **PD4** — Remaining layout variants: 60%, ISO (V2)
+- **PD5** — Optional Playwright smoke / broader E2E
+- **PD6** — Parsers for real config formats (INI, CFG, XML)
+- **PD7** — Further UI locales beyond en/es/pt/fr/zh if needed
+- **V3 / V4** — Steam sync, cloud profiles, game detection, recommendations (roadmap only until opened)
 
 ## Technical Debt
 
@@ -176,13 +192,14 @@ Known risks that become debt if neglected:
 
 | Phase | Scope |
 |---|---|
-| UI Refresh (UR1–UR5) | **Complete** — keyboard-first shell, free-key retoken, collapsible chrome, Full/TKL selector, mouse visualizer (see In Progress summary) |
-| V2 | Modifier combinations, action-name search, remaining layout variants (60%, ISO), more UI locales |
-| V3 | Real config file import, Steam sync, cloud profiles, game detection |
+| UI Refresh (UR1–UR5) | **Complete** — keyboard-first shell, free-key retoken, collapsible chrome, Full/TKL selector, mouse visualizer |
+| Product Depth (PD1–PD7) | **Active plan** in `PLAN.md` — catalog, V2 UI slices, Playwright, config parsers, extra locales |
+| V2 (via PD2–PD4, PD7) | Modifier combinations, action-name search, 60%/ISO layouts, more UI locales |
+| V3 | Steam sync, cloud profiles (adapter — D3), game detection; real-config import starts as **PD6** |
 | V4 | Recommendations: *"the best push-to-talk key for your library"* |
 
-Real config import is the defensible advantage: once BindScope reads the user's own config files, it
-becomes much harder to copy.
+Real config import (PD6) is the defensible advantage: once BindScope reads the user's own config
+files, it becomes much harder to copy. Full V3 sync features wait on an explicit phase open.
 
 ## History
 

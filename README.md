@@ -14,8 +14,9 @@ Pages is wired via Actions.
 
 **UI Refresh (UR1–UR5) complete:** keyboard-first shell, neutral free keys, collapsible chrome,
 Full/TKL selector, and mouse visualizer with first-class availability ids. See `PROJECT_ROADMAP.md`.
-`PLAN.md` holds a closed-track summary until a new phase opens. Next: Later Direction (catalog, V2,
-parsers). QA notes: `qa.md`.
+
+**Next:** Product Depth track (PD1–PD7) in `PLAN.md` — catalog growth, V2 features, config parsers,
+optional E2E. QA notes: `qa.md`.
 
 To run it, see **Getting Started** below.
 

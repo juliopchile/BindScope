@@ -8,49 +8,265 @@ into `PROJECT_ROADMAP.md`; stable design information lives in `PROJECT_STRUCTURE
 
 ## Current Status
 
-**Current track:** UI Refresh (post-MVP) — **complete** (UR1–UR5)
+**Current track:** Product Depth (post–UI Refresh)
 
-**Status:** All UI Refresh phases shipped. Next work comes from **Later Direction** in
-`PROJECT_ROADMAP.md` (catalog growth, V2 modifiers/layouts, parsers, optional E2E) — not a new
-UI Refresh phase unless product owners open one.
+**Status:** Planned (design only; no implementation phase authorized yet)
 
-**Source of requirements:** `qa.md` (user QA notes). Reference screenshots: `example_csbinds.png`,
-`example_keybindr.png`. Competitive brief: `docs/keybindr-analysis.md`.
+**Context:** MVP (Stages 0–5) and UI Refresh (UR1–UR5) are complete. The shell is keyboard-first with
+Full/TKL layouts, mouse visualizer, collapsible chrome, i18n, and theme. Remaining work is
+**data coverage**, **deeper interaction features**, and **real-config import** — not another visual
+overhaul unless QA reopens one.
 
-**Product constraint (do not lose):** BindScope’s differentiator remains multi-profile availability
-(`available = allKeys − union(usedKeys)`). See **D13** in `DECISIONS.md`.
+**Product constraint (do not lose):** multi-profile availability
+(`available = allKeys − union(usedKeys)`). Domain stays pure (D5). Seeds stay hand-curated (D7).
+Static-only deploy (D2). Keybindr-inspired shell rules still apply (D13).
 
-**MVP note:** Stages 0–5 are complete and committed on `main` (local branch may be ahead of
-`origin/main`).
+**Prior closed track:** UI Refresh — see `PROJECT_ROADMAP.md` and `docs/keybindr-analysis.md`.
 
 ---
 
-## UI Refresh — closed
+## Why this track
 
-| Phase | Status |
+Binding **data quality and catalog breadth** remain the real product bottleneck (Technical Debt in
+the roadmap). V2 features unlock more of the engine and shell already built. Config parsers are the
+defensible long-term advantage (Later Direction). Cloud sync and recommendations come only after
+parsers and a credible catalog.
+
+---
+
+## Phase Plan
+
+Phases are sized for one orchestrated sub-agent each (`/orquestando-agentes`). Do not start Phase N+1
+until Phase N is summarized in `PROJECT_ROADMAP.md` and this file is updated — unless the user
+explicitly parallelizes independent phases (e.g. Playwright vs catalog).
+
+### Suggested order
+
+```
+PD1 (catalog) → PD2 (modifiers UI) → PD3 (action search) → PD4 (60% / ISO layouts)
+     ↘ PD5 (Playwright smoke) can run anytime after PD1 if capacity allows
+PD6 (config parsers) → then V3 / V4 from the roadmap (not detailed here until opened)
+PD7 (extra UI locales) — as needed, not blocking
+```
+
+Prefer **PD1 before feature polish** when capacity is limited (D7 / D9).
+
+---
+
+### Phase PD1 — Catalog growth (~20–30 titles)
+
+**Goal.** Grow the hand-curated seed catalog so multi-game overlays are useful for a typical library.
+
+**Must do**
+
+- Add games (and optional tools) as file-per-title modules under `app/src/data/catalog/`; register in
+  `index.ts`; keep `STARTER_POOL` sensible.
+- Every binding keeps a `verification` state; prefer official menus / exported configs / community-
+  verified sources — no wiki auto-scrape (D7).
+- Layered profiles (`defaultEnabled` vs opt-in) consistent with existing seeds.
+- Include deliberate cross-title conflicts so overlays stay demonstrable.
+- Catalog invariant tests (unique ids, key normalization, layer structure) stay green.
+- Optional: a few more mouse binds where the title clearly uses them (CS2 already demos mouse).
+
+**Out of scope**
+
+- Parsers, Steam APIs, translating action names, new shell chrome.
+
+**Acceptance**
+
+- [ ] Catalog reaches roughly **20–30** curated entries (games + tools), or an agreed interim milestone
+      documented in the roadmap if split across commits.
+- [ ] `make test` / `lint` / `build` pass; search finds new titles; layers flatten correctly.
+- [ ] `PROJECT_ROADMAP.md` notes new count; no silent drop in verification discipline.
+
+**Likely touch points:** `data/catalog/games/*`, `tools/*`, `index.ts`, catalog tests, maybe README
+catalog blurb.
+
+---
+
+### Phase PD2 — Modifier combinations in the UI (V2 slice)
+
+**Goal.** Surface chords that already exist in the model so users can distinguish bare keys from
+modifier+key occupancy (engine already stores modifiers).
+
+**Must do**
+
+- Define UX per `docs` / product judgment: e.g. chord indicators on keys, filter/toggle “show chords”,
+  detail panel clarity (already shows chord labels in places — extend consistently).
+- Do not break bare-key availability scoring without an explicit, tested rule change. Prefer
+  additive UI on top of current per-physical-key aggregation unless a design decision says otherwise.
+- Keep domain pure; any new scoring rules live in `domain/` with table-driven tests.
+- i18n for new chrome.
+
+**Out of scope**
+
+- Full Keybindr-style chord editor; remapping workflow.
+
+**Acceptance**
+
+- [ ] User can see which bindings are chords vs bare keys in the visualizer and/or detail.
+- [ ] Tests cover chord display / any scoring change.
+- [ ] `make test` / `lint` / `build` pass; STYLES.md updated if new cues ship.
+
+---
+
+### Phase PD3 — Action-name search
+
+**Goal.** Find keys/bindings by action text across selected profiles (e.g. “push to talk”, “reload”).
+
+**Must do**
+
+- Search UI (likely in Games chrome or a stage-level find) using existing forgiving search utilities
+  where possible; match against binding `action` / `context` in selected (or catalog) profiles.
+- Selecting a hit focuses the key/mouse control and opens detail.
+- Locale-agnostic matching on curated action strings (actions stay in source language — D10).
+- i18n for chrome only.
+
+**Out of scope**
+
+- Translating seed action names; fuzzy NLP; server search.
+
+**Acceptance**
+
+- [ ] User can query an action string and jump to the occupying control.
+- [ ] Empty and no-match states localized.
+- [ ] Tests for match helpers; `make test` / `lint` / `build` pass.
+
+---
+
+### Phase PD4 — Remaining layout variants (60%, ISO)
+
+**Goal.** Extend the form-factor selector beyond ANSI Full / TKL.
+
+**Must do**
+
+- Data-driven layouts: at least **60%/compact** and **ISO** (Enter/left-shift shape) in
+  `keyboardLayouts.ts` (or split modules); registry + `LayoutId`; selector + persisted preference
+  (existing `bindscope.layout` pattern).
+- No auto-switch on viewport width (UR1 decision stands).
+- Layout invariant tests (unique ids, dimensions, ISO geometry sanity).
+
+**Out of scope**
+
+- Ergo / split / vendor boards; Keybindr HOTAS catalogs.
+
+**Acceptance**
+
+- [ ] User can select Full, TKL, and new variants; availability updates; preference persists.
+- [ ] Docs (`PROJECT_STRUCTURE.md`, `STYLES.md`) list shipped `LayoutId`s.
+- [ ] `make test` / `lint` / `build` pass.
+
+---
+
+### Phase PD5 — Optional Playwright smoke
+
+**Goal.** Thin E2E safety net for the static app (load, select game, keyboard visible, layout switch).
+
+**Must do**
+
+- Playwright (or agreed runner) behind Makefile target; CI optional but preferred on `main` if cheap.
+- Smoke only: home load, open Games, select a seed, assert visualizer + legend; optional layout toggle.
+- Document how to run in README / AGENTS commands table.
+
+**Out of scope**
+
+- Full visual regression suite; cross-browser matrix beyond one CI browser unless trivial.
+
+**Acceptance**
+
+- [ ] `make` target runs smoke locally; documented.
+- [ ] Flakes addressed or test narrowed; does not block Pages deploy unless CI is explicitly added.
+
+**Note:** Can be scheduled in parallel with PD2–PD4 if catalog (PD1) is stable enough for selectors.
+
+---
+
+### Phase PD6 — Real config parsers (INI / CFG / XML)
+
+**Goal.** Import bindings from real game/tool config files client-side, feeding the same
+`InputProfile` / availability path as JSON import (defensible advantage).
+
+**Must do**
+
+- Parser modules under `lib/` (or `lib/parsers/`), isolated from React (PROJECT_STRUCTURE).
+- Support at least one format end-to-end with tests and a documented sample; then generalize toward
+  INI, CFG, and XML as scoped.
+- Reuse key normalization; skip/report invalid binds like JSON import.
+- UI: extend Import / Export chrome — file pickers by format; clear errors via i18n.
+- No server upload; fully static (D2).
+
+**Out of scope**
+
+- Steam Cloud sync, accounts, automatic game detection (those are V3).
+- Silent scrape of wikis to build parsers’ expected schemas.
+
+**Acceptance**
+
+- [ ] User can import at least one real config format and see keys update on the visualizer.
+- [ ] Table-driven parser tests; invalid input does not crash the app.
+- [ ] `PROJECT_STRUCTURE.md` documents parser boundary; `make test` / `lint` / `build` pass.
+
+---
+
+### Phase PD7 — Further UI locales (as needed)
+
+**Goal.** Add chrome locales beyond en/es/pt/fr/zh when product demand exists.
+
+**Must do**
+
+- New catalog file under `app/src/i18n/locales/`; register in i18n index; parity with English keys.
+- Locale switcher lists the new language; `document.documentElement.lang` updates.
+
+**Out of scope**
+
+- Translating seed action names (unless a per-profile catalog is explicitly added).
+
+**Acceptance**
+
+- [ ] Key parity tests (or checklist) vs `en`; switcher works; prefs persist.
+
+---
+
+## Later phases (roadmap only — open a PLAN section when authorized)
+
+| Phase | Scope | Depends on |
+|---|---|---|
+| **V3** | Steam sync, cloud profiles (adapter behind interface — D3), game detection | PD6 strongly recommended first |
+| **V4** | Recommendations (“best push-to-talk key for your library”) | Credible catalog (PD1) + stable availability UX |
+
+Do not stub empty backend modules (D3 / D9).
+
+---
+
+## Explicit Non-Goals (until a decision changes)
+
+- Controller / gamepad / HOTAS bindings.
+- User accounts as an MVP-shaped requirement without an adapter plan.
+- Auto wiki scraping in the critical path (D7).
+- Desktop application.
+- Cloning Keybindr’s bind-editor product (D13).
+- Restoring discarded commit `ab47adc` wholesale.
+
+---
+
+## Documentation map for this track
+
+| File | Role |
 |---|---|
-| UR1. Competitive analysis & design brief | Complete |
-| UR2. Keyboard-first shell & free-key retoken | Complete |
-| UR3. Collapsible chrome & denser shell | Complete |
-| UR4. Keyboard form-factor selector | Complete |
-| UR5. Mouse visualizer | Complete |
-
-### Phase UR5 — Mouse visualizer (delivered)
-
-- Data-driven `MouseLayout` in `data/mouseLayout.ts` (Mouse1–5 + WheelUp/WheelDown).
-- Canonical mouse ids in `keyNormalization` + types; table-driven tests.
-- `MouseVisualizer` beside keyboard on `lg+` (stacked below on narrow); selectable; detail panel shared.
-- Availability: optional `deviceLayouts` on `computeAvailability`; mouse participates when shown.
-- Demo mouse binds on Counter-Strike 2 combat layer; prefs “Show mouse” (`bindscope.showMouse`).
-- i18n for new chrome (en/es/pt/fr/zh); `PROJECT_STRUCTURE.md` / `STYLES.md` updated.
+| `PLAN.md` | This file — active Product Depth phases PD1–PD7 |
+| `PROJECT_ROADMAP.md` | Condensed status; V3/V4 remain high-level until opened |
+| `PROJECT_STRUCTURE.md` | Update when parsers / layouts / catalog conventions change |
+| `DECISIONS.md` | D1–D13 still govern; add entries only if a phase forces a new constraint |
+| `AGENTS.md` / `README.md` | Point at active track |
 
 ---
 
 ## Immediate Next Step
 
-Pick from **Later Direction** / Pending Work in `PROJECT_ROADMAP.md` (no active UI Refresh phase).
+Authorize **Phase PD1** (catalog growth) unless the user prioritizes another phase (e.g. PD6 parsers
+or PD5 Playwright) explicitly.
 
-## Verification Commands
+## Verification Commands (every implementation phase)
 
 ```sh
 make test
