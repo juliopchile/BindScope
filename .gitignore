@@ -19,3 +19,9 @@ npm-debug.log*
 .DS_Store
 .idea/
 *.swp
+
+# Playwright
+app/test-results/
+app/playwright-report/
+app/blob-report/
+app/playwright/.cache/

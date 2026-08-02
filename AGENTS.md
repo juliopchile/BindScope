@@ -10,15 +10,15 @@ import/export, locale catalogs under `app/src/i18n/` (en/es/pt/fr/zh), light/dar
 `html[data-theme]`, and GitHub Pages deploy from `.github/workflows/deploy-pages.yml`. Visual tokens
 live in `STYLES.md`.
 
-**Active work:** Product Depth track (PD1–PD7) in `PLAN.md`. **PD1–PD4 complete** — seed catalog has
+**Active work:** Product Depth track (PD1–PD7) in `PLAN.md`. **PD1–PD5 complete** — seed catalog has
 **26** curated entries (22 games + 4 tools); modifier chords in the UI; stage **action-name search**;
-form factors **Full / TKL / 60% / ISO Full**. Next default: authorize **PD5** (Playwright smoke) or
-**PD6** (config parsers) if preferred. Remaining: optional Playwright, parsers, extra locales.
+form factors **Full / TKL / 60% / ISO Full**; Playwright smoke via `make e2e`. Next default: authorize
+**PD6** (config parsers) if preferred. Remaining: parsers, extra locales.
 UI Refresh (UR1–UR5) is complete. Do not start a PD phase until the user authorizes it. Requirements
 archive: `qa.md`; competitive brief: `docs/keybindr-analysis.md` (D13).
 
-Use `make install`, `make run`, `make test`, `make lint`, and `make build` from the repo root. Do not
-invent commands; prefer the Makefile.
+Use `make install`, `make run`, `make test`, `make lint`, `make build`, and `make e2e` from the repo
+root. Do not invent commands; prefer the Makefile.
 
 A previous full implementation existed in commit `ab47adc` and was deliberately discarded in `ebe8889`. Do not restore it wholesale. See `PROJECT_ROADMAP.md` for why it was rejected.
 
@@ -83,6 +83,8 @@ points there as they appear.
 | `make test` | Vitest unit tests | Works |
 | `make lint` | ESLint | Works |
 | `make build` | Static production build into `app/dist` | Works |
+| `make e2e-install` | Download Playwright Chromium browser | Works |
+| `make e2e` | Build + Playwright smoke against Vite preview | Works |
 
 `PORT` and `HOST` are read from an optional git-ignored `.env`, falling back to `8080` and
 `127.0.0.1`. `.env.example` is the committed template. Overrides also work inline:

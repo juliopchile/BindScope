@@ -110,8 +110,8 @@ Delivered:
 
 ## In Progress
 
-**Product Depth track (post–UI Refresh)** — active in `PLAN.md` (phases PD1–PD7). **PD1–PD4 complete.**
-Default next authorization: **PD5** (Playwright smoke), or **PD6** (parsers) if preferred.
+**Product Depth track (post–UI Refresh)** — active in `PLAN.md` (phases PD1–PD7). **PD1–PD5 complete.**
+Default next authorization: **PD6** (config parsers), or **PD7** if preferred.
 
 | Phase | Status | Summary |
 |---|---|---|
@@ -119,7 +119,7 @@ Default next authorization: **PD5** (Playwright smoke), or **PD6** (parsers) if 
 | PD2. Modifier combinations UI | **Complete** | Additive `+` chord marks, legend chords-only filter, detail bare/chord groups; scoring unchanged |
 | PD3. Action-name search | **Complete** | Stage find by action/context; Selected default + Catalog scope; jump opens detail |
 | PD4. Layout variants 60% / ISO | **Complete** | `ansi-60` + `iso-full`; selector + persist; no viewport auto-switch |
-| PD5. Playwright smoke | Planned | Optional thin E2E; can parallelize after PD1 |
+| PD5. Playwright smoke | **Complete** | `make e2e` + Chromium smoke; optional CI does not gate Pages |
 | PD6. Config parsers (INI / CFG / XML) | Planned | Client-side real-config import → InputProfile |
 | PD7. Further UI locales | Planned | As needed; chrome only |
 
@@ -189,6 +189,13 @@ Form-factor registry extended with **ANSI 60%** (`ansi-60`, alpha only — no na
 the focused key is absent from the new layout. No viewport auto-switch (UR1/Q2). Ergo / split /
 ISO-TKL deferred.
 
+### Product Depth — PD5 (complete)
+
+Thin Playwright smoke behind `make e2e` / `make e2e-install` (`@playwright/test` in `app/`). One
+Chromium scenario: home load, open Games, add OBS Studio, assert keyboard visualizer + legend, toggle
+layout Full → TKL. Vite preview webServer with local `VITE_BASE_PATH=/`. Optional
+`.github/workflows/e2e.yml` on `main`/PRs — independent of Pages deploy so flakes never block publish.
+
 ## Pending Work
 
 Detailed acceptance criteria and order live in `PLAN.md` (Product Depth PD1–PD7). Summary:
@@ -197,7 +204,7 @@ Detailed acceptance criteria and order live in `PLAN.md` (Product Depth PD1–PD
 - **PD2** — ~~Modifier combinations in the UI (V2)~~ **Done**
 - **PD3** — ~~Action-name search (V2)~~ **Done**
 - **PD4** — ~~Remaining layout variants: 60%, ISO (V2)~~ **Done**
-- **PD5** — Optional Playwright smoke / broader E2E
+- **PD5** — ~~Optional Playwright smoke / broader E2E~~ **Done**
 - **PD6** — Parsers for real config formats (INI, CFG, XML)
 - **PD7** — Further UI locales beyond en/es/pt/fr/zh if needed
 - **V3 / V4** — Steam sync, cloud profiles, game detection, recommendations (roadmap only until opened)
@@ -227,7 +234,7 @@ Known risks that become debt if neglected:
 | Phase | Scope |
 |---|---|
 | UI Refresh (UR1–UR5) | **Complete** — keyboard-first shell, free-key retoken, collapsible chrome, Full/TKL selector, mouse visualizer |
-| Product Depth (PD1–PD7) | **Active plan** in `PLAN.md` — PD1–PD4 done; next PD5+ |
+| Product Depth (PD1–PD7) | **Active plan** in `PLAN.md` — PD1–PD5 done; next PD6+ |
 | V2 (via PD2–PD4, PD7) | ~~Modifier combinations~~, ~~action-name search~~, ~~60%/ISO layouts~~, more UI locales |
 | V3 | Steam sync, cloud profiles (adapter — D3), game detection; real-config import starts as **PD6** |
 | V4 | Recommendations: *"the best push-to-talk key for your library"* |

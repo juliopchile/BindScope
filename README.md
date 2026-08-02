@@ -16,10 +16,10 @@ Pages is wired via Actions.
 Full/TKL/60%/ISO selector, and mouse visualizer with first-class availability ids. See
 `PROJECT_ROADMAP.md`.
 
-**Next:** Product Depth track (PD1–PD7) in `PLAN.md`. **PD1–PD4 complete** — **26** curated catalog
-entries; chord marks; stage action-name search; Full / TKL / 60% / ISO Full layouts. Default next:
-**PD5** (Playwright smoke) or **PD6** (parsers) if preferred. Remaining: optional E2E, config
-parsers, extra locales. QA notes: `qa.md`.
+**Next:** Product Depth track (PD1–PD7) in `PLAN.md`. **PD1–PD5 complete** — **26** curated catalog
+entries; chord marks; stage action-name search; Full / TKL / 60% / ISO Full layouts; Playwright smoke
+(`make e2e`). Default next: authorize **PD6** (config parsers). Remaining: parsers, extra locales.
+QA notes: `qa.md`.
 
 To run it, see **Getting Started** below.
 
@@ -78,14 +78,21 @@ make help      # list all targets
 Useful targets:
 
 ```sh
-make test      # Vitest unit tests
-make lint      # ESLint
-make build     # static artifact in app/dist
-make serve     # same as run, without opening a browser
+make test         # Vitest unit tests
+make lint         # ESLint
+make build        # static artifact in app/dist
+make serve        # same as run, without opening a browser
+make e2e-install  # once: download Playwright Chromium
+make e2e          # build + Playwright smoke (home, Games, visualizer, layout)
 ```
 
 The application lives in `app/`. Repository documentation is never part of the Vite app root or the
 deployed site.
+
+Playwright smoke (`make e2e`) builds the app, serves Vite preview on `127.0.0.1:4173`, and runs one
+Chromium scenario against English chrome. Install browsers once with `make e2e-install`. An optional
+GitHub Actions workflow (`.github/workflows/e2e.yml`) runs the same smoke on `main` / PRs; it does
+**not** gate the Pages deploy job.
 
 ### Configuration
 

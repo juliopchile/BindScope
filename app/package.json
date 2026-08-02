@@ -13,7 +13,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:install": "playwright install chromium"
   },
   "dependencies": {
     "react": "^19.2.7",
@@ -22,6 +24,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/vite": "^4.1.17",
     "@types/node": "^24.13.2",
     "@types/react": "^19.2.17",

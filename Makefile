@@ -14,12 +14,12 @@ HOST ?= 127.0.0.1
 APP ?= app
 
 .DEFAULT_GOAL := help
-.PHONY: help install run serve port test lint build
+.PHONY: help install run serve port test lint build e2e e2e-install
 
 help: ## Show available targets
 	@printf 'BindScope targets:\n\n'
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
-		| awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[1m%-10s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
+		| awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[1m%-12s\033[0m %s\n", $$1, $$2}'
 	@printf '\nDev server: http://%s:%s (override in .env or with `make run PORT=1234`)\n' '$(HOST)' '$(PORT)'
 
 install: ## Install app dependencies (npm install in app/)
@@ -66,3 +66,10 @@ lint: ## Run ESLint
 
 build: ## Build static production artifact into app/dist
 	npm --prefix $(APP) run build
+
+e2e-install: ## Download Playwright Chromium (once per machine / CI)
+	npm --prefix $(APP) run test:e2e:install
+
+e2e: ## Playwright smoke against Vite preview (builds app/dist first)
+	npm --prefix $(APP) run build
+	npm --prefix $(APP) run test:e2e

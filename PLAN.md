@@ -10,12 +10,12 @@ into `PROJECT_ROADMAP.md`; stable design information lives in `PROJECT_STRUCTURE
 
 **Current track:** Product Depth (post–UI Refresh)
 
-**Status:** PD4 complete; authorize **PD5** next (default), or **PD6** if preferred
+**Status:** PD5 complete; authorize **PD6** next (config parsers), or **PD7** if preferred
 
 **Context:** MVP (Stages 0–5) and UI Refresh (UR1–UR5) are complete. The shell is keyboard-first with
 Full / TKL / 60% / ISO Full layouts, mouse visualizer, collapsible chrome, i18n, and theme. Remaining
-work is **optional E2E**, **real-config import**, and **extra locales** — not another visual overhaul
-unless QA reopens one.
+work is **real-config import** and **extra locales** — not another visual overhaul unless QA reopens
+one. Playwright smoke lands via `make e2e` (optional CI workflow does not gate Pages).
 
 **Product constraint (do not lose):** multi-profile availability
 (`available = allKeys − union(usedKeys)`). Domain stays pure (D5). Seeds stay hand-curated (D7).
@@ -43,8 +43,7 @@ explicitly parallelizes independent phases (e.g. Playwright vs catalog).
 ### Suggested order
 
 ```
-PD1 (catalog) → PD2 (modifiers UI) → PD3 (action search) → PD4 (60% / ISO layouts) ✓
-     ↘ PD5 (Playwright smoke) can run anytime after PD1 if capacity allows
+PD1 (catalog) → PD2 (modifiers UI) → PD3 (action search) → PD4 (60% / ISO layouts) → PD5 (Playwright) ✓
 PD6 (config parsers) → then V3 / V4 from the roadmap (not detailed here until opened)
 PD7 (extra UI locales) — as needed, not blocking
 ```
@@ -158,26 +157,24 @@ selection when the key leaves the layout. Ergo / ISO-TKL deferred.
 
 ---
 
-### Phase PD5 — Optional Playwright smoke
+### Phase PD5 — Optional Playwright smoke ✅
+
+**Status:** Complete
 
 **Goal.** Thin E2E safety net for the static app (load, select game, keyboard visible, layout switch).
 
-**Must do**
+**Delivered**
 
-- Playwright (or agreed runner) behind Makefile target; CI optional but preferred on `main` if cheap.
-- Smoke only: home load, open Games, select a seed, assert visualizer + legend; optional layout toggle.
-- Document how to run in README / AGENTS commands table.
-
-**Out of scope**
-
-- Full visual regression suite; cross-browser matrix beyond one CI browser unless trivial.
+- `@playwright/test` in `app/`; config + `app/e2e/smoke.spec.ts` (Chromium only).
+- Makefile: `make e2e-install` (browser download), `make e2e` (build + smoke vs Vite preview).
+- Smoke: home load, open Games, add OBS Studio, assert keyboard + legend, toggle Full → TKL.
+- Docs in README / AGENTS commands table.
+- Optional CI: `.github/workflows/e2e.yml` on `main` / PRs — **does not** gate Pages deploy.
 
 **Acceptance**
 
-- [ ] `make` target runs smoke locally; documented.
-- [ ] Flakes addressed or test narrowed; does not block Pages deploy unless CI is explicitly added.
-
-**Note:** Can be scheduled in parallel with PD2–PD4 if catalog (PD1) is stable enough for selectors.
+- [x] `make` target runs smoke locally; documented.
+- [x] Flakes addressed or test narrowed; does not block Pages deploy unless CI is explicitly added.
 
 ---
 
@@ -263,8 +260,8 @@ Do not stub empty backend modules (D3 / D9).
 
 ## Immediate Next Step
 
-Authorize **Phase PD5** (Playwright smoke) unless the user prioritizes another phase
-(e.g. PD6 parsers) explicitly.
+Authorize **Phase PD6** (real config parsers) unless the user prioritizes another phase
+(e.g. PD7 locales) explicitly.
 
 ## Verification Commands (every implementation phase)
 
@@ -272,4 +269,5 @@ Authorize **Phase PD5** (Playwright smoke) unless the user prioritizes another p
 make test
 make lint
 make build
+make e2e   # when touching shell / chrome / deploy path
 ```
