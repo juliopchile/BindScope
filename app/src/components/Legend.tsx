@@ -1,3 +1,4 @@
+import { useId, useState } from 'react'
 import { useI18n } from '../i18n/useI18n'
 import { CHORD_MARK } from '../lib/chords'
 import type { KeyAvailabilityState } from '../types'
@@ -20,19 +21,38 @@ export function Legend({
 }: LegendProps) {
   const { t } = useI18n()
   const showAll = activeFilters.size === 0
+  const hintId = useId()
+  const [hintOpen, setHintOpen] = useState(false)
 
   return (
     <section aria-label={t('legendHeading')}>
-      <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
+      <div className="mb-2 flex items-center gap-1.5">
         <h2
           className="text-xs font-semibold tracking-wide uppercase"
           style={{ color: 'var(--fg-muted)' }}
         >
           {t('legendHeading')}
         </h2>
-        <p className="text-xs" style={{ color: 'var(--fg-muted)' }}>
-          {t('filterHint')}
-        </p>
+        <span className="legend-hint">
+          <button
+            type="button"
+            className="legend-hint__trigger"
+            aria-label={t('filterHint')}
+            aria-expanded={hintOpen}
+            aria-controls={hintId}
+            onClick={() => setHintOpen((open) => !open)}
+            onBlur={() => setHintOpen(false)}
+          >
+            <span aria-hidden="true">!</span>
+          </button>
+          <span
+            id={hintId}
+            role="tooltip"
+            className={`legend-hint__tooltip${hintOpen ? ' is-open' : ''}`}
+          >
+            {t('filterHint')}
+          </span>
+        </span>
       </div>
       <ul className="flex flex-wrap gap-x-3 gap-y-2 text-sm">
         {LEGEND_STATES.map((state) => {

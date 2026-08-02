@@ -16,7 +16,7 @@ const LAYOUT_LABEL_KEYS: Record<LayoutId, MessageKey> = {
 }
 
 const selectClass =
-  'chrome-toolbar__layout min-h-10 min-w-[7.5rem] rounded-md border px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2'
+  'chrome-toolbar__layout min-h-10 min-w-[7.5rem] rounded-md border py-2 pl-3 text-sm focus-visible:outline focus-visible:outline-2'
 
 export function LayoutSelector({ value, onChange }: LayoutSelectorProps) {
   const { t } = useI18n()
@@ -25,7 +25,8 @@ export function LayoutSelector({ value, onChange }: LayoutSelectorProps) {
     <select
       className={selectClass}
       style={{
-        background: 'var(--bg)',
+        // backgroundColor (not shorthand) so CSS can keep the custom chevron image
+        backgroundColor: 'var(--bg)',
         borderColor: 'var(--border)',
         color: 'var(--fg)',
         outlineColor: 'var(--focus)',

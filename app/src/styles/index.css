@@ -94,6 +94,11 @@ html[data-theme='system'] {
   box-sizing: border-box;
 }
 
+/* Modest global type scale — rem-based Tailwind chrome follows this (D12). */
+html {
+  font-size: 106.25%; /* 17px when the browser default is 16px */
+}
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -193,6 +198,81 @@ body {
   border-style: dashed;
 }
 
+/* Legend filter hint — hidden by default; reveal on hover / focus / tap */
+.legend-hint {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.legend-hint__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  background: var(--surface);
+  color: var(--fg-muted);
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: help;
+}
+
+.legend-hint__trigger:hover,
+.legend-hint__trigger:focus-visible,
+.legend-hint__trigger[aria-expanded='true'] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.legend-hint__trigger:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.legend-hint__tooltip {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 0.35rem);
+  z-index: 20;
+  width: max-content;
+  max-width: min(18rem, calc(100vw - 2rem));
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  background: var(--surface);
+  color: var(--fg-muted);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: normal;
+  text-transform: none;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--fg) 12%, transparent);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 120ms ease,
+    visibility 120ms ease;
+}
+
+.legend-hint__trigger:hover + .legend-hint__tooltip,
+.legend-hint__trigger:focus-visible + .legend-hint__tooltip,
+.legend-hint__tooltip.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .legend-hint__tooltip {
+    transition: none;
+  }
+}
+
 /* Visually hidden but available to assistive tech / file inputs */
 .sr-only {
   position: absolute;
@@ -214,6 +294,28 @@ body {
 
 .chrome-toolbar__trigger[aria-expanded='true'] {
   box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+/* Layout <select>: custom chevron so arrow↔border inset is independent of text↔arrow gap */
+.chrome-toolbar__layout {
+  appearance: none;
+  -webkit-appearance: none;
+  /* Icon slot only (≈ icon width + right inset); keeps label close to the arrow */
+  padding-inline-end: 1.65rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none'%3E%3Cpath stroke='%2352525b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M1.5 1.5 6 6l4.5-4.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.55rem center;
+  background-size: 0.7rem 0.45rem;
+}
+
+html[data-theme='dark'] .chrome-toolbar__layout {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none'%3E%3Cpath stroke='%23a1a1aa' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M1.5 1.5 6 6l4.5-4.5'/%3E%3C/svg%3E");
+}
+
+@media (prefers-color-scheme: dark) {
+  html[data-theme='system'] .chrome-toolbar__layout {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none'%3E%3Cpath stroke='%23a1a1aa' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M1.5 1.5 6 6l4.5-4.5'/%3E%3C/svg%3E");
+  }
 }
 
 /* SF — site footer + Support donate modal */
@@ -285,7 +387,7 @@ body {
   z-index: 60;
   display: grid;
   place-items: center;
-  padding: 1rem;
+  padding: 1.25rem;
 }
 
 .support-modal__backdrop {
@@ -301,12 +403,12 @@ body {
 .support-modal__dialog {
   position: relative;
   z-index: 1;
-  width: min(100%, 24rem);
-  max-height: min(90vh, 36rem);
+  width: min(100%, 26rem);
+  max-height: min(90vh, 40rem);
   overflow: auto;
   border: 1px solid;
   border-radius: 0.75rem;
-  padding: 1rem 1rem 1.15rem;
+  padding: 1.25rem 1.25rem 1.4rem;
   box-shadow: 0 12px 36px color-mix(in srgb, var(--fg) 18%, transparent);
 }
 
