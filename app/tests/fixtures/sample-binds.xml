@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- BindScope XML bind list (PD6 schema) -->
+<binds>
+  <bind key="W" action="Forward" />
+  <bind key="A" action="Strafe Left" />
+  <bind key="S" action="Back" />
+  <bind key="D" action="Strafe Right" />
+  <bind key="Space" action="Jump" />
+  <bind key="E" action="Use" modifiers="ctrl" />
+  <bind key="R">Reload</bind>
+  <bind key="NOT_A_KEY" action="Broken" />
+  <bind action="MissingKey" />
+</binds>

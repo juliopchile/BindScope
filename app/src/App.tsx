@@ -8,7 +8,10 @@ import { LayoutSelector } from './components/LayoutSelector'
 import { Legend } from './components/Legend'
 import { MouseVisualizer } from './components/MouseVisualizer'
 import { PrefsControls } from './components/PrefsControls'
-import { ProfileIO } from './components/ProfileIO'
+import {
+  IMPORT_TARGET_FROM_FILENAME,
+  ProfileIO,
+} from './components/ProfileIO'
 import { SelectedGames } from './components/SelectedGames'
 import {
   CATALOG_GAMES,
@@ -25,10 +28,15 @@ import { useI18n } from './i18n/useI18n'
 import {
   buildSafeKeysDocument,
   downloadJson,
-  parseImportDocument,
+  parseImportFile,
   readFileAsText,
   serializeProfilesDocument,
+  UnsupportedImportFormatError,
 } from './lib/importExport'
+import {
+  detectImportFormat,
+  resolveGameIdFromFileName,
+} from './lib/parsers'
 import {
   readStoredLayout,
   readStoredShowChordMarks,
@@ -190,9 +198,40 @@ export default function App() {
     setSelectedKey(null)
   }
 
-  async function handleImportFile(file: File): Promise<string> {
+  async function handleImportFile(file: File, targetGameId: string): Promise<string> {
     const text = await readFileAsText(file)
-    const result = parseImportDocument(text)
+    const format = detectImportFormat(file.name, text)
+    if (!format) throw new UnsupportedImportFormatError()
+
+    const aliasToId = new Map<string, string>()
+    for (const game of CATALOG_GAMES) {
+      for (const alias of game.aliases ?? []) {
+        aliasToId.set(alias.toLowerCase(), game.id)
+      }
+    }
+    const catalogIds = new Set(CATALOG_GAMES.map((game) => game.id))
+
+    let gameIdForConfig = targetGameId
+    if (targetGameId === IMPORT_TARGET_FROM_FILENAME) {
+      gameIdForConfig = resolveGameIdFromFileName(file.name, catalogIds, aliasToId)
+    }
+
+    let result
+    try {
+      result = parseImportFile(text, file.name, {
+        gameId: gameIdForConfig,
+        fileName: file.name,
+        profileName:
+          GAMES_BY_ID[gameIdForConfig]?.name ??
+          (format === 'json' ? undefined : file.name.replace(/\.[^.]+$/, '')),
+      })
+    } catch (error) {
+      if (error instanceof UnsupportedImportFormatError) throw error
+      if (error instanceof Error && /No profiles/.test(error.message)) {
+        throw new Error('NO_BINDS')
+      }
+      throw error
+    }
 
     const nextOverrides: ProfileOverridesByGame = { ...overridesByGame }
     for (const profile of result.profiles) {
@@ -287,10 +326,24 @@ export default function App() {
           }
           ioPanel={
             <ProfileIO
-              onImportFile={handleImportFile}
+              onImportFile={async (file, targetGameId) => {
+                try {
+                  return await handleImportFile(file, targetGameId)
+                } catch (error) {
+                  if (error instanceof UnsupportedImportFormatError) {
+                    throw new Error(t('importUnsupportedFormat'))
+                  }
+                  if (error instanceof Error && error.message === 'NO_BINDS') {
+                    throw new Error(t('importNoValidBinds'))
+                  }
+                  throw new Error(t('importError'))
+                }
+              }}
               onExportProfiles={handleExportProfiles}
               onExportSafeKeys={handleExportSafeKeys}
               canExport={effectiveProfiles.length > 0}
+              targetGames={CATALOG_GAMES}
+              selectedIds={selectedIds}
             />
           }
           prefsPanel={

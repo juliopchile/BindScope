@@ -45,7 +45,7 @@ BindScope/
 │   │   ├── ui/                 # Key-state meta; EN messages re-export
 │   │   ├── styles/             # Theme tokens (light / dark / system)
 │   │   ├── components/         # ChromeToolbar, ActionSearch, keyboard, mouse, detail, prefs, IO
-│   │   ├── lib/                # Selection, action search, chords, import/export, theme prefs
+│   │   ├── lib/                # Selection, action search, chords, import/export, config parsers, theme prefs
 │   │   └── i18n/               # Locale catalogs + provider (en/es/pt/fr/zh)
 │   ├── public/                 # Static assets
 │   ├── tests/                  # Unit tests
@@ -93,7 +93,8 @@ Paths are relative to `app/src/`.
 | `data/catalog/` | File-per-title seeds; tools marked `kind: 'tool'` |
 | `i18n/` | UI message catalogs and locale selection helpers. No domain logic |
 | `components/` | Presentation. Contains no business rules |
-| `lib/` | Selection helpers, action-name search, chords, JSON import/export; real config parsers later |
+| `lib/` | Selection helpers, action-name search, chords, JSON + CFG/INI/XML import |
+| `lib/parsers/` | Pure config parsers (Source CFG, simple INI, BindScope XML); no React / DOM |
 | `utils/` | Key identifier normalization, forgiving search (games + action match) |
 | `types/` | Models shared across domain, data, and UI |
 | `styles/` | Global CSS and theme tokens for light / dark / system modes |
@@ -199,10 +200,10 @@ E
 ```
 
 **Panels:** game/tool search · selected chips · binding-layer toggles · custom profile
-import/export · safe-key export · keyboard form-factor selector (Full / TKL / 60% / ISO Full) ·
-keyboard + mouse visualizers · show-mouse preference · selection-driven key/mouse detail ·
-interactive legend filters (free / partial / heavy / reserved) · empty-selection guidance ·
-language switcher · theme switcher.
+import/export (JSON + Source CFG / INI / BindScope XML) · safe-key export · keyboard form-factor
+selector (Full / TKL / 60% / ISO Full) · keyboard + mouse visualizers · show-mouse preference ·
+selection-driven key/mouse detail · interactive legend filters (free / partial / heavy / reserved) ·
+empty-selection guidance · language switcher · theme switcher.
 
 **Yours / tools:** catalog entries with `kind: 'tool'` participate in the same availability
 computation as games; the detail panel labels them as tools. A dedicated `yours` key-state is not
@@ -219,6 +220,14 @@ width. Ergo / split remain out of scope.
 inside the same visualizer stage. When shown, mouse ids are passed as `deviceLayouts` into
 `computeAvailability` and use the same free/partial/heavy/reserved token language. Toggle persists
 as `bindscope.showMouse` (default on). No bind-editing on click; no gamepad/HOTAS.
+
+**Config import (PD6):** pure parsers under `app/src/lib/parsers/` (no React, no DOM). Source CFG
+(`bind "KEY" "cmd"`), simple INI (`[section]` + `key=action`), and BindScope XML
+(`<bind key="…" action="…"/>`) lift into the same `InputProfile` / `sourceType: 'imported'` path as
+JSON. Keys go through `normalizeKey` / `normalizeModifiers`; unknowns are skipped and counted.
+`parseImportFile` in `lib/importExport.ts` auto-routes by extension/content. CFG/INI/XML target a
+single game via the Import panel select (catalog / selected / from filename). Samples:
+`app/tests/fixtures/` and `docs/samples/`.
 
 **Design:** clean, high-contrast, minimal but professional. The keyboard must look like a keyboard.
 Obvious hover and selected states. No visual noise, no gratuitous animation, no flashy branding.

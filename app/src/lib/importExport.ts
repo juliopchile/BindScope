@@ -8,6 +8,13 @@ import type {
   SafeKeysDocument,
 } from '../types'
 import { normalizeKey, normalizeModifiers } from '../utils/keyNormalization'
+import {
+  detectImportFormat,
+  isConfigFormat,
+  parseConfigFormat,
+  type ConfigImportOptions,
+  type ImportFormat,
+} from './parsers'
 
 const bindingSchema = z.object({
   key: z.string().min(1),
@@ -51,6 +58,54 @@ export type ImportParseResult = {
   profiles: InputProfile[]
   skippedBindings: number
   skippedProfiles: number
+}
+
+export type { ImportFormat, ConfigImportOptions }
+
+export class UnsupportedImportFormatError extends Error {
+  constructor(message = 'Unsupported import format') {
+    super(message)
+    this.name = 'UnsupportedImportFormatError'
+  }
+}
+
+/**
+ * Auto-detect format from filename/content and parse into ImportParseResult.
+ * JSON uses the v1 document schema; CFG/INI/XML need `configOptions.gameId`.
+ */
+export function parseImportFile(
+  raw: string,
+  fileName: string,
+  configOptions?: ConfigImportOptions,
+): ImportParseResult {
+  const format = detectImportFormat(fileName, raw)
+  if (!format) throw new UnsupportedImportFormatError()
+
+  if (format === 'json') {
+    return parseImportDocument(raw)
+  }
+
+  if (!isConfigFormat(format)) {
+    throw new UnsupportedImportFormatError()
+  }
+
+  const options: ConfigImportOptions = {
+    gameId: configOptions?.gameId ?? 'imported',
+    profileName: configOptions?.profileName,
+    profileId: configOptions?.profileId,
+    fileName: configOptions?.fileName ?? fileName,
+  }
+  const { profile, skippedBindings } = parseConfigFormat(raw, format, options)
+  return {
+    document: {
+      schemaVersion: 1,
+      exportedAt: new Date().toISOString(),
+      profiles: [profile],
+    },
+    profiles: [profile],
+    skippedBindings,
+    skippedProfiles: 0,
+  }
 }
 
 /** Parse JSON text into a v1 import document; normalize keys; coerce source to imported. */

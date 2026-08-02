@@ -1,11 +1,18 @@
 import { useId, useRef, useState } from 'react'
 import { useI18n } from '../i18n/useI18n'
+import type { Game } from '../types'
+
+/** Sentinel: derive gameId from the chosen filename (slug / catalog alias). */
+export const IMPORT_TARGET_FROM_FILENAME = '__filename__'
 
 interface ProfileIOProps {
-  onImportFile: (file: File) => Promise<string>
+  onImportFile: (file: File, targetGameId: string) => Promise<string>
   onExportProfiles: () => void
   onExportSafeKeys: () => void
   canExport: boolean
+  /** Selected games first, then the rest of the catalog — used for CFG/INI/XML target. */
+  targetGames: Game[]
+  selectedIds: string[]
 }
 
 export function ProfileIO({
@@ -13,12 +20,22 @@ export function ProfileIO({
   onExportProfiles,
   onExportSafeKeys,
   canExport,
+  targetGames,
+  selectedIds,
 }: ProfileIOProps) {
   const { t } = useI18n()
   const inputId = useId()
+  const targetId = useId()
   const inputRef = useRef<HTMLInputElement>(null)
   const [status, setStatus] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const [targetGameId, setTargetGameId] = useState(
+    () => selectedIds[0] ?? IMPORT_TARGET_FROM_FILENAME,
+  )
+
+  const selectedSet = new Set(selectedIds)
+  const selectedGames = targetGames.filter((g) => selectedSet.has(g.id))
+  const otherGames = targetGames.filter((g) => !selectedSet.has(g.id))
 
   async function handleFileChange(fileList: FileList | null) {
     const file = fileList?.[0]
@@ -26,10 +43,10 @@ export function ProfileIO({
     setBusy(true)
     setStatus(null)
     try {
-      const message = await onImportFile(file)
+      const message = await onImportFile(file, targetGameId)
       setStatus(message)
-    } catch {
-      setStatus(t('importError'))
+    } catch (error) {
+      setStatus(error instanceof Error && error.message ? error.message : t('importError'))
     } finally {
       setBusy(false)
       if (inputRef.current) inputRef.current.value = ''
@@ -49,12 +66,48 @@ export function ProfileIO({
       >
         {t('profilesHeading')}
       </h3>
+      <p className="text-xs" style={{ color: 'var(--fg-muted)' }}>
+        {t('importFormatHint')}
+      </p>
+      <div className="flex flex-col gap-1">
+        <label htmlFor={targetId} className="text-xs" style={{ color: 'var(--fg-muted)' }}>
+          {t('importTargetLabel')}
+        </label>
+        <select
+          id={targetId}
+          className="min-h-10 rounded-md border px-2 py-1.5 text-sm"
+          style={{ borderColor: 'var(--border)', background: 'var(--bg)', color: 'var(--fg)' }}
+          value={targetGameId}
+          disabled={busy}
+          onChange={(event) => setTargetGameId(event.target.value)}
+        >
+          <option value={IMPORT_TARGET_FROM_FILENAME}>{t('importTargetFilename')}</option>
+          {selectedGames.length > 0 ? (
+            <optgroup label={t('importTargetSelectedGroup')}>
+              {selectedGames.map((game) => (
+                <option key={game.id} value={game.id}>
+                  {game.name}
+                </option>
+              ))}
+            </optgroup>
+          ) : null}
+          {otherGames.length > 0 ? (
+            <optgroup label={t('importTargetCatalogGroup')}>
+              {otherGames.map((game) => (
+                <option key={game.id} value={game.id}>
+                  {game.name}
+                </option>
+              ))}
+            </optgroup>
+          ) : null}
+        </select>
+      </div>
       <div className="flex flex-wrap gap-2">
         <input
           ref={inputRef}
           id={inputId}
           type="file"
-          accept="application/json,.json"
+          accept=".json,.cfg,.ini,.xml,application/json,text/plain,text/xml,application/xml"
           className="sr-only"
           aria-label={t('importAriaLabel')}
           disabled={busy}

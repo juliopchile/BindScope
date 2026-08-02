@@ -110,8 +110,8 @@ Delivered:
 
 ## In Progress
 
-**Product Depth track (post–UI Refresh)** — active in `PLAN.md` (phases PD1–PD7). **PD1–PD5 complete.**
-Default next authorization: **PD6** (config parsers), or **PD7** if preferred.
+**Product Depth track (post–UI Refresh)** — active in `PLAN.md` (phases PD1–PD7). **PD1–PD6 complete.**
+Default next authorization: **PD7** (extra locales) if needed, or open **V3**.
 
 | Phase | Status | Summary |
 |---|---|---|
@@ -120,7 +120,7 @@ Default next authorization: **PD6** (config parsers), or **PD7** if preferred.
 | PD3. Action-name search | **Complete** | Stage find by action/context; Selected default + Catalog scope; jump opens detail |
 | PD4. Layout variants 60% / ISO | **Complete** | `ansi-60` + `iso-full`; selector + persist; no viewport auto-switch |
 | PD5. Playwright smoke | **Complete** | `make e2e` + Chromium smoke; optional CI does not gate Pages |
-| PD6. Config parsers (INI / CFG / XML) | Planned | Client-side real-config import → InputProfile |
+| PD6. Config parsers (INI / CFG / XML) | **Complete** | Client-side CFG/INI/XML (+ JSON) → imported InputProfile; samples + tests |
 | PD7. Further UI locales | Planned | As needed; chrome only |
 
 ### UI Refresh track (complete)
@@ -196,6 +196,15 @@ Chromium scenario: home load, open Games, add OBS Studio, assert keyboard visual
 layout Full → TKL. Vite preview webServer with local `VITE_BASE_PATH=/`. Optional
 `.github/workflows/e2e.yml` on `main`/PRs — independent of Pages deploy so flakes never block publish.
 
+### Product Depth — PD6 (complete)
+
+Client-side real-config import under `app/src/lib/parsers/` (pure, no React): Source-engine CFG
+(`bind "KEY" "cmd"`), simple INI sections, and BindScope XML `<bind>` lists. `parseImportFile`
+auto-detects by extension/content alongside existing JSON. CFG/INI/XML become a single imported
+`InputProfile` (target game from Import panel: selected, catalog, or filename/alias). Invalid keys
+skipped like JSON import. Samples in `app/tests/fixtures/` + `docs/samples/`. No upload, no wiki
+scrape.
+
 ## Pending Work
 
 Detailed acceptance criteria and order live in `PLAN.md` (Product Depth PD1–PD7). Summary:
@@ -205,7 +214,7 @@ Detailed acceptance criteria and order live in `PLAN.md` (Product Depth PD1–PD
 - **PD3** — ~~Action-name search (V2)~~ **Done**
 - **PD4** — ~~Remaining layout variants: 60%, ISO (V2)~~ **Done**
 - **PD5** — ~~Optional Playwright smoke / broader E2E~~ **Done**
-- **PD6** — Parsers for real config formats (INI, CFG, XML)
+- **PD6** — ~~Parsers for real config formats (INI, CFG, XML)~~ **Done**
 - **PD7** — Further UI locales beyond en/es/pt/fr/zh if needed
 - **V3 / V4** — Steam sync, cloud profiles, game detection, recommendations (roadmap only until opened)
 
@@ -234,13 +243,14 @@ Known risks that become debt if neglected:
 | Phase | Scope |
 |---|---|
 | UI Refresh (UR1–UR5) | **Complete** — keyboard-first shell, free-key retoken, collapsible chrome, Full/TKL selector, mouse visualizer |
-| Product Depth (PD1–PD7) | **Active plan** in `PLAN.md` — PD1–PD5 done; next PD6+ |
+| Product Depth (PD1–PD7) | **Active plan** in `PLAN.md` — PD1–PD6 done; next PD7 or V3 |
 | V2 (via PD2–PD4, PD7) | ~~Modifier combinations~~, ~~action-name search~~, ~~60%/ISO layouts~~, more UI locales |
-| V3 | Steam sync, cloud profiles (adapter — D3), game detection; real-config import starts as **PD6** |
+| V3 | Steam sync, cloud profiles (adapter — D3), game detection (real-config import done as **PD6**) |
 | V4 | Recommendations: *"the best push-to-talk key for your library"* |
 
-Real config import (PD6) is the defensible advantage: once BindScope reads the user's own config
-files, it becomes much harder to copy. Full V3 sync features wait on an explicit phase open.
+Real config import (**PD6**, complete) is the defensible advantage: once BindScope reads the user's
+own config files, it becomes much harder to copy. Full V3 sync features wait on an explicit phase
+open.
 
 ## History
 

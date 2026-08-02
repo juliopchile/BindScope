@@ -10,12 +10,13 @@ into `PROJECT_ROADMAP.md`; stable design information lives in `PROJECT_STRUCTURE
 
 **Current track:** Product Depth (post–UI Refresh)
 
-**Status:** PD5 complete; authorize **PD6** next (config parsers), or **PD7** if preferred
+**Status:** PD6 complete; authorize **PD7** (extra locales) or open **V3** next
 
 **Context:** MVP (Stages 0–5) and UI Refresh (UR1–UR5) are complete. The shell is keyboard-first with
-Full / TKL / 60% / ISO Full layouts, mouse visualizer, collapsible chrome, i18n, and theme. Remaining
-work is **real-config import** and **extra locales** — not another visual overhaul unless QA reopens
-one. Playwright smoke lands via `make e2e` (optional CI workflow does not gate Pages).
+Full / TKL / 60% / ISO Full layouts, mouse visualizer, collapsible chrome, i18n, and theme. Client-side
+CFG / INI / XML import lands via PD6. Remaining Product Depth: **extra locales** (PD7) — not another
+visual overhaul unless QA reopens one. Playwright smoke lands via `make e2e` (optional CI workflow
+does not gate Pages).
 
 **Product constraint (do not lose):** multi-profile availability
 (`available = allKeys − union(usedKeys)`). Domain stays pure (D5). Seeds stay hand-curated (D7).
@@ -44,7 +45,7 @@ explicitly parallelizes independent phases (e.g. Playwright vs catalog).
 
 ```
 PD1 (catalog) → PD2 (modifiers UI) → PD3 (action search) → PD4 (60% / ISO layouts) → PD5 (Playwright) ✓
-PD6 (config parsers) → then V3 / V4 from the roadmap (not detailed here until opened)
+PD6 (config parsers) ✓ → then V3 / V4 from the roadmap (not detailed here until opened)
 PD7 (extra UI locales) — as needed, not blocking
 ```
 
@@ -180,28 +181,25 @@ selection when the key leaves the layout. Ergo / ISO-TKL deferred.
 
 ### Phase PD6 — Real config parsers (INI / CFG / XML)
 
+**Status:** Complete
+
 **Goal.** Import bindings from real game/tool config files client-side, feeding the same
 `InputProfile` / availability path as JSON import (defensible advantage).
 
-**Must do**
+**Done**
 
-- Parser modules under `lib/` (or `lib/parsers/`), isolated from React (PROJECT_STRUCTURE).
-- Support at least one format end-to-end with tests and a documented sample; then generalize toward
-  INI, CFG, and XML as scoped.
-- Reuse key normalization; skip/report invalid binds like JSON import.
-- UI: extend Import / Export chrome — file pickers by format; clear errors via i18n.
-- No server upload; fully static (D2).
-
-**Out of scope**
-
-- Steam Cloud sync, accounts, automatic game detection (those are V3).
-- Silent scrape of wikis to build parsers’ expected schemas.
+- Pure parsers under `app/src/lib/parsers/` (Source CFG, simple INI, BindScope XML) +
+  `parseImportFile` routing in `lib/importExport.ts`.
+- Import panel accepts `.json` / `.cfg` / `.ini` / `.xml`; target-game select for CFG/INI/XML
+  (catalog, selected, or from filename / alias).
+- Samples + schema notes in `app/tests/fixtures/` and `docs/samples/`; table-driven parser tests.
+- i18n errors/hints in en/es/pt/fr/zh.
 
 **Acceptance**
 
-- [ ] User can import at least one real config format and see keys update on the visualizer.
-- [ ] Table-driven parser tests; invalid input does not crash the app.
-- [ ] `PROJECT_STRUCTURE.md` documents parser boundary; `make test` / `lint` / `build` pass.
+- [x] User can import at least one real config format and see keys update on the visualizer.
+- [x] Table-driven parser tests; invalid input does not crash the app.
+- [x] `PROJECT_STRUCTURE.md` documents parser boundary; `make test` / `lint` / `build` pass.
 
 ---
 
@@ -260,8 +258,8 @@ Do not stub empty backend modules (D3 / D9).
 
 ## Immediate Next Step
 
-Authorize **Phase PD6** (real config parsers) unless the user prioritizes another phase
-(e.g. PD7 locales) explicitly.
+Authorize **Phase PD7** (extra UI locales) if needed, or open **V3** (Steam sync / cloud adapter /
+game detection) — PD6 config import is done.
 
 ## Verification Commands (every implementation phase)
 
