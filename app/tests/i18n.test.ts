@@ -36,7 +36,7 @@ describe('i18n catalogs', () => {
     )
     expect(translate('en', 'importSuccess', { count: 1 })).toBe('Imported 1 profile(s).')
     expect(translate('de', 'importSuccess', { count: 2 })).toBe('2 Profil(e) importiert.')
-    expect(translate('ja', 'gamesSelectedCount', { count: 3 })).toBe('3 件選択')
+    expect(translate('ja', 'gamesSelectedCount', { count: 3 })).toBe('3 件選択中')
   })
 
   it('validates locale codes', () => {
