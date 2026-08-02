@@ -1,37 +1,12 @@
 # BindScope
 
-> AI agents: read `AGENTS.md` before working in this repository.
+> AI agents: start with [`AGENTS.md`](AGENTS.md). Progress and active work live in
+> [`PROJECT_ROADMAP.md`](PROJECT_ROADMAP.md) and [`PLAN.md`](PLAN.md) — not here.
 
 BindScope lets you select several games at once, overlay their default or custom keymaps on an
 interactive keyboard and mouse, and instantly see **which keys are still free** across all of them.
 
-## Project Status
-
-**Stage 5 complete — Deployment and polish (MVP).** Search and select curated games and tools, toggle
-binding layers, import/export profiles (JSON, Source CFG, INI, BindScope XML), switch UI language
-(en / es / pt / fr / zh / de / ja) and theme (light / dark / system), and download the current free
-(safe) key set. Static deploy to GitHub Pages is wired via Actions.
-
-**UI Refresh (UR1–UR5) complete:** keyboard-first shell, neutral free keys, collapsible chrome,
-Full/TKL/60%/ISO selector, and mouse visualizer with first-class availability ids. See
-`PROJECT_ROADMAP.md`.
-
-**Product Depth (PD1–PD7) complete** — **26** curated catalog entries; chord marks; stage action-name
-search; Full / TKL / 60% / ISO Full layouts; Playwright smoke (`make e2e`); client-side config
-parsers; German and Japanese UI locales.
-
-**V2.5 Visual polish complete** — full/TKL system keys + NumLock, even keyboard geometry, aligned
-header toolbar, horizontal binding-layer toggles. See `PROJECT_ROADMAP.md`.
-
-**SF — Support footer complete** — site footer with Support modal (Ko-fi, MetaMask send, manual
-networks + QR; endpoints in `supportConfig.ts`), Source code, and Report issue links. See
-`PROJECT_ROADMAP.md`.
-
-**Next:** authorize **V3** (Steam sync, cloud profiles, game detection) when ready.
-
-To run it, see **Getting Started** below.
-
-## The Problem
+## The problem
 
 PC players bind keys outside their games: overlays like MSI Afterburner, push-to-talk, recording
 hotkeys, macros, and operating system shortcuts. Those bindings silently collide with in-game
@@ -42,12 +17,11 @@ No tool answers the question that matters:
 > **Which keys are still safe across the games I actually play?**
 
 Existing tools (KeyBindr, ED KB Map, Visual Keymap, PCGamingWiki) show **one** game or **one**
-profile at a time. None compute the intersection across several. See `DECISIONS.md` for the
-landscape analysis.
+profile at a time. None compute the intersection across several.
 
-## What BindScope Does
+## What BindScope does
 
-The core idea is not "display keybinds" but **computing the intersection of unused keys across
+The core idea is not “display keybinds” but **computing the intersection of unused keys across
 several games and profiles**:
 
 ```
@@ -56,26 +30,27 @@ available = allKeys − union(usedKeys)
 
 That line is the entire engine. Everything else is data quality and UX.
 
-**User flow:** the user selects Skyrim, Genshin Impact, and Warframe. The app overlays the three
-keymaps on an interactive keyboard and mouse and distinguishes keys used by every game, keys used by
-some, keys free across all of them, and keys reserved by the operating system or by the app's own
-safety rules. The user can load a custom profile for any game and the result updates instantly.
+**Typical flow:** select Skyrim, Genshin Impact, and Warframe. BindScope overlays the three keymaps
+on a keyboard and mouse and shows keys used by every title, keys used by some, keys free across all
+of them, and keys reserved by the OS or by BindScope’s own safety rules. Import a custom profile for
+any title and the result updates immediately.
 
-## Project Constraints
+### Capabilities
 
-| Constraint | Detail |
-|---|---|
-| Fully frontend | Static client-side code, deployable to GitHub Pages with no backend or database |
-| Optional future backend | Only for storing profiles; always behind an interface, never a dependency |
-| Performance | Instant interaction, lean bundle, local computation instead of network calls |
-| Pure domain logic | Independent of the UI and covered by tests |
-| Localization | Switchable UI language via client-side i18n catalogs |
-| Theme | Light, dark, and system modes with a user-facing switch |
-| Responsive | Usable on phone, tablet, and desktop viewports |
+- Curated catalog of games and tools (OBS, Afterburner, Discord, ShareX, …) with toggleable binding
+  layers
+- Interactive SVG keyboard (Full, TKL, 60%, ISO Full) and mouse, with free / partial / heavy /
+  reserved states
+- Modifier-chord marks and action-name search across the selection or the full catalog
+- Import and export: BindScope JSON, Source CFG, simple INI, BindScope XML; export the current safe
+  (free) key set
+- UI languages: English, Spanish, Portuguese, French, Chinese, German, Japanese
+- Light, dark, and system theme; preferences and selection persist in the browser
+- Fully static — no backend, no account, no required network calls at runtime
 
-## Getting Started
+## Getting started
 
-Requires Node.js. Install dependencies once, then start the Vite dev server:
+Requires Node.js. From the repository root:
 
 ```sh
 make install   # npm install inside app/
@@ -91,68 +66,53 @@ make lint         # ESLint
 make build        # static artifact in app/dist
 make serve        # same as run, without opening a browser
 make e2e-install  # once: download Playwright Chromium
-make e2e          # build + Playwright smoke (home, Games, visualizer, layout)
+make e2e          # build + Playwright smoke against Vite preview
 ```
 
 The application lives in `app/`. Repository documentation is never part of the Vite app root or the
 deployed site.
 
-Playwright smoke (`make e2e`) builds the app, serves Vite preview on `127.0.0.1:4173`, and runs one
-Chromium scenario against English chrome. Install browsers once with `make e2e-install`. An optional
-GitHub Actions workflow (`.github/workflows/e2e.yml`) runs the same smoke on `main` / PRs; it does
-**not** gate the Pages deploy job.
-
 ### Configuration
 
-The port and host come from an optional `.env` file, which is git-ignored:
+`make run` / `make serve` default to `127.0.0.1:8080`. Override on the command line
+(`make run PORT=8090`) or with an optional git-ignored `.env` in the repo root:
 
 ```sh
-cp .env.example .env    # then edit PORT
+PORT=8090
+HOST=0.0.0.0   # reach the dev server from another device on your network
 ```
 
-| Variable | Default | Purpose |
-|---|---|---|
-| `PORT` | `8080` | Port for `make run` / `make serve` |
-| `HOST` | `127.0.0.1` | Bind address; use `0.0.0.0` to reach the server from another device |
-| `VITE_BASE_PATH` | `/` | Vite asset base path; CI sets `/BindScope/` for project Pages |
+`VITE_BASE_PATH` defaults to `/`; CI sets `/BindScope/` for project GitHub Pages.
 
-A one-off override works too: `make run PORT=8090`. If the port is already taken, `make run` says
-what is holding it and suggests the next free one instead of failing obscurely.
-
-Locale, theme, layout, mouse/chord chrome prefs, and the current game selection (ids, enabled
-layers, imported overrides) persist in the browser (`localStorage` keys `bindscope.locale`,
-`bindscope.theme`, `bindscope.layout`, `bindscope.showMouse`, `bindscope.showChordMarks`,
-`bindscope.selection`). Locale/theme are chrome-only; seed binding action names stay in their
-curated language. First visit starts with an empty selection.
+Locale, theme, layout, mouse/chord preferences, and the current game selection persist in
+`localStorage` (`bindscope.locale`, `bindscope.theme`, `bindscope.layout`, `bindscope.showMouse`,
+`bindscope.showChordMarks`, `bindscope.selection`). Seed binding action names stay in their curated
+language. First visit starts with an empty selection.
 
 ## Deployment
 
-Everything deployable lives in `app/`. On push to `main`, `.github/workflows/deploy-pages.yml` runs
-`npm ci` + `npm run build` in `app/` with `VITE_BASE_PATH=/BindScope/`, then publishes `app/dist` to
-GitHub Pages. No server runtime.
+Everything deployable lives in `app/`. On push to `main`, GitHub Actions builds `app/` with
+`VITE_BASE_PATH=/BindScope/` and publishes `app/dist` to GitHub Pages. Enable
+**Settings → Pages → Source: GitHub Actions** once on the repository.
 
-Enable **Settings → Pages → Source: GitHub Actions** once on the repository. The workflow builds from
-`app/` rather than the "deploy from `/docs`" setting, so `docs/` stays free for project documentation
-and never reaches the published site.
+Local production preview: `make build`, then `npm --prefix app run preview`.
 
-Local preview of the production build: `make build` then `npm --prefix app run preview`.
+## Further documentation
 
-## Documentation Map
+| File | Audience | Contents |
+|---|---|---|
+| [`AGENTS.md`](AGENTS.md) | AI agents | Reading order, invariants, commands |
+| [`PROJECT_STRUCTURE.md`](PROJECT_STRUCTURE.md) | Contributors | Architecture, data model, conventions |
+| [`PROJECT_ROADMAP.md`](PROJECT_ROADMAP.md) | Maintainers / agents | Completed work, pending phases, history |
+| [`PLAN.md`](PLAN.md) | Maintainers / agents | Active implementation work only (when any) |
+| [`DECISIONS.md`](DECISIONS.md) | Contributors | Architecture decisions and rationale |
+| [`STYLES.md`](STYLES.md) | Contributors | Theme tokens, key-state cues, breakpoints |
+| [`LICENSE`](LICENSE) | Everyone | MIT License |
 
-| File | Contents |
-|---|---|
-| `README.md` | Entry point: what it is, why it exists, how to run it |
-| `PROJECT_STRUCTURE.md` | Target architecture, data model, availability engine, conventions |
-| `PROJECT_ROADMAP.md` | Stages, completed and pending work, technical debt, history |
-| `DECISIONS.md` | Architecture decisions and their rationale |
-| `PLAN.md` | Active work only: current task, blockers, next step (idle after SF1) |
-| `AGENTS.md` | AI agent instructions: reading order, invariants, commands |
-| `STYLES.md` | Theme tokens, key-state cues, breakpoints |
-| `qa.md` | Post-MVP UI QA notes (requirements source for the UI Refresh track) |
-| `docs/keybindr-analysis.md` | UR1 competitive brief: Keybindr IA adopt/reject for UR2–UR5 |
-| `docs/source-conversation.md` | Conversation that produced the concept; immutable historical record |
+Stable product knowledge belongs in the permanent docs above. In-flight implementation detail belongs
+in `PLAN.md`. Roadmap status and stage history belong in `PROJECT_ROADMAP.md` — keep them out of this
+README so it stays useful as a human product entry point.
 
-## Documentation Rule
+## License
 
-Stable knowledge belongs in the permanent documentation; in-flight implementation detail belongs in
-`PLAN.md`. Do not accumulate everything in one file.
+BindScope is released under the [MIT License](LICENSE).

@@ -1,6 +1,7 @@
 # AGENTS.md
 
-This file is written for AI coding agents working in BindScope. It should help agents avoid avoidable mistakes and ramp up quickly.
+This file is written for AI coding agents working in BindScope. It should help agents avoid avoidable
+mistakes and ramp up quickly.
 
 ## Project State — Read This First
 
@@ -24,21 +25,42 @@ explicit authorization. Competitive brief: `docs/keybindr-analysis.md` (D13).
 Use `make install`, `make run`, `make test`, `make lint`, `make build`, and `make e2e` from the repo
 root. Do not invent commands; prefer the Makefile.
 
-A previous full implementation existed in commit `ab47adc` and was deliberately discarded in `ebe8889`. Do not restore it wholesale. See `PROJECT_ROADMAP.md` for why it was rejected.
+A previous full implementation existed in commit `ab47adc` and was deliberately discarded in `ebe8889`.
+Do not restore it wholesale. See `PROJECT_ROADMAP.md` for why it was rejected.
+
+## Documentation roles
+
+This repo follows the [doc-template](https://github.com/juliopchile/doc-template) split, with one
+BindScope-specific rule:
+
+| File | Role |
+|---|---|
+| `README.md` | **Human** product entry: problem, features, setup, deploy. No stage status or pending work. |
+| `AGENTS.md` | **Agents** entry: invariants, commands, reading order, current project state |
+| `PROJECT_STRUCTURE.md` | Architecture, layout, data model, conventions |
+| `PROJECT_ROADMAP.md` | Timeline, completed phases, pending work, technical debt, history |
+| `PLAN.md` | Active implementation work only |
+| `DECISIONS.md` / `STYLES.md` | Settled design constraints |
+
+Do **not** mirror roadmap status into `README.md`. When a stage completes, summarize it in
+`PROJECT_ROADMAP.md` and clear the detail out of `PLAN.md`.
 
 ## Primary Documentation Sources
 
 Read these files before making changes:
 
-1. `README.md` — product overview, problem statement, setup, documentation map
-2. `PROJECT_STRUCTURE.md` — target architecture, data model, availability engine contract, conventions
+1. `README.md` — human overview, setup, and usage (product surface only)
+2. `PROJECT_STRUCTURE.md` — architecture, data model, availability engine contract, conventions
 3. `PROJECT_ROADMAP.md` — stages, completed work, pending work, technical debt, project history
 4. `DECISIONS.md` — why the project is built this way; read before proposing architectural changes
 5. `PLAN.md` — active work only; consult when it exists and the user asks for implementation work
 
-`PLAN.md` is not permanent project documentation. Use it to understand the current task, blockers, and next steps.
+`PLAN.md` is not permanent project documentation. Use it to understand the current task, blockers,
+and next steps.
 
-`docs/source-conversation.md` is the archived source conversation that produced the concept. It is an immutable historical record, not a specification. Do not edit it and do not treat its recommendations as binding — the permanent docs above supersede it.
+`docs/source-conversation.md` is the archived source conversation that produced the concept. It is an
+immutable historical record, not a specification. Do not edit it and do not treat its recommendations
+as binding — the permanent docs above supersede it.
 
 All documentation in this repository is written in English.
 
@@ -49,6 +71,7 @@ All documentation in this repository is written in English.
 - Do not commit, push, release, or deploy unless the user explicitly asks.
 - Preserve user changes; do not revert unrelated work.
 - When a stage completes, summarize it in `PROJECT_ROADMAP.md` and clear the detail out of `PLAN.md`.
+  Do not add status sections to `README.md`.
 
 ## Domain Invariants
 
@@ -67,7 +90,7 @@ These are easy to get wrong and expensive to fix later:
 
 An agent in this project can act as an **orchestrator** (coordinates sub-agents that implement stages of the plan) or as an **orchestrated** agent (implements one concrete stage). The role is recognized from the prompt received; no configuration is needed.
 
-- **Orchestrated**: follows familiarization → stage summary (with questions, if any) → authorized execution. On completion, it documents in `PLAN.md` and `PROJECT_ROADMAP.md`, and **proposes** a commit message without committing.
+- **Orchestrated**: follows familiarization → stage summary (with questions, if any) → authorized execution. On completion, it documents in `PLAN.md` and `PROJECT_ROADMAP.md`, and **proposes** a commit message without committing. It does not rewrite `README.md` for stage status.
 - **Orchestrator**: launches a fresh sub-agent per stage, evaluates its summaries, resolves questions with its own judgment when possible, and escalates only product or scope decisions to the user. It never authorizes commits on its own.
 
 The methodology and its three canonical prompts live in the user-level `orquestando-agentes` skill. It is **not** vendored into this repository — invoke it with `/orquestando-agentes`. Stages in `PROJECT_ROADMAP.md` are sized to be delegated one per sub-agent.
@@ -77,30 +100,30 @@ The methodology and its three canonical prompts live in the user-level `orquesta
 The `Makefile` is the task runner. Use it rather than calling `npx` directly, and add new entry
 points there as they appear.
 
-| Command | Purpose | Status |
-|---|---|---|
-| `make help` | List targets and show the active port | Works |
-| `make install` | `npm install` inside `app/` | Works |
-| `make run` | Vite dev server with HMR (opens browser) | Works |
-| `make serve` | Same, without opening a browser | Works |
-| `make port` | Print the port `make run` would use | Works |
-| `make test` | Vitest unit tests | Works |
-| `make lint` | ESLint | Works |
-| `make build` | Static production build into `app/dist` | Works |
-| `make e2e-install` | Download Playwright Chromium browser | Works |
-| `make e2e` | Build + Playwright smoke against Vite preview | Works |
+| Command | Purpose |
+|---|---|
+| `make help` | List targets and show the active port |
+| `make install` | `npm install` inside `app/` |
+| `make run` | Vite dev server with HMR (opens browser) |
+| `make serve` | Same, without opening a browser |
+| `make port` | Print the port `make run` would use |
+| `make test` | Vitest unit tests |
+| `make lint` | ESLint |
+| `make build` | Static production build into `app/dist` |
+| `make e2e-install` | Download Playwright Chromium browser |
+| `make e2e` | Build + Playwright smoke against Vite preview |
 
 `PORT` and `HOST` are read from an optional git-ignored `.env`, falling back to `8080` and
-`127.0.0.1`. `.env.example` is the committed template. Overrides also work inline:
-`make run PORT=8090`.
+`127.0.0.1`. Overrides also work inline: `make run PORT=8090`.
 
 ## Additional Documentation
 
-| File | When to Reference | Status |
-|---|---|---|
-| `DECISIONS.md` | Architectural tradeoffs and their rationale | Exists |
-| `STYLES.md` | Visual design tokens, key-state cues, breakpoints, component rules | Exists |
-| `qa.md` | UI QA notes (archive: V2.5 visual polish requirements) | Exists |
-| `docs/keybindr-analysis.md` | UR1 competitive brief (Keybindr IA adopt/reject) | Exists |
-| `PLAN.md` | Active work only (none; next auth is V3) | Idle |
-| `CONTRIBUTING.md` | Binding-data submission workflow | Create only if community contributions open |
+| File | When to Reference |
+|---|---|
+| `DECISIONS.md` | Architectural tradeoffs and their rationale |
+| `STYLES.md` | Visual design tokens, key-state cues, breakpoints, component rules |
+| `qa.md` | UI QA notes (archive: V2.5 visual polish requirements) |
+| `docs/keybindr-analysis.md` | UR1 competitive brief (Keybindr IA adopt/reject) |
+| `PLAN.md` | Active work only (none; next auth is V3) |
+| `CONTRIBUTING.md` | Binding-data submission workflow — create only if community contributions open |
+| `LICENSE` | MIT License |

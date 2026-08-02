@@ -1,4 +1,4 @@
-# Local configuration — copy .env.example to .env
+# Optional local overrides for `make run` / `make serve` (PORT, HOST)
 .env
 .env.local
 

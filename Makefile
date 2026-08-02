@@ -1,7 +1,7 @@
 # BindScope task runner.
 #
-# Configuration is read from an optional .env file in this directory.
-# Copy .env.example to .env to override defaults. See `make help`.
+# Optional git-ignored `.env` in this directory can set PORT / HOST.
+# Defaults below apply when `.env` is absent. See `make help`.
 
 # `-include` so a missing .env is not an error. Variables defined here become
 # plain make variables, which is why PORT below uses `?=` and not `=`.

@@ -54,8 +54,8 @@ BindScope/
 ├── .github/workflows/          # GitHub Pages deploy from app/
 ├── docs/                       # Historical and supporting documentation
 ├── Makefile                    # Root task runner
-├── .env.example
-├── README.md
+├── LICENSE                     # MIT
+├── README.md                   # Human product entry (no roadmap status)
 ├── PROJECT_STRUCTURE.md
 ├── PROJECT_ROADMAP.md
 ├── DECISIONS.md
@@ -113,7 +113,7 @@ Paths are relative to `app/src/`.
 | Keyboard | SVG (every key is an interactive element) | In use (ANSI full) |
 | Validation | Zod | In use (availability + import) |
 | Unit tests | Vitest | In use |
-| E2E tests | Playwright | Optional / deferred |
+| E2E tests | Playwright | In use (`make e2e`) |
 | Deploy | GitHub Actions → Pages from `app/dist` | In use |
 | Quality | ESLint + Prettier | In use |
 
