@@ -139,9 +139,11 @@ engine based on UI toggles.
 and verification status.
 
 **`KeyboardLayout` / `MouseLayout` / `DeviceLayout`** — data-driven SVG geometry (`id`, `name`,
-`width`/`height`, `keys[]` with position/size). The mouse layout lives in `data/mouseLayout.ts`.
-`computeAvailability` accepts optional `deviceLayouts` whose keys join the keyboard layout in the
-availability universe (first-class, not companion-only cosmetics).
+`width`/`height`, `keys[]` with position/size). Optional per-key `pathD` + `collisionRects` support
+non-rectangular caps (ISO Enter L-shape); the axis-aligned box remains for layout bounds. The mouse
+layout lives in `data/mouseLayout.ts`. `computeAvailability` accepts optional `deviceLayouts` whose
+keys join the keyboard layout in the availability universe (first-class, not companion-only
+cosmetics).
 
 The key representation **must be normalized**: the same physical key is identified the same way
 throughout the app. The model must not assume bare keys forever; modifier chords and multiple layers
@@ -210,10 +212,15 @@ computation as games; the detail panel labels them as tools. A dedicated `yours`
 required in the engine.
 
 **Layouts:** ANSI Full (`ansi-full`, default), ANSI TKL (`ansi-tkl`, no numpad), ANSI 60%
-(`ansi-60`, alpha only), and ISO Full (`iso-full`, tall Enter + `IntlBackslash`) via `LayoutId` +
-`LAYOUT_REGISTRY` in `data/keyboardLayouts.ts`. Form-factor selector lives in the header toolbar;
-preference persists in `localStorage` (`bindscope.layout`). Layout never auto-switches on viewport
-width. Ergo / split remain out of scope.
+(`ansi-60`, alpha only), and ISO Full (`iso-full`, L-shaped Enter + `IntlBackslash`) via `LayoutId` +
+`LAYOUT_REGISTRY` in `data/keyboardLayouts.ts`. Geometry uses unit `U`/`H`, inter-key `GAP`, row
+pitch `ROW = H + GAP`, a slightly larger F→number gap, and `CLUSTER_GAP` between alpha, nav/system,
+and numpad islands. ISO Enter is a path polygon (wider Q-row top bar, stem after home-row
+`Backslash`) with `collisionRects` for overlap checks; ANSI Enter stays a single-row rectangle. Full
+and TKL include `PrintScreen` / `ScrollLock` / `Pause`; full layouts also include `NumLock` on the
+numpad. Form-factor selector lives in the header toolbar (visible control with `aria-label`; no
+stacked caption); preference persists in `localStorage` (`bindscope.layout`). Layout never
+auto-switches on viewport width. Ergo / split remain out of scope.
 
 **Mouse:** standard five-button + wheel layout in `data/mouseLayout.ts` (`Mouse1`…`Mouse5`,
 `WheelUp`, `WheelDown`). Rendered beside the keyboard on wide viewports (stacked below on narrow)

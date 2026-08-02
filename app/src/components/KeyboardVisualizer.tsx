@@ -1,6 +1,6 @@
 import { useI18n } from '../i18n/useI18n'
 import { CHORD_MARK, keyHasChordBindings } from '../lib/chords'
-import type { KeyAvailability, KeyAvailabilityState, KeyboardKey, KeyboardLayout } from '../types'
+import type { KeyAvailability, KeyAvailabilityState, KeyboardKey, KeyboardLayout, LayoutKey } from '../types'
 import { isKeyVisible } from '../lib/selection'
 import { getKeyStateMeta } from '../ui/keyStateMeta'
 
@@ -44,6 +44,72 @@ function KeyPatterns() {
   )
 }
 
+function keyLabelX(layoutKey: LayoutKey): number {
+  return layoutKey.labelX ?? layoutKey.x + layoutKey.width / 2
+}
+
+function keyLabelY(layoutKey: LayoutKey): number {
+  return layoutKey.labelY ?? layoutKey.y + layoutKey.height / 2
+}
+
+/** Tallest collision rect (ISO Enter stem) or the bounding box — for chord-mark anchoring. */
+function keyStemOrigin(layoutKey: LayoutKey): { x: number; y: number; height: number; width: number } {
+  const rects = layoutKey.collisionRects
+  if (!rects || rects.length === 0) {
+    return { x: layoutKey.x, y: layoutKey.y, width: layoutKey.width, height: layoutKey.height }
+  }
+  return rects.reduce((best, rect) => (rect.height > best.height ? rect : best))
+}
+
+function KeyCapShape({
+  layoutKey,
+  className,
+  strokeWidth,
+  selected,
+  fill,
+  pointerEvents,
+}: {
+  layoutKey: LayoutKey
+  className?: string
+  strokeWidth: number
+  selected: boolean
+  fill?: string
+  pointerEvents?: 'none'
+}) {
+  const selectedStroke = selected ? { stroke: 'var(--accent)' } : undefined
+  const stroke = fill !== undefined ? 'none' : undefined
+
+  if (layoutKey.pathD) {
+    return (
+      <path
+        d={layoutKey.pathD}
+        className={className}
+        stroke={stroke}
+        strokeWidth={strokeWidth}
+        style={selectedStroke}
+        fill={fill}
+        pointerEvents={pointerEvents}
+      />
+    )
+  }
+
+  return (
+    <rect
+      x={layoutKey.x}
+      y={layoutKey.y}
+      width={layoutKey.width}
+      height={layoutKey.height}
+      rx={5}
+      className={className}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
+      style={selectedStroke}
+      fill={fill}
+      pointerEvents={pointerEvents}
+    />
+  )
+}
+
 export function KeyboardVisualizer({
   layout,
   keys,
@@ -77,6 +143,9 @@ export function KeyboardVisualizer({
           const ariaLabel = showChord
             ? `${layoutKey.label}, ${stateLabel}, ${t('chordAriaSuffix')}`
             : `${layoutKey.label}, ${stateLabel}`
+          const labelX = keyLabelX(layoutKey)
+          const labelY = keyLabelY(layoutKey)
+          const stem = keyStemOrigin(layoutKey)
 
           return (
             <g
@@ -96,30 +165,23 @@ export function KeyboardVisualizer({
                 }
               }}
             >
-              <rect
-                x={layoutKey.x}
-                y={layoutKey.y}
-                width={layoutKey.width}
-                height={layoutKey.height}
-                rx={5}
+              <KeyCapShape
+                layoutKey={layoutKey}
                 className={meta.fillClass}
                 strokeWidth={selected ? 3 : 1.5}
-                style={selected ? { stroke: 'var(--accent)' } : undefined}
+                selected={selected}
               />
-              <rect
-                x={layoutKey.x}
-                y={layoutKey.y}
-                width={layoutKey.width}
-                height={layoutKey.height}
-                rx={5}
+              <KeyCapShape
+                layoutKey={layoutKey}
+                strokeWidth={0}
+                selected={false}
                 fill={`url(#${meta.patternId})`}
-                stroke="none"
                 pointerEvents="none"
               />
               <text
                 className="key-label"
-                x={layoutKey.x + layoutKey.width / 2}
-                y={layoutKey.y + layoutKey.height / 2 + (meta.mark || showChord ? 2 : 0)}
+                x={labelX}
+                y={labelY + (meta.mark || showChord ? 2 : 0)}
                 textAnchor="middle"
                 dominantBaseline="middle"
               >
@@ -138,8 +200,8 @@ export function KeyboardVisualizer({
               {showChord ? (
                 <text
                   className="key-chord-mark"
-                  x={layoutKey.x + 6}
-                  y={layoutKey.y + layoutKey.height - 5}
+                  x={stem.x + 6}
+                  y={stem.y + stem.height - 5}
                   textAnchor="start"
                 >
                   {CHORD_MARK}

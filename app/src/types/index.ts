@@ -84,14 +84,36 @@ export interface CatalogEntry {
   profile: SeedProfile
 }
 
+/** Axis-aligned rectangle in layout SVG space (collision / multi-rect geometry). */
+export interface LayoutRect {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
 export interface LayoutKey {
   id: KeyboardKey
   label: string
+  /** Axis-aligned bounding box (layout width, label fallback, chrome anchors). */
   x: number
   y: number
   width: number
   height: number
   row?: number
+  /**
+   * Absolute SVG path `d` for non-rectangular keycaps (ISO Enter L-shape).
+   * When set, the visualizer draws this path instead of a rounded rect.
+   */
+  pathD?: string
+  /**
+   * Union of rects that make up the keycap. Overlap tests use these when present
+   * so an L-shaped Enter does not false-positive against home-row Backslash.
+   */
+  collisionRects?: readonly LayoutRect[]
+  /** Label center; defaults to bounding-box center. */
+  labelX?: number
+  labelY?: number
 }
 
 export interface KeyboardLayout {

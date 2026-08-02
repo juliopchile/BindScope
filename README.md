@@ -18,8 +18,12 @@ Full/TKL/60%/ISO selector, and mouse visualizer with first-class availability id
 
 **Product Depth (PD1–PD7) complete** — **26** curated catalog entries; chord marks; stage action-name
 search; Full / TKL / 60% / ISO Full layouts; Playwright smoke (`make e2e`); client-side config
-parsers; German and Japanese UI locales. Default next: open **V3** when authorized. QA notes:
-`qa.md`.
+parsers; German and Japanese UI locales.
+
+**V2.5 Visual polish complete** — full/TKL system keys + NumLock, even keyboard geometry, aligned
+header toolbar, horizontal binding-layer toggles. See `PROJECT_ROADMAP.md`.
+
+**Next:** authorize **V3** (Steam sync, cloud profiles, game detection) when ready.
 
 To run it, see **Getting Started** below.
 

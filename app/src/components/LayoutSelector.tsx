@@ -16,35 +16,29 @@ const LAYOUT_LABEL_KEYS: Record<LayoutId, MessageKey> = {
 }
 
 const selectClass =
-  'min-h-10 min-w-[7.5rem] rounded-md border px-2 py-2 text-sm focus-visible:outline focus-visible:outline-2'
+  'chrome-toolbar__layout min-h-10 min-w-[7.5rem] rounded-md border px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2'
 
 export function LayoutSelector({ value, onChange }: LayoutSelectorProps) {
   const { t } = useI18n()
 
   return (
-    <label
-      className="chrome-toolbar__layout flex flex-col gap-1 text-xs"
-      style={{ color: 'var(--fg-muted)' }}
+    <select
+      className={selectClass}
+      style={{
+        background: 'var(--bg)',
+        borderColor: 'var(--border)',
+        color: 'var(--fg)',
+        outlineColor: 'var(--focus)',
+      }}
+      value={value}
+      onChange={(event) => onChange(event.target.value as LayoutId)}
+      aria-label={t('layoutLabel')}
     >
-      <span className="font-semibold tracking-wide uppercase">{t('layoutLabel')}</span>
-      <select
-        className={selectClass}
-        style={{
-          background: 'var(--bg)',
-          borderColor: 'var(--border)',
-          color: 'var(--fg)',
-          outlineColor: 'var(--focus)',
-        }}
-        value={value}
-        onChange={(event) => onChange(event.target.value as LayoutId)}
-        aria-label={t('layoutLabel')}
-      >
-        {LAYOUT_IDS.map((id) => (
-          <option key={id} value={id}>
-            {t(LAYOUT_LABEL_KEYS[id])}
-          </option>
-        ))}
-      </select>
-    </label>
+      {LAYOUT_IDS.map((id) => (
+        <option key={id} value={id}>
+          {t(LAYOUT_LABEL_KEYS[id])}
+        </option>
+      ))}
+    </select>
   )
 }

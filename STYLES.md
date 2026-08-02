@@ -6,9 +6,20 @@ cues, or breakpoints change.
 ## Design direction (UI Refresh)
 
 UI Refresh UR1–UR5 is **complete**. Decision: **D13**. Competitive brief: `docs/keybindr-analysis.md`.
-Closed-track summary: `PLAN.md`.
 
-### Shell hierarchy & chrome (UR3–UR5 shipped)
+## Design direction (V2.5 — shipped)
+
+Visual polish after Product Depth. Plan archive cleared from active `PLAN.md`; roadmap has the
+condensed record. Requirements archive: `qa.md` + `screenshot_*.png`.
+
+| Topic | Shipped rule |
+|---|---|
+| Keyboard geometry | Uniform `ROW = H + GAP` after the number row; `CLUSTER_GAP` between alpha / nav / numpad; full & TKL include PrtSc, ScrLk, Pause; full includes NumLk; ISO Enter uses optional `pathD` L-outline (not a tall rect) |
+| Header toolbar | Layout `<select>` shares one baseline with Games / Import / Preferences (`aria-label` only — no stacked caption) |
+| Stage under header | Compact header/main vertical padding; toolbar row uses `items-center` |
+| Binding layers | Horizontal `flex-wrap` layer checkboxes under each selected game fieldset |
+
+### Shell hierarchy & chrome (UR3–UR5 + V2.5)
 
 | Topic | Direction |
 |---|---|
@@ -132,14 +143,15 @@ container.
 ## Components
 
 - Toolbar: `app/src/components/ChromeToolbar.tsx` — exclusive header disclosures + visible layout select
-- Layout selector: `app/src/components/LayoutSelector.tsx` — Full / TKL; preference via `lib/preferences.ts`
+- Layout selector: `app/src/components/LayoutSelector.tsx` — Full / TKL / 60% / ISO; `aria-label`
+  only (no visible stacked caption); preference via `lib/preferences.ts`
 - Keyboard: `app/src/components/KeyboardVisualizer.tsx` — data-driven from `KeyboardLayout`; dims
   keys whose state is filtered out via the legend; optional `+` chord marks
 - Mouse: `app/src/components/MouseVisualizer.tsx` — data-driven from `MouseLayout` (`data/mouseLayout.ts`);
   same key-state fill/pattern/mark tokens as keyboard; selectable buttons share the detail panel
 - Detail: `app/src/components/KeyDetailPanel.tsx` — selection-driven; bare vs chord binding groups
 - Legend: `app/src/components/Legend.tsx` — toggles state filters + chords-only filter
-- Search / selection: `GameSearch.tsx`, `SelectedGames.tsx` (inside Games disclosure)
+- Search / selection: `GameSearch.tsx`, `SelectedGames.tsx` (layer toggles horizontal flex-wrap)
 - Profile IO: `ProfileIO.tsx` (inside Import / Export disclosure)
 - Prefs: `PrefsControls.tsx` — locale + theme + show mouse + show chord marks (Preferences disclosure)
 - Chrome copy: locale catalogs in `app/src/i18n/locales/` via `useI18n()`

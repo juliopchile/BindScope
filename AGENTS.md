@@ -13,9 +13,11 @@ tokens live in `STYLES.md`.
 **Product Depth (PD1–PD7) is complete** — seed catalog has **26** curated entries (22 games + 4
 tools); modifier chords; stage **action-name search**; form factors **Full / TKL / 60% / ISO Full**;
 Playwright smoke via `make e2e`; client-side **CFG / INI / XML** config import; UI locales include
-**German** and **Japanese**. UI Refresh (UR1–UR5) is complete. Next default: open **V3** when
-authorized. Do not start a roadmap phase until the user authorizes it. Requirements archive: `qa.md`;
-competitive brief: `docs/keybindr-analysis.md` (D13).
+**German** and **Japanese**. UI Refresh (UR1–UR5) is complete.
+
+**Active plan:** none open — **V2.5 Visual polish is complete**. Next authorization is **V3**
+(Steam sync / cloud profiles / game detection) when the user opens it. Do not start V3 without
+explicit authorization. Competitive brief: `docs/keybindr-analysis.md` (D13).
 
 Use `make install`, `make run`, `make test`, `make lint`, `make build`, and `make e2e` from the repo
 root. Do not invent commands; prefer the Makefile.
@@ -96,7 +98,7 @@ points there as they appear.
 |---|---|---|
 | `DECISIONS.md` | Architectural tradeoffs and their rationale | Exists |
 | `STYLES.md` | Visual design tokens, key-state cues, breakpoints, component rules | Exists |
-| `qa.md` | Post-MVP UI QA notes (UI Refresh requirements) | Exists |
+| `qa.md` | UI QA notes (archive: V2.5 visual polish requirements) | Exists |
 | `docs/keybindr-analysis.md` | UR1 competitive brief (Keybindr IA adopt/reject) | Exists |
-| `PLAN.md` | Product Depth PD1–PD7 complete; next = V3 when authorized | Track closed |
+| `PLAN.md` | Active work only (cleared after V2.5; authorize V3 next) | Idle |
 | `CONTRIBUTING.md` | Binding-data submission workflow | Create only if community contributions open |

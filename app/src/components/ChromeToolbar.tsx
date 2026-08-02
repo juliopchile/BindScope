@@ -96,7 +96,7 @@ export function ChromeToolbar({
 
   return (
     <div ref={rootRef} className="chrome-toolbar mx-auto flex w-full max-w-[1400px] flex-col">
-      <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
         <div className="min-w-0">{leading}</div>
         <div
           className="chrome-toolbar__actions flex flex-wrap items-center justify-end gap-2"

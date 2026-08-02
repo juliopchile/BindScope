@@ -292,7 +292,7 @@ export default function App() {
   return (
     <div className="min-h-screen">
       <header
-        className="border-b px-4 py-3"
+        className="border-b px-4 py-2.5"
         style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
       >
         <ChromeToolbar
@@ -357,7 +357,7 @@ export default function App() {
         />
       </header>
 
-      <main className="mx-auto max-w-[1400px] space-y-3 px-4 py-4">
+      <main className="mx-auto max-w-[1400px] space-y-3 px-4 py-3">
         <div
           className={
             selectedKey

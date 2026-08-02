@@ -112,9 +112,9 @@ export function SelectedGames({
                   {t('overrideActive')}
                 </p>
               ) : null}
-              <ul className="mt-1 space-y-1 text-sm">
+              <ul className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm">
                 {profile.layers.map((layer) => (
-                  <li key={layer.id}>
+                  <li key={layer.id} className="min-w-0">
                     <label className="inline-flex min-h-10 cursor-pointer items-center gap-2">
                       <input
                         type="checkbox"

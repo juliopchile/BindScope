@@ -110,8 +110,18 @@ Delivered:
 
 ## Post-MVP Tracks
 
-**Next authorization:** open **V3** (Steam sync / cloud adapter / game detection). No active
-implementation track until authorized.
+**Next authorization:** **V3** (Steam sync, cloud profiles adapter, game detection). V2.5 Visual
+polish is **complete**. Do not open V3 until the user explicitly authorizes it.
+
+### V2.5 — Visual polish (complete)
+
+Post–Product Depth QA. Requirements archive: `qa.md` + `screenshot_*.png`.
+
+| Workstream | Status | Summary |
+|---|---|---|
+| V2.5-A. Keyboard geometry & system keys | **Complete** | Uniform row pitch + `CLUSTER_GAP`; PrtSc / ScrLk / Pause on full/TKL; NumLk on full; overlap-free; layout invariant tests |
+| V2.5-B. Header & toolbar alignment | **Complete** | Layout select `aria-label` only (no stacked caption); toolbar `items-center`; tighter header↔stage padding |
+| V2.5-C. Horizontal binding layers | **Complete** | Per-game layer toggles `flex-wrap` horizontal in Games panel; override-disabled preserved |
 
 ### Product Depth track (complete)
 
@@ -219,16 +229,7 @@ Seed action names stay untranslated (D10). Product Depth track closed.
 
 ## Pending Work
 
-Product Depth (PD1–PD7) is complete. Summary:
-
-- **PD1** — ~~Grow the hand-curated catalog toward ~20–30 titles~~ **Done (26 entries)**
-- **PD2** — ~~Modifier combinations in the UI (V2)~~ **Done**
-- **PD3** — ~~Action-name search (V2)~~ **Done**
-- **PD4** — ~~Remaining layout variants: 60%, ISO (V2)~~ **Done**
-- **PD5** — ~~Optional Playwright smoke / broader E2E~~ **Done**
-- **PD6** — ~~Parsers for real config formats (INI, CFG, XML)~~ **Done**
-- **PD7** — ~~Further UI locales (de, ja)~~ **Done**
-- **V3 / V4** — Steam sync, cloud profiles, game detection, recommendations (roadmap only until opened)
+- **V3 / V4** — Steam sync, cloud profiles, game detection, recommendations (authorize V3 next)
 
 ## Technical Debt
 
@@ -257,7 +258,8 @@ Known risks that become debt if neglected:
 | UI Refresh (UR1–UR5) | **Complete** — keyboard-first shell, free-key retoken, collapsible chrome, Full/TKL selector, mouse visualizer |
 | Product Depth (PD1–PD7) | **Complete** — catalog, chords, action search, layouts, Playwright, parsers, de/ja locales |
 | V2 (via PD2–PD4, PD7) | ~~Modifier combinations~~, ~~action-name search~~, ~~60%/ISO layouts~~, ~~more UI locales~~ |
-| V3 | Steam sync, cloud profiles (adapter — D3), game detection (real-config import done as **PD6**) |
+| **V2.5 Visual polish** | **Complete** — keyboard geometry + system keys, header/toolbar alignment, horizontal binding layers |
+| V3 | Steam sync, cloud profiles (adapter — D3), game detection — **next authorization** |
 | V4 | Recommendations: *"the best push-to-talk key for your library"* |
 
 Real config import (**PD6**, complete) is the defensible advantage: once BindScope reads the user's
