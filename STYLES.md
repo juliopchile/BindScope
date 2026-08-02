@@ -19,13 +19,14 @@ condensed record. Requirements archive: `qa.md` + `screenshot_*.png`.
 | Stage under header | Compact header/main vertical padding; toolbar row uses `items-center` |
 | Binding layers | Horizontal `flex-wrap` layer checkboxes under each selected game fieldset |
 
-### Shell hierarchy & chrome (UR3–UR5 + V2.5)
+### Shell hierarchy & chrome (UR3–UR5 + V2.5 + SF1)
 
 | Topic | Direction |
 |---|---|
-| Hierarchy | Header (brand + action cluster) → keyboard/mouse stage (+ selection detail) |
-| Open chrome | Brand, tagline; visible layout selector; compact toolbar triggers (Games, Import / Export, Preferences) |
+| Hierarchy | Header (brand + action cluster) → keyboard/mouse stage (+ selection detail) → site footer |
+| Open chrome | Brand, tagline; visible layout selector; compact toolbar triggers (Games, Import / Export, Preferences); footer Support / Source / Issues |
 | Closed chrome | Devices sit in a bordered `.keyboard-stage` surface |
+| Footer (SF) | Hairline top border; centered inline row with `|` separators; Support trigger shows animated Ko-fi + MetaMask inline SVGs and opens a modal (Ko-fi link / MetaMask send / manual networks + QR); BindScope accent tokens (Ko-fi purple only on the Ko-fi control) |
 | Action find (PD3) | Compact **Find action** in the stage header; Selected (default) / Catalog scope; results overlay while querying |
 | Controls | Exclusive header disclosures via `ChromeToolbar` — collapsed by default |
 | Detail panel | Selection-driven; beside stage on desktop; bottom drawer + backdrop on phone |

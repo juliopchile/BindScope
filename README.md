@@ -23,8 +23,11 @@ parsers; German and Japanese UI locales.
 **V2.5 Visual polish complete** — full/TKL system keys + NumLock, even keyboard geometry, aligned
 header toolbar, horizontal binding-layer toggles. See `PROJECT_ROADMAP.md`.
 
-**Next:** authorize **SF — Support footer** (donate + GitHub links; see `PLAN.md`), then **V3**
-(Steam sync, cloud profiles, game detection) when ready.
+**SF — Support footer complete** — site footer with Support modal (Ko-fi, MetaMask send, manual
+networks + QR; endpoints in `supportConfig.ts`), Source code, and Report issue links. See
+`PROJECT_ROADMAP.md`.
+
+**Next:** authorize **V3** (Steam sync, cloud profiles, game detection) when ready.
 
 To run it, see **Getting Started** below.
 
@@ -142,7 +145,7 @@ Local preview of the production build: `make build` then `npm --prefix app run p
 | `PROJECT_STRUCTURE.md` | Target architecture, data model, availability engine, conventions |
 | `PROJECT_ROADMAP.md` | Stages, completed and pending work, technical debt, history |
 | `DECISIONS.md` | Architecture decisions and their rationale |
-| `PLAN.md` | Active work only: current task, blockers, next step |
+| `PLAN.md` | Active work only: current task, blockers, next step (idle after SF1) |
 | `AGENTS.md` | AI agent instructions: reading order, invariants, commands |
 | `STYLES.md` | Theme tokens, key-state cues, breakpoints |
 | `qa.md` | Post-MVP UI QA notes (requirements source for the UI Refresh track) |

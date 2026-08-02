@@ -39,13 +39,14 @@ BindScope/
 │   │   │   ├── catalog/        # Seed games/tools (one file each) + index
 │   │   │   ├── keyboardLayouts.ts
 │   │   │   ├── mouseLayout.ts  # Standard mouse button geometry + ids
-│   │   │   └── reservedKeys.ts
+│   │   │   ├── reservedKeys.ts
+│   │   │   └── supportConfig.ts # Donate / GitHub footer endpoints (owner-editable)
 │   │   ├── types/              # Shared typed models
 │   │   ├── utils/              # Key normalization + forgiving search
 │   │   ├── ui/                 # Key-state meta; EN messages re-export
 │   │   ├── styles/             # Theme tokens (light / dark / system)
-│   │   ├── components/         # ChromeToolbar, ActionSearch, keyboard, mouse, detail, prefs, IO
-│   │   ├── lib/                # Selection, action search, chords, import/export, config parsers, theme prefs
+│   │   ├── components/         # ChromeToolbar, ActionSearch, keyboard, mouse, detail, prefs, IO, Support modal
+│   │   ├── lib/                # Selection, action search, chords, import/export, config parsers, theme prefs, ethereum donate helpers
 │   │   └── i18n/               # Locale catalogs + provider (en/es/pt/fr/zh/de/ja)
 │   ├── public/                 # Static assets
 │   ├── tests/                  # Unit tests
@@ -93,7 +94,7 @@ Paths are relative to `app/src/`.
 | `data/` | Game catalog, seed profiles, keyboard/mouse layouts, reserved-key rules |
 | `data/catalog/` | File-per-title seeds; tools marked `kind: 'tool'` |
 | `i18n/` | UI message catalogs and locale selection helpers. No domain logic |
-| `components/` | Presentation. Contains no business rules |
+| `components/` | Presentation. Contains no business rules (includes `SiteFooter`) |
 | `lib/` | Selection helpers, action-name search, chords, JSON + CFG/INI/XML import |
 | `lib/parsers/` | Pure config parsers (Source CFG, simple INI, BindScope XML); no React / DOM |
 | `utils/` | Key identifier normalization, forgiving search (games + action match) |
@@ -206,7 +207,8 @@ E
 import/export (JSON + Source CFG / INI / BindScope XML) · safe-key export · keyboard form-factor
 selector (Full / TKL / 60% / ISO Full) · keyboard + mouse visualizers · show-mouse preference ·
 selection-driven key/mouse detail · interactive legend filters (free / partial / heavy / reserved) ·
-empty-selection guidance · language switcher · theme switcher.
+empty-selection guidance · language switcher · theme switcher · site footer (Support modal / Source /
+Issues; Ko-fi, MetaMask, manual networks when configured).
 
 **Yours / tools:** catalog entries with `kind: 'tool'` participate in the same availability
 computation as games; the detail panel labels them as tools. A dedicated `yours` key-state is not

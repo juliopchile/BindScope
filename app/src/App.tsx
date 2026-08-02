@@ -13,6 +13,7 @@ import {
   ProfileIO,
 } from './components/ProfileIO'
 import { SelectedGames } from './components/SelectedGames'
+import { SiteFooter } from './components/SiteFooter'
 import {
   CATALOG_GAMES,
   CATALOG_INPUT_PROFILES,
@@ -332,7 +333,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <header
         className="border-b px-4 py-2.5"
         style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
@@ -399,7 +400,7 @@ export default function App() {
         />
       </header>
 
-      <main className="mx-auto max-w-[1400px] space-y-3 px-4 py-3">
+      <main className="mx-auto w-full max-w-[1400px] flex-1 space-y-3 px-4 py-3">
         <div
           className={
             selectedKey
@@ -504,6 +505,8 @@ export default function App() {
           ) : null}
         </div>
       </main>
+
+      <SiteFooter />
     </div>
   )
 }

@@ -216,6 +216,117 @@ body {
   box-shadow: inset 0 0 0 1px var(--accent);
 }
 
+/* SF — site footer + Support donate modal */
+.site-footer__action:hover {
+  color: var(--accent);
+}
+
+.site-footer__support-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.support-icon {
+  display: block;
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  object-fit: contain;
+  transform-origin: center;
+  transition: transform 180ms ease;
+}
+
+.site-footer__support-trigger:hover .support-icon--kofi,
+.site-footer__support-trigger:focus-visible .support-icon--kofi {
+  animation: support-kofi-tilt 900ms ease-in-out infinite;
+}
+
+.site-footer__support-trigger:hover .support-icon--metamask,
+.site-footer__support-trigger:focus-visible .support-icon--metamask {
+  animation: support-fox-bob 900ms ease-in-out infinite;
+}
+
+@keyframes support-kofi-tilt {
+  0%,
+  100% {
+    transform: rotate(0deg) translateY(0);
+  }
+  40% {
+    transform: rotate(-8deg) translateY(-1px);
+  }
+  70% {
+    transform: rotate(6deg) translateY(0);
+  }
+}
+
+@keyframes support-fox-bob {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-1.5px) scale(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-footer__support-trigger:hover .support-icon--kofi,
+  .site-footer__support-trigger:focus-visible .support-icon--kofi,
+  .site-footer__support-trigger:hover .support-icon--metamask,
+  .site-footer__support-trigger:focus-visible .support-icon--metamask {
+    animation: none;
+  }
+}
+
+.support-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.support-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--fg) 42%, transparent);
+}
+
+.support-modal__dialog {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 24rem);
+  max-height: min(90vh, 36rem);
+  overflow: auto;
+  border: 1px solid;
+  border-radius: 0.75rem;
+  padding: 1rem 1rem 1.15rem;
+  box-shadow: 0 12px 36px color-mix(in srgb, var(--fg) 18%, transparent);
+}
+
+.support-modal__dialog:focus {
+  outline: none;
+}
+
+.support-modal__dialog:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.support-modal__action:hover {
+  filter: brightness(1.03);
+}
+
+.support-modal__qr {
+  display: block;
+}
+
 /* Desktop: backdrop unused; phone: dim page behind bottom drawer */
 .key-detail-backdrop {
   display: none;

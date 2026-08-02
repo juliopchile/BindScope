@@ -36,4 +36,28 @@ test('home loads, Games add seed, visualizer + legend, layout toggle', async ({ 
   await layout.selectOption('ansi-tkl')
   await expect(layout).toHaveValue('ansi-tkl')
   await expect(page.getByRole('group', { name: 'Keyboard availability map' })).toBeVisible()
+
+  const footer = page.getByRole('contentinfo')
+  const support = footer.getByRole('button', { name: 'Support' })
+  await expect(support).toBeVisible()
+  await expect(footer.getByRole('link', { name: 'Source code' })).toHaveAttribute(
+    'href',
+    'https://github.com/juliopchile/BindScope',
+  )
+  await expect(footer.getByRole('link', { name: 'Report issue' })).toHaveAttribute(
+    'href',
+    'https://github.com/juliopchile/BindScope/issues',
+  )
+
+  await support.click()
+  const dialog = page.getByRole('dialog', { name: 'Support options' })
+  await expect(dialog).toBeVisible()
+  await expect(dialog.getByRole('link', { name: 'Support on Ko-fi' })).toHaveAttribute(
+    'href',
+    'https://ko-fi.com/memristor',
+  )
+  await expect(dialog.getByRole('button', { name: 'Send with MetaMask' })).toBeVisible()
+  await expect(dialog.getByRole('button', { name: 'Manual / no MetaMask' })).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(dialog).toBeHidden()
 })
