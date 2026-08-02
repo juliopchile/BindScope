@@ -65,6 +65,8 @@ export const es: MessageCatalog = {
   layoutLabel: 'Teclado',
   layoutAnsiFull: 'Completo',
   layoutAnsiTkl: 'TKL',
+  layoutAnsi60: '60%',
+  layoutIsoFull: 'ISO completo',
   showMouseLabel: 'Mostrar ratón',
   showChordMarksLabel: 'Mostrar marcas de acordes (+)',
   chordLegendLabel: 'Acordes',

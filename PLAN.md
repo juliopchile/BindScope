@@ -10,12 +10,12 @@ into `PROJECT_ROADMAP.md`; stable design information lives in `PROJECT_STRUCTURE
 
 **Current track:** Product Depth (post–UI Refresh)
 
-**Status:** PD3 complete; authorize **PD4** next (default)
+**Status:** PD4 complete; authorize **PD5** next (default), or **PD6** if preferred
 
 **Context:** MVP (Stages 0–5) and UI Refresh (UR1–UR5) are complete. The shell is keyboard-first with
-Full/TKL layouts, mouse visualizer, collapsible chrome, i18n, and theme. Remaining work is
-**data coverage**, **deeper interaction features**, and **real-config import** — not another visual
-overhaul unless QA reopens one.
+Full / TKL / 60% / ISO Full layouts, mouse visualizer, collapsible chrome, i18n, and theme. Remaining
+work is **optional E2E**, **real-config import**, and **extra locales** — not another visual overhaul
+unless QA reopens one.
 
 **Product constraint (do not lose):** multi-profile availability
 (`available = allKeys − union(usedKeys)`). Domain stays pure (D5). Seeds stay hand-curated (D7).
@@ -43,7 +43,7 @@ explicitly parallelizes independent phases (e.g. Playwright vs catalog).
 ### Suggested order
 
 ```
-PD1 (catalog) → PD2 (modifiers UI) → PD3 (action search) → PD4 (60% / ISO layouts)
+PD1 (catalog) → PD2 (modifiers UI) → PD3 (action search) → PD4 (60% / ISO layouts) ✓
      ↘ PD5 (Playwright smoke) can run anytime after PD1 if capacity allows
 PD6 (config parsers) → then V3 / V4 from the roadmap (not detailed here until opened)
 PD7 (extra UI locales) — as needed, not blocking
@@ -148,9 +148,13 @@ modifier+key occupancy (engine already stores modifiers).
 
 **Acceptance**
 
-- [ ] User can select Full, TKL, and new variants; availability updates; preference persists.
-- [ ] Docs (`PROJECT_STRUCTURE.md`, `STYLES.md`) list shipped `LayoutId`s.
-- [ ] `make test` / `lint` / `build` pass.
+- [x] User can select Full, TKL, and new variants; availability updates; preference persists.
+- [x] Docs (`PROJECT_STRUCTURE.md`, `STYLES.md`) list shipped `LayoutId`s.
+- [x] `make test` / `lint` / `build` pass.
+
+**Done (PD4):** Shipped `ansi-60` (alpha-only compact) and `iso-full` (tall Enter, home-row
+`Backslash`, `IntlBackslash` left of Z). Selector + `bindscope.layout` unchanged in pattern; clears
+selection when the key leaves the layout. Ergo / ISO-TKL deferred.
 
 ---
 
@@ -259,8 +263,8 @@ Do not stub empty backend modules (D3 / D9).
 
 ## Immediate Next Step
 
-Authorize **Phase PD4** (60% / ISO layouts) unless the user prioritizes another phase
-(e.g. PD6 parsers or PD5 Playwright) explicitly.
+Authorize **Phase PD5** (Playwright smoke) unless the user prioritizes another phase
+(e.g. PD6 parsers) explicitly.
 
 ## Verification Commands (every implementation phase)
 

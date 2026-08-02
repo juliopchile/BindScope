@@ -52,6 +52,7 @@ const ALIAS_MAP: Record<string, KeyboardKey> = {
   RBRACKET: 'BracketRight',
   '\\': 'Backslash',
   BACKSLASH: 'Backslash',
+  INTLBACKSLASH: 'IntlBackslash',
   ';': 'Semicolon',
   SEMICOLON: 'Semicolon',
   "'": 'Quote',
@@ -189,6 +190,7 @@ const CANONICAL_CODES = new Set<string>([
   'BracketLeft',
   'BracketRight',
   'Backslash',
+  'IntlBackslash',
   'Semicolon',
   'Quote',
   'Comma',
@@ -271,6 +273,7 @@ export function formatKeyLabel(key: KeyboardKey): string {
   if (key === 'BracketLeft') return '['
   if (key === 'BracketRight') return ']'
   if (key === 'Backslash') return '\\'
+  if (key === 'IntlBackslash') return '\\'
   if (key === 'Semicolon') return ';'
   if (key === 'Quote') return "'"
   if (key === 'Comma') return ','

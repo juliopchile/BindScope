@@ -31,7 +31,9 @@ Closed-track summary: `PLAN.md`.
 - Content column / stage: `max-width: 1400px`.
 - SVG: `width: 100%` + layout `viewBox`; **no** artificial SVG max-width cap.
 - Horizontal scroll only as last resort on very narrow widths (`overflow-x-auto` wrapper).
-- Do **not** auto-switch form factor on resize. User preference wins (UR4 shipped).
+- Do **not** auto-switch form factor on resize. User preference wins (UR4 / PD4).
+
+Shipped `LayoutId`s: `ansi-full` (default), `ansi-tkl`, `ansi-60`, `iso-full`.
 
 ### Free-key tokens (UR2 shipped)
 
@@ -51,7 +53,7 @@ state (free uses legend `·` only; no on-key mark).
 | Games (search + selection + layers) | Collapsed | User opens **Games** in the header toolbar |
 | Import / export / safe-key | Collapsed | User opens **Import / Export** |
 | Locale + theme + show mouse | Collapsed | User opens **Preferences** |
-| Keyboard form factor | Visible | Header toolbar select (Full / TKL); persists `bindscope.layout` |
+| Keyboard form factor | Visible | Header toolbar select (Full / TKL / 60% / ISO Full); persists `bindscope.layout` |
 | Key/mouse detail | Collapsed | User selects a key or mouse button; Close / backdrop / re-click dismisses |
 | Legend + availability summary | Visible (slim) | Always under the device stage |
 

@@ -21,8 +21,10 @@ describe('preferences helpers', () => {
 
   it('defaults keyboard layout to ANSI Full and validates ids', () => {
     expect(DEFAULT_LAYOUT).toBe('ansi-full')
-    expect(LAYOUT_IDS).toEqual(['ansi-full', 'ansi-tkl'])
+    expect(LAYOUT_IDS).toEqual(['ansi-full', 'ansi-tkl', 'ansi-60', 'iso-full'])
     expect(isLayoutId('ansi-tkl')).toBe(true)
+    expect(isLayoutId('ansi-60')).toBe(true)
+    expect(isLayoutId('iso-full')).toBe(true)
     expect(isLayoutId('layout-60')).toBe(false)
   })
 

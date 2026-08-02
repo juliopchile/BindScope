@@ -13,11 +13,13 @@ theme (light / dark / system), and download the current free (safe) key set. Sta
 Pages is wired via Actions.
 
 **UI Refresh (UR1–UR5) complete:** keyboard-first shell, neutral free keys, collapsible chrome,
-Full/TKL selector, and mouse visualizer with first-class availability ids. See `PROJECT_ROADMAP.md`.
+Full/TKL/60%/ISO selector, and mouse visualizer with first-class availability ids. See
+`PROJECT_ROADMAP.md`.
 
-**Next:** Product Depth track (PD1–PD7) in `PLAN.md`. **PD1–PD3 complete** — **26** curated catalog
-entries; chord marks; stage action-name search. Default next: **PD4** (60%/ISO layouts). Remaining:
-layout variants, config parsers, optional E2E. QA notes: `qa.md`.
+**Next:** Product Depth track (PD1–PD7) in `PLAN.md`. **PD1–PD4 complete** — **26** curated catalog
+entries; chord marks; stage action-name search; Full / TKL / 60% / ISO Full layouts. Default next:
+**PD5** (Playwright smoke) or **PD6** (parsers) if preferred. Remaining: optional E2E, config
+parsers, extra locales. QA notes: `qa.md`.
 
 To run it, see **Getting Started** below.
 

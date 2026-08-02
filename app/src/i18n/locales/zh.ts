@@ -64,6 +64,8 @@ export const zh: MessageCatalog = {
   layoutLabel: '键盘',
   layoutAnsiFull: '全尺寸',
   layoutAnsiTkl: 'TKL',
+  layoutAnsi60: '60%',
+  layoutIsoFull: 'ISO 全尺寸',
   showMouseLabel: '显示鼠标',
   showChordMarksLabel: '显示组合键标记 (+)',
   chordLegendLabel: '组合键',

@@ -64,6 +64,8 @@ export const en = {
   layoutLabel: 'Keyboard',
   layoutAnsiFull: 'Full',
   layoutAnsiTkl: 'TKL',
+  layoutAnsi60: '60%',
+  layoutIsoFull: 'ISO Full',
   showMouseLabel: 'Show mouse',
   showChordMarksLabel: 'Show chord marks (+)',
   chordLegendLabel: 'Chords',

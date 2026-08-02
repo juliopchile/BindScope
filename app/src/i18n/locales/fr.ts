@@ -66,6 +66,8 @@ export const fr: MessageCatalog = {
   layoutLabel: 'Clavier',
   layoutAnsiFull: 'Complet',
   layoutAnsiTkl: 'TKL',
+  layoutAnsi60: '60%',
+  layoutIsoFull: 'ISO complet',
   showMouseLabel: 'Afficher la souris',
   showChordMarksLabel: 'Afficher les marques d’accords (+)',
   chordLegendLabel: 'Accords',

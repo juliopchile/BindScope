@@ -1,5 +1,6 @@
 import { LAYOUT_IDS } from '../data/keyboardLayouts'
 import { useI18n } from '../i18n/useI18n'
+import type { MessageKey } from '../i18n'
 import type { LayoutId } from '../types'
 
 interface LayoutSelectorProps {
@@ -7,8 +8,15 @@ interface LayoutSelectorProps {
   onChange: (layoutId: LayoutId) => void
 }
 
+const LAYOUT_LABEL_KEYS: Record<LayoutId, MessageKey> = {
+  'ansi-full': 'layoutAnsiFull',
+  'ansi-tkl': 'layoutAnsiTkl',
+  'ansi-60': 'layoutAnsi60',
+  'iso-full': 'layoutIsoFull',
+}
+
 const selectClass =
-  'min-h-10 min-w-[6.5rem] rounded-md border px-2 py-2 text-sm focus-visible:outline focus-visible:outline-2'
+  'min-h-10 min-w-[7.5rem] rounded-md border px-2 py-2 text-sm focus-visible:outline focus-visible:outline-2'
 
 export function LayoutSelector({ value, onChange }: LayoutSelectorProps) {
   const { t } = useI18n()
@@ -33,18 +41,10 @@ export function LayoutSelector({ value, onChange }: LayoutSelectorProps) {
       >
         {LAYOUT_IDS.map((id) => (
           <option key={id} value={id}>
-            {layoutOptionLabel(t, id)}
+            {t(LAYOUT_LABEL_KEYS[id])}
           </option>
         ))}
       </select>
     </label>
   )
-}
-
-function layoutOptionLabel(
-  t: (key: 'layoutAnsiFull' | 'layoutAnsiTkl') => string,
-  id: LayoutId,
-): string {
-  if (id === 'ansi-tkl') return t('layoutAnsiTkl')
-  return t('layoutAnsiFull')
 }
