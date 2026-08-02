@@ -1,0 +1,65 @@
+import type { CatalogEntry } from '../../../types'
+import { bind } from '../bind'
+
+export const overwatch2: CatalogEntry = {
+  game: {
+    id: 'overwatch-2',
+    name: 'Overwatch 2',
+    kind: 'game',
+    aliases: ['OW2', 'Overwatch'],
+    tags: ['hero-shooter', 'fps'],
+    profileIds: ['overwatch-2-default'],
+  },
+  profile: {
+    id: 'overwatch-2-default',
+    gameId: 'overwatch-2',
+    name: 'Default',
+    sourceType: 'official',
+    versionLabel: 'PC defaults (curated)',
+    verificationStatus: 'community',
+    layers: [
+      {
+        id: 'combat',
+        label: 'Movement & combat',
+        defaultEnabled: true,
+        bindings: [
+          bind('KeyW', 'Move Forward'),
+          bind('KeyA', 'Move Left'),
+          bind('KeyS', 'Move Back'),
+          bind('KeyD', 'Move Right'),
+          bind('Space', 'Jump'),
+          bind('ControlLeft', 'Crouch'),
+          bind('ShiftLeft', 'Ability 1'),
+          bind('KeyE', 'Ability 2'),
+          bind('KeyQ', 'Ultimate'),
+          bind('KeyR', 'Reload'),
+          bind('KeyF', 'Interact / melee'),
+          bind('KeyV', 'Melee'),
+          bind('KeyC', 'Communication menu'),
+          bind('KeyX', 'Acknowledge'),
+          bind('KeyZ', 'Hello'),
+          bind('KeyT', 'Push to talk (common)'),
+          bind('Mouse1', 'Primary fire'),
+          bind('Mouse2', 'Secondary fire / zoom'),
+          bind('Mouse3', 'Ability / ping (layout dependent)'),
+        ],
+      },
+      {
+        id: 'ui',
+        label: 'UI & social',
+        defaultEnabled: false,
+        bindings: [
+          bind('Tab', 'Scoreboard'),
+          bind('Escape', 'Menu'),
+          bind('Enter', 'Chat'),
+          bind('KeyP', 'Spray'),
+          bind('KeyH', 'Hello / voice line wheel'),
+          bind('KeyB', 'Emote'),
+          bind('KeyY', 'Group up'),
+          bind('KeyG', 'Need healing'),
+          bind('KeyI', 'Hide HUD (common remap)', 'unverified'),
+        ],
+      },
+    ],
+  },
+}

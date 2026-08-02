@@ -10,7 +10,7 @@ into `PROJECT_ROADMAP.md`; stable design information lives in `PROJECT_STRUCTURE
 
 **Current track:** Product Depth (post–UI Refresh)
 
-**Status:** Planned (design only; no implementation phase authorized yet)
+**Status:** PD1 complete; authorize **PD2** next (default)
 
 **Context:** MVP (Stages 0–5) and UI Refresh (UR1–UR5) are complete. The shell is keyboard-first with
 Full/TKL layouts, mouse visualizer, collapsible chrome, i18n, and theme. Remaining work is
@@ -53,34 +53,31 @@ Prefer **PD1 before feature polish** when capacity is limited (D7 / D9).
 
 ---
 
-### Phase PD1 — Catalog growth (~20–30 titles)
+### Phase PD1 — Catalog growth (~20–30 titles) ✅
+
+**Status:** Complete
 
 **Goal.** Grow the hand-curated seed catalog so multi-game overlays are useful for a typical library.
 
-**Must do**
+**Delivered**
 
-- Add games (and optional tools) as file-per-title modules under `app/src/data/catalog/`; register in
-  `index.ts`; keep `STARTER_POOL` sensible.
-- Every binding keeps a `verification` state; prefer official menus / exported configs / community-
-  verified sources — no wiki auto-scrape (D7).
-- Layered profiles (`defaultEnabled` vs opt-in) consistent with existing seeds.
-- Include deliberate cross-title conflicts so overlays stay demonstrable.
-- Catalog invariant tests (unique ids, key normalization, layer structure) stay green.
-- Optional: a few more mouse binds where the title clearly uses them (CS2 already demos mouse).
-
-**Out of scope**
-
-- Parsers, Steam APIs, translating action names, new shell chrome.
+- Catalog grown to **26** curated entries (**22 games + 4 tools**) under `app/src/data/catalog/`.
+- New games: Overwatch 2, Destiny 2, Minecraft, Fortnite, Dota 2, Rocket League, Path of Exile,
+  Escape from Tarkov, Dead by Daylight, Baldur's Gate 3, Elden Ring, Final Fantasy XIV, Rust,
+  Diablo IV.
+- New tools: Discord, ShareX (alongside OBS Studio, MSI Afterburner).
+- Layered profiles with verification on every binding; deliberate cross-title conflicts (MOBA QWER,
+  MMO hotbars, FPS WASD/voice, Discord PTT remaps).
+- `STARTER_POOL` expanded with CS2, Minecraft, VALORANT.
+- Catalog invariant tests extended (unique ids, key normalization, layer structure, band size);
+  `NumLock` added to key normalization for existing WoW/FFXIV seeds.
+- Mouse binds on several FPS/ARPG titles beyond CS2.
 
 **Acceptance**
 
-- [ ] Catalog reaches roughly **20–30** curated entries (games + tools), or an agreed interim milestone
-      documented in the roadmap if split across commits.
-- [ ] `make test` / `lint` / `build` pass; search finds new titles; layers flatten correctly.
-- [ ] `PROJECT_ROADMAP.md` notes new count; no silent drop in verification discipline.
-
-**Likely touch points:** `data/catalog/games/*`, `tools/*`, `index.ts`, catalog tests, maybe README
-catalog blurb.
+- [x] Catalog reaches roughly **20–30** curated entries (games + tools).
+- [x] `make test` / `lint` / `build` pass; search finds new titles; layers flatten correctly.
+- [x] `PROJECT_ROADMAP.md` notes new count; verification discipline maintained.
 
 ---
 
@@ -263,8 +260,8 @@ Do not stub empty backend modules (D3 / D9).
 
 ## Immediate Next Step
 
-Authorize **Phase PD1** (catalog growth) unless the user prioritizes another phase (e.g. PD6 parsers
-or PD5 Playwright) explicitly.
+Authorize **Phase PD2** (modifier combinations in the UI) unless the user prioritizes another phase
+(e.g. PD6 parsers or PD5 Playwright) explicitly.
 
 ## Verification Commands (every implementation phase)
 

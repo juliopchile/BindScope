@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest'
 import {
   CATALOG_ENTRIES,
   defaultEnabledLayerIds,
+  GAMES_BY_ID,
   pickRandomStarter,
+  SEED_PROFILES_BY_GAME_ID,
   STARTER_POOL,
   toInputProfile,
 } from '../src/data/catalog'
@@ -11,18 +13,45 @@ import {
   isStateVisible,
   profilesForSelection,
 } from '../src/lib/selection'
+import { normalizeKey } from '../src/utils/keyNormalization'
 import { makeProfile } from './fixtures'
 
 describe('catalog seeds', () => {
   it('exposes layered profiles with verification on every binding', () => {
-    expect(CATALOG_ENTRIES.length).toBeGreaterThan(0)
+    expect(CATALOG_ENTRIES.length).toBeGreaterThanOrEqual(20)
+    expect(CATALOG_ENTRIES.length).toBeLessThanOrEqual(30)
     for (const entry of CATALOG_ENTRIES) {
       expect(entry.game.profileIds).toContain(entry.profile.id)
+      expect(entry.profile.gameId).toBe(entry.game.id)
       expect(entry.profile.layers.length).toBeGreaterThan(0)
+      expect(entry.profile.layers.some((layer) => layer.defaultEnabled)).toBe(true)
       for (const layer of entry.profile.layers) {
+        expect(layer.id.length).toBeGreaterThan(0)
         expect(layer.bindings.length).toBeGreaterThan(0)
         for (const binding of layer.bindings) {
           expect(binding.verification).toBeTruthy()
+        }
+      }
+    }
+  })
+
+  it('keeps unique game and profile ids with matching lookup maps', () => {
+    const gameIds = CATALOG_ENTRIES.map((e) => e.game.id)
+    const profileIds = CATALOG_ENTRIES.map((e) => e.profile.id)
+    expect(new Set(gameIds).size).toBe(gameIds.length)
+    expect(new Set(profileIds).size).toBe(profileIds.length)
+    for (const entry of CATALOG_ENTRIES) {
+      expect(GAMES_BY_ID[entry.game.id]).toBe(entry.game)
+      expect(SEED_PROFILES_BY_GAME_ID[entry.game.id]).toBe(entry.profile)
+    }
+  })
+
+  it('uses already-normalized key identifiers on every binding', () => {
+    for (const entry of CATALOG_ENTRIES) {
+      for (const layer of entry.profile.layers) {
+        for (const binding of layer.bindings) {
+          const normalized = normalizeKey(binding.key)
+          expect(normalized, `${entry.game.id}:${binding.key}`).toBe(binding.key)
         }
       }
     }
@@ -37,10 +66,20 @@ describe('catalog seeds', () => {
       'world-of-warcraft',
       'obs-studio',
       'msi-afterburner',
+      'discord',
+      'minecraft',
+      'dota-2',
     ]) {
       expect(ids.has(id)).toBe(true)
     }
     expect(CATALOG_ENTRIES.some((e) => e.game.kind === 'tool')).toBe(true)
+    expect(CATALOG_ENTRIES.filter((e) => e.game.kind === 'tool').length).toBeGreaterThanOrEqual(4)
+  })
+
+  it('keeps STARTER_POOL ids inside the catalog', () => {
+    for (const id of STARTER_POOL) {
+      expect(GAMES_BY_ID[id]).toBeTruthy()
+    }
   })
 })
 

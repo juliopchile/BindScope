@@ -80,6 +80,7 @@ const ALIAS_MAP: Record<string, KeyboardKey> = {
   RWIN: 'MetaRight',
   PRINTSCREEN: 'PrintScreen',
   PRTSC: 'PrintScreen',
+  NUMLOCK: 'NumLock',
   NUMPAD0: 'Numpad0',
   NUMPAD1: 'Numpad1',
   NUMPAD2: 'Numpad2',
@@ -194,6 +195,7 @@ const CANONICAL_CODES = new Set<string>([
   'Period',
   'Slash',
   'PrintScreen',
+  'NumLock',
   'Numpad0',
   'Numpad1',
   'Numpad2',
@@ -281,6 +283,7 @@ export function formatKeyLabel(key: KeyboardKey): string {
   if (key === 'CapsLock') return 'Caps'
   if (key === 'Escape') return 'Esc'
   if (key === 'PrintScreen') return 'PrtSc'
+  if (key === 'NumLock') return 'NumLk'
   if (key === 'Mouse1') return 'M1'
   if (key === 'Mouse2') return 'M2'
   if (key === 'Mouse3') return 'M3'

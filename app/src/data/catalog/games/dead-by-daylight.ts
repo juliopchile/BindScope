@@ -1,0 +1,75 @@
+import type { CatalogEntry } from '../../../types'
+import { bind } from '../bind'
+
+export const deadByDaylight: CatalogEntry = {
+  game: {
+    id: 'dead-by-daylight',
+    name: 'Dead by Daylight',
+    kind: 'game',
+    aliases: ['DbD'],
+    tags: ['asymmetrical', 'horror'],
+    profileIds: ['dead-by-daylight-default'],
+  },
+  profile: {
+    id: 'dead-by-daylight-default',
+    gameId: 'dead-by-daylight',
+    name: 'Default',
+    sourceType: 'official',
+    versionLabel: 'PC defaults (curated)',
+    verificationStatus: 'community',
+    layers: [
+      {
+        id: 'survivor',
+        label: 'Survivor actions',
+        defaultEnabled: true,
+        bindings: [
+          bind('KeyW', 'Move Forward'),
+          bind('KeyA', 'Move Left'),
+          bind('KeyS', 'Move Back'),
+          bind('KeyD', 'Move Right'),
+          bind('Space', 'Run / vault'),
+          bind('ControlLeft', 'Crouch'),
+          bind('KeyE', 'Interact / repair / heal'),
+          bind('KeyR', 'Drop item / drop pallet context'),
+          bind('KeyF', 'Use item'),
+          bind('KeyC', 'Crouch (toggle)'),
+          bind('ShiftLeft', 'Run (hold layouts)', 'community'),
+          bind('Mouse1', 'Attack (killer) / interact alt'),
+          bind('Mouse2', 'Secondary ability / aim item'),
+        ],
+      },
+      {
+        id: 'killer',
+        label: 'Killer abilities',
+        defaultEnabled: true,
+        bindings: [
+          bind('KeyQ', 'Power / ability'),
+          bind('KeyW', 'Move Forward'),
+          bind('KeyA', 'Move Left'),
+          bind('KeyS', 'Move Back'),
+          bind('KeyD', 'Move Right'),
+          bind('Space', 'Attack lunge / vault'),
+          bind('ControlLeft', 'Crouch / stalk (power dependent)'),
+          bind('KeyR', 'Break / damage gen'),
+          bind('KeyE', 'Pick up / hook'),
+          bind('Mouse1', 'Attack'),
+          bind('Mouse2', 'Secondary attack / power'),
+        ],
+      },
+      {
+        id: 'ui',
+        label: 'UI & social',
+        defaultEnabled: false,
+        bindings: [
+          bind('Tab', 'Scoreboard / status'),
+          bind('Escape', 'Menu'),
+          bind('Enter', 'Chat (lobby)'),
+          bind('KeyT', 'Push to talk (common)'),
+          bind('KeyM', 'Mute'),
+          bind('KeyP', 'Ping / point'),
+          bind('KeyI', 'Emote / gesture', 'unverified'),
+        ],
+      },
+    ],
+  },
+}

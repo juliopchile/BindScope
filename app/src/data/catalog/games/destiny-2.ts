@@ -1,0 +1,68 @@
+import type { CatalogEntry } from '../../../types'
+import { bind } from '../bind'
+
+export const destiny2: CatalogEntry = {
+  game: {
+    id: 'destiny-2',
+    name: 'Destiny 2',
+    kind: 'game',
+    aliases: ['D2', 'Destiny'],
+    tags: ['looter-shooter', 'fps'],
+    profileIds: ['destiny-2-default'],
+  },
+  profile: {
+    id: 'destiny-2-default',
+    gameId: 'destiny-2',
+    name: 'Default',
+    sourceType: 'official',
+    versionLabel: 'PC defaults (curated)',
+    verificationStatus: 'community',
+    layers: [
+      {
+        id: 'combat',
+        label: 'Movement & combat',
+        defaultEnabled: true,
+        bindings: [
+          bind('KeyW', 'Move Forward'),
+          bind('KeyA', 'Move Left'),
+          bind('KeyS', 'Move Back'),
+          bind('KeyD', 'Move Right'),
+          bind('Space', 'Jump'),
+          bind('ControlLeft', 'Crouch'),
+          bind('ShiftLeft', 'Sprint'),
+          bind('KeyR', 'Reload / stow'),
+          bind('KeyE', 'Interact / revive'),
+          bind('KeyF', 'Melee'),
+          bind('KeyQ', 'Grenade'),
+          bind('KeyC', 'Class ability'),
+          bind('KeyV', 'Super'),
+          bind('KeyG', 'Air move / charged melee context'),
+          bind('Digit1', 'Kinetic weapon'),
+          bind('Digit2', 'Energy weapon'),
+          bind('Digit3', 'Power weapon'),
+          bind('KeyX', 'Switch weapon'),
+          bind('Mouse1', 'Fire'),
+          bind('Mouse2', 'Aim / zoom'),
+          bind('Mouse3', 'Finisher / heavy attack'),
+        ],
+      },
+      {
+        id: 'menus',
+        label: 'Menus & map',
+        defaultEnabled: false,
+        bindings: [
+          bind('Tab', 'Director / inventory'),
+          bind('KeyI', 'Inventory'),
+          bind('KeyM', 'Map / director'),
+          bind('KeyO', 'Emote / ghost'),
+          bind('KeyB', 'Emote wheel'),
+          bind('Escape', 'Menu'),
+          bind('Enter', 'Chat'),
+          bind('KeyT', 'Push to talk (common)'),
+          bind('KeyP', 'Emote page'),
+          bind('KeyL', 'Toggle flashlight / ghost light'),
+        ],
+      },
+    ],
+  },
+}

@@ -74,7 +74,8 @@ Delivered:
 - `app/src/data/catalog/` — one module per game/tool, aggregated in `index.ts` with editable
   `STARTER_POOL`
 - Layered seed profiles (`BindingLayer`: default-on vs opt-in); flattened for the pure engine
-- Games plus tool profiles (`kind: 'tool'`) for OBS Studio and MSI Afterburner (Yours layer)
+- Games plus tool profiles (`kind: 'tool'`) for OBS Studio and MSI Afterburner (Yours layer);
+  PD1 later expands tools to Discord and ShareX as well
 - Game search, selected chips, layer toggles, interactive legend filters on the keyboard
 - Random first-load pick from the starter pool; empty-selection guidance when cleared
 - Tests for search, selection/flattening, and catalog invariants (`make test` 40 passing)
@@ -109,12 +110,12 @@ Delivered:
 
 ## In Progress
 
-**Product Depth track (post–UI Refresh)** — planned in `PLAN.md` (phases PD1–PD7). No phase is
-authorized for implementation until the user green-lights one (default next: **PD1** catalog growth).
+**Product Depth track (post–UI Refresh)** — active in `PLAN.md` (phases PD1–PD7). **PD1 complete.**
+Default next authorization: **PD2** (modifier combinations UI).
 
 | Phase | Status | Summary |
 |---|---|---|
-| PD1. Catalog growth (~20–30 titles) | Planned | Hand-curated seeds; verification states; catalog tests |
+| PD1. Catalog growth (~20–30 titles) | **Complete** | **26** curated entries (22 games + 4 tools); verification + invariant tests |
 | PD2. Modifier combinations UI | Planned | Surface chords already in the model (V2 slice) |
 | PD3. Action-name search | Planned | Find bindings by action text; focus key/mouse |
 | PD4. Layout variants 60% / ISO | Planned | Extend form-factor selector beyond Full/TKL |
@@ -155,11 +156,20 @@ editing, no gamepad/HOTAS.
 | UR4. Keyboard form-factor selector | Complete | ANSI Full + TKL registry; toolbar selector; persisted preference |
 | UR5. Mouse visualizer | Complete | Mouse SVG + first-class availability ids; show/hide pref; CS2 demo binds |
 
+### Product Depth — PD1 (complete)
+
+Grew the hand-curated seed catalog from 10 → **26** entries (22 games + 4 tools) under
+`app/src/data/catalog/`. Every binding keeps a verification state; layers stay default-on vs opt-in;
+invariant tests cover unique ids, key normalization (including `NumLock`), and catalog size band.
+`STARTER_POOL` includes CS2, Minecraft, and VALORANT alongside the original MMO/MOBA set. Deliberate
+cross-title conflicts (MOBA abilities, MMO hotbars, FPS WASD/voice, Discord PTT) keep overlays
+demonstrable. No parsers or wiki scrape.
+
 ## Pending Work
 
 Detailed acceptance criteria and order live in `PLAN.md` (Product Depth PD1–PD7). Summary:
 
-- **PD1** — Grow the hand-curated catalog toward ~20–30 titles (layout/registry already extensible)
+- **PD1** — ~~Grow the hand-curated catalog toward ~20–30 titles~~ **Done (26 entries)**
 - **PD2** — Modifier combinations in the UI (V2)
 - **PD3** — Action-name search (V2)
 - **PD4** — Remaining layout variants: 60%, ISO (V2)
@@ -193,7 +203,7 @@ Known risks that become debt if neglected:
 | Phase | Scope |
 |---|---|
 | UI Refresh (UR1–UR5) | **Complete** — keyboard-first shell, free-key retoken, collapsible chrome, Full/TKL selector, mouse visualizer |
-| Product Depth (PD1–PD7) | **Active plan** in `PLAN.md` — catalog, V2 UI slices, Playwright, config parsers, extra locales |
+| Product Depth (PD1–PD7) | **Active plan** in `PLAN.md` — PD1 done (26 seeds); next PD2+ |
 | V2 (via PD2–PD4, PD7) | Modifier combinations, action-name search, 60%/ISO layouts, more UI locales |
 | V3 | Steam sync, cloud profiles (adapter — D3), game detection; real-config import starts as **PD6** |
 | V4 | Recommendations: *"the best push-to-talk key for your library"* |

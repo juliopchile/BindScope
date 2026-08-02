@@ -21,6 +21,8 @@ describe('key normalization', () => {
     ['Digit1', 'Digit1'],
     ['PrtSc', 'PrintScreen'],
     ['numpad5', 'Numpad5'],
+    ['NumLock', 'NumLock'],
+    ['numlock', 'NumLock'],
     ['Mouse1', 'Mouse1'],
     ['MOUSE1', 'Mouse1'],
     ['lmb', 'Mouse1'],
