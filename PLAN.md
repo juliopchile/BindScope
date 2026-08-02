@@ -10,13 +10,13 @@ into `PROJECT_ROADMAP.md`; stable design information lives in `PROJECT_STRUCTURE
 
 **Current track:** Product Depth (post–UI Refresh)
 
-**Status:** PD6 complete; authorize **PD7** (extra locales) or open **V3** next
+**Status:** Product Depth **complete** (PD1–PD7). Next: open **V3** when authorized.
 
 **Context:** MVP (Stages 0–5) and UI Refresh (UR1–UR5) are complete. The shell is keyboard-first with
-Full / TKL / 60% / ISO Full layouts, mouse visualizer, collapsible chrome, i18n, and theme. Client-side
-CFG / INI / XML import lands via PD6. Remaining Product Depth: **extra locales** (PD7) — not another
-visual overhaul unless QA reopens one. Playwright smoke lands via `make e2e` (optional CI workflow
-does not gate Pages).
+Full / TKL / 60% / ISO Full layouts, mouse visualizer, collapsible chrome, i18n
+(en/es/pt/fr/zh/de/ja), and theme. Client-side CFG / INI / XML import lands via PD6; PD7 adds German
+and Japanese chrome locales. Playwright smoke lands via `make e2e` (optional CI workflow does not
+gate Pages).
 
 **Product constraint (do not lose):** multi-profile availability
 (`available = allKeys − union(usedKeys)`). Domain stays pure (D5). Seeds stay hand-curated (D7).
@@ -46,7 +46,7 @@ explicitly parallelizes independent phases (e.g. Playwright vs catalog).
 ```
 PD1 (catalog) → PD2 (modifiers UI) → PD3 (action search) → PD4 (60% / ISO layouts) → PD5 (Playwright) ✓
 PD6 (config parsers) ✓ → then V3 / V4 from the roadmap (not detailed here until opened)
-PD7 (extra UI locales) — as needed, not blocking
+PD7 (extra UI locales) ✓
 ```
 
 Prefer **PD1 before feature polish** when capacity is limited (D7 / D9).
@@ -203,22 +203,24 @@ selection when the key leaves the layout. Ergo / ISO-TKL deferred.
 
 ---
 
-### Phase PD7 — Further UI locales (as needed)
+### Phase PD7 — Further UI locales ✅
+
+**Status:** Complete
 
 **Goal.** Add chrome locales beyond en/es/pt/fr/zh when product demand exists.
 
-**Must do**
+**Delivered**
 
-- New catalog file under `app/src/i18n/locales/`; register in i18n index; parity with English keys.
-- Locale switcher lists the new language; `document.documentElement.lang` updates.
-
-**Out of scope**
-
-- Translating seed action names (unless a per-profile catalog is explicitly added).
+- German (`de`) and Japanese (`ja`) catalogs under `app/src/i18n/locales/`; registered in i18n index
+  with native switcher labels (Deutsch / 日本語).
+- Key parity vs `en` enforced by extended `tests/i18n.test.ts`; prefs / boot already route through
+  `isLocale` so `bindscope.locale` and `document.documentElement.lang` accept the new codes.
+- Seed binding action names remain untranslated (D10).
 
 **Acceptance**
 
-- [ ] Key parity tests (or checklist) vs `en`; switcher works; prefs persist.
+- [x] Key parity tests vs `en`; switcher lists de/ja; prefs persist.
+- [x] `make test` / `lint` / `build` pass.
 
 ---
 
@@ -248,7 +250,7 @@ Do not stub empty backend modules (D3 / D9).
 
 | File | Role |
 |---|---|
-| `PLAN.md` | This file — active Product Depth phases PD1–PD7 |
+| `PLAN.md` | This file — Product Depth PD1–PD7 complete; clear or replace when V3 opens |
 | `PROJECT_ROADMAP.md` | Condensed status; V3/V4 remain high-level until opened |
 | `PROJECT_STRUCTURE.md` | Update when parsers / layouts / catalog conventions change |
 | `DECISIONS.md` | D1–D13 still govern; add entries only if a phase forces a new constraint |
@@ -258,8 +260,8 @@ Do not stub empty backend modules (D3 / D9).
 
 ## Immediate Next Step
 
-Authorize **Phase PD7** (extra UI locales) if needed, or open **V3** (Steam sync / cloud adapter /
-game detection) — PD6 config import is done.
+Product Depth (PD1–PD7) is complete. Open **V3** (Steam sync / cloud adapter / game detection) only
+when authorized — do not stub backend modules (D3 / D9).
 
 ## Verification Commands (every implementation phase)
 

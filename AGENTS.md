@@ -6,16 +6,16 @@ This file is written for AI coding agents working in BindScope. It should help a
 
 **Stage 5 (MVP) is complete.** `app/` is a Vite + React + TypeScript app with a pure availability
 engine, data-driven SVG keyboard + mouse, game/tool search, layered seed catalog, JSON custom-profile
-import/export, locale catalogs under `app/src/i18n/` (en/es/pt/fr/zh), light/dark/system theme via
-`html[data-theme]`, and GitHub Pages deploy from `.github/workflows/deploy-pages.yml`. Visual tokens
-live in `STYLES.md`.
+import/export, locale catalogs under `app/src/i18n/` (en/es/pt/fr/zh/de/ja), light/dark/system theme
+via `html[data-theme]`, and GitHub Pages deploy from `.github/workflows/deploy-pages.yml`. Visual
+tokens live in `STYLES.md`.
 
-**Active work:** Product Depth track (PD1–PD7) in `PLAN.md`. **PD1–PD6 complete** — seed catalog has
-**26** curated entries (22 games + 4 tools); modifier chords in the UI; stage **action-name search**;
-form factors **Full / TKL / 60% / ISO Full**; Playwright smoke via `make e2e`; client-side **CFG /
-INI / XML** config import (plus JSON). Next default: authorize **PD7** (extra locales) or open **V3**.
-UI Refresh (UR1–UR5) is complete. Do not start a PD phase until the user authorizes it. Requirements
-archive: `qa.md`; competitive brief: `docs/keybindr-analysis.md` (D13).
+**Product Depth (PD1–PD7) is complete** — seed catalog has **26** curated entries (22 games + 4
+tools); modifier chords; stage **action-name search**; form factors **Full / TKL / 60% / ISO Full**;
+Playwright smoke via `make e2e`; client-side **CFG / INI / XML** config import; UI locales include
+**German** and **Japanese**. UI Refresh (UR1–UR5) is complete. Next default: open **V3** when
+authorized. Do not start a roadmap phase until the user authorizes it. Requirements archive: `qa.md`;
+competitive brief: `docs/keybindr-analysis.md` (D13).
 
 Use `make install`, `make run`, `make test`, `make lint`, `make build`, and `make e2e` from the repo
 root. Do not invent commands; prefer the Makefile.
@@ -98,5 +98,5 @@ points there as they appear.
 | `STYLES.md` | Visual design tokens, key-state cues, breakpoints, component rules | Exists |
 | `qa.md` | Post-MVP UI QA notes (UI Refresh requirements) | Exists |
 | `docs/keybindr-analysis.md` | UR1 competitive brief (Keybindr IA adopt/reject) | Exists |
-| `PLAN.md` | Active Product Depth phases PD1–PD7 | Active plan |
+| `PLAN.md` | Product Depth PD1–PD7 complete; next = V3 when authorized | Track closed |
 | `CONTRIBUTING.md` | Binding-data submission workflow | Create only if community contributions open |

@@ -15,7 +15,7 @@ const EN_KEYS = Object.keys(en) as MessageKey[]
 
 describe('i18n catalogs', () => {
   it('lists the expected locales', () => {
-    expect(LOCALES).toEqual(['en', 'es', 'pt', 'fr', 'zh'])
+    expect(LOCALES).toEqual(['en', 'es', 'pt', 'fr', 'zh', 'de', 'ja'])
     expect(DEFAULT_LOCALE).toBe('en')
   })
 
@@ -35,11 +35,17 @@ describe('i18n catalogs', () => {
       'Imported 2 profile(s).',
     )
     expect(translate('en', 'importSuccess', { count: 1 })).toBe('Imported 1 profile(s).')
+    expect(translate('de', 'importSuccess', { count: 2 })).toBe('2 Profil(e) importiert.')
+    expect(translate('ja', 'gamesSelectedCount', { count: 3 })).toBe('3 件選択')
   })
 
   it('validates locale codes', () => {
     expect(isLocale('es')).toBe(true)
-    expect(isLocale('de')).toBe(false)
+    expect(isLocale('de')).toBe(true)
+    expect(isLocale('ja')).toBe(true)
+    expect(isLocale('ko')).toBe(false)
     expect(getCatalog('zh')).toBe(catalogs.zh)
+    expect(getCatalog('de')).toBe(catalogs.de)
+    expect(getCatalog('ja')).toBe(catalogs.ja)
   })
 })

@@ -101,17 +101,22 @@ Delivered:
 
 - `.github/workflows/deploy-pages.yml` — build `app/` with `VITE_BASE_PATH=/BindScope/`, publish
   `app/dist` to GitHub Pages
-- Light custom i18n under `app/src/i18n/` — catalogs `en`, `es`, `pt`, `fr`, `zh`; switcher +
-  `document.documentElement.lang`; preferences in `localStorage` (chrome only)
+- Light custom i18n under `app/src/i18n/` — catalogs `en`, `es`, `pt`, `fr`, `zh`, `de`, `ja`;
+  switcher + `document.documentElement.lang`; preferences in `localStorage` (chrome only)
 - Theme light / dark / system via `html[data-theme]` on existing CSS tokens; boot script avoids flash
 - Header preference controls; touch-target and aria polish on the existing shell
 - Catalog key-parity tests; `make test` 52 passing; production JS ~91 kB gzip
 - Playwright E2E deferred (optional; not required for stage close)
 
-## In Progress
+## Post-MVP Tracks
 
-**Product Depth track (post–UI Refresh)** — active in `PLAN.md` (phases PD1–PD7). **PD1–PD6 complete.**
-Default next authorization: **PD7** (extra locales) if needed, or open **V3**.
+**Next authorization:** open **V3** (Steam sync / cloud adapter / game detection). No active
+implementation track until authorized.
+
+### Product Depth track (complete)
+
+Phases PD1–PD7 delivered (see condensed notes below). Catalog, chords, action search, layouts,
+Playwright, config parsers, and de/ja chrome locales.
 
 | Phase | Status | Summary |
 |---|---|---|
@@ -121,7 +126,7 @@ Default next authorization: **PD7** (extra locales) if needed, or open **V3**.
 | PD4. Layout variants 60% / ISO | **Complete** | `ansi-60` + `iso-full`; selector + persist; no viewport auto-switch |
 | PD5. Playwright smoke | **Complete** | `make e2e` + Chromium smoke; optional CI does not gate Pages |
 | PD6. Config parsers (INI / CFG / XML) | **Complete** | Client-side CFG/INI/XML (+ JSON) → imported InputProfile; samples + tests |
-| PD7. Further UI locales | Planned | As needed; chrome only |
+| PD7. Further UI locales | **Complete** | German (`de`) + Japanese (`ja`) chrome catalogs; key parity vs `en` |
 
 ### UI Refresh track (complete)
 
@@ -205,9 +210,16 @@ auto-detects by extension/content alongside existing JSON. CFG/INI/XML become a 
 skipped like JSON import. Samples in `app/tests/fixtures/` + `docs/samples/`. No upload, no wiki
 scrape.
 
+### Product Depth — PD7 (complete)
+
+Chrome locales **German (`de`)** and **Japanese (`ja`)** added beside en/es/pt/fr/zh. Catalogs under
+`app/src/i18n/locales/`; switcher labels Deutsch / 日本語; `isLocale` / prefs / boot accept the new
+codes so `bindscope.locale` and `document.documentElement.lang` update. Key-parity tests vs `en`.
+Seed action names stay untranslated (D10). Product Depth track closed.
+
 ## Pending Work
 
-Detailed acceptance criteria and order live in `PLAN.md` (Product Depth PD1–PD7). Summary:
+Product Depth (PD1–PD7) is complete. Summary:
 
 - **PD1** — ~~Grow the hand-curated catalog toward ~20–30 titles~~ **Done (26 entries)**
 - **PD2** — ~~Modifier combinations in the UI (V2)~~ **Done**
@@ -215,7 +227,7 @@ Detailed acceptance criteria and order live in `PLAN.md` (Product Depth PD1–PD
 - **PD4** — ~~Remaining layout variants: 60%, ISO (V2)~~ **Done**
 - **PD5** — ~~Optional Playwright smoke / broader E2E~~ **Done**
 - **PD6** — ~~Parsers for real config formats (INI, CFG, XML)~~ **Done**
-- **PD7** — Further UI locales beyond en/es/pt/fr/zh if needed
+- **PD7** — ~~Further UI locales (de, ja)~~ **Done**
 - **V3 / V4** — Steam sync, cloud profiles, game detection, recommendations (roadmap only until opened)
 
 ## Technical Debt
@@ -243,8 +255,8 @@ Known risks that become debt if neglected:
 | Phase | Scope |
 |---|---|
 | UI Refresh (UR1–UR5) | **Complete** — keyboard-first shell, free-key retoken, collapsible chrome, Full/TKL selector, mouse visualizer |
-| Product Depth (PD1–PD7) | **Active plan** in `PLAN.md` — PD1–PD6 done; next PD7 or V3 |
-| V2 (via PD2–PD4, PD7) | ~~Modifier combinations~~, ~~action-name search~~, ~~60%/ISO layouts~~, more UI locales |
+| Product Depth (PD1–PD7) | **Complete** — catalog, chords, action search, layouts, Playwright, parsers, de/ja locales |
+| V2 (via PD2–PD4, PD7) | ~~Modifier combinations~~, ~~action-name search~~, ~~60%/ISO layouts~~, ~~more UI locales~~ |
 | V3 | Steam sync, cloud profiles (adapter — D3), game detection (real-config import done as **PD6**) |
 | V4 | Recommendations: *"the best push-to-talk key for your library"* |
 

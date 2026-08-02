@@ -38,6 +38,8 @@ describe('preferences helpers', () => {
 
   it('shares locale validation with i18n', () => {
     expect(isLocale('fr')).toBe(true)
+    expect(isLocale('de')).toBe(true)
+    expect(isLocale('ja')).toBe(true)
     expect(isLocale('')).toBe(false)
   })
 })

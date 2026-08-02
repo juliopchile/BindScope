@@ -46,7 +46,7 @@ BindScope/
 │   │   ├── styles/             # Theme tokens (light / dark / system)
 │   │   ├── components/         # ChromeToolbar, ActionSearch, keyboard, mouse, detail, prefs, IO
 │   │   ├── lib/                # Selection, action search, chords, import/export, config parsers, theme prefs
-│   │   └── i18n/               # Locale catalogs + provider (en/es/pt/fr/zh)
+│   │   └── i18n/               # Locale catalogs + provider (en/es/pt/fr/zh/de/ja)
 │   ├── public/                 # Static assets
 │   ├── tests/                  # Unit tests
 │   └── dist/                   # Production build output (git-ignored)
@@ -107,7 +107,7 @@ Paths are relative to `app/src/`.
 | UI | React 19 | In use |
 | Build | Vite, static output to `app/dist` | In use |
 | Styling | Tailwind CSS v4 plus CSS custom properties for themes | In use (light/dark/system) |
-| i18n | Light custom catalogs under `app/src/i18n/` (no heavy framework) | In use (en/es/pt/fr/zh) |
+| i18n | Light custom catalogs under `app/src/i18n/` (no heavy framework) | In use (en/es/pt/fr/zh/de/ja) |
 | Keyboard | SVG (every key is an interactive element) | In use (ANSI full) |
 | Validation | Zod | In use (availability + import) |
 | Unit tests | Vitest | In use |
@@ -238,9 +238,9 @@ at any time; the choice persists locally. Key-state colors are theme tokens; eve
 a non-color cue (text, pattern, or icon).
 
 **Localization (i18n):** all UI chrome strings come from locale catalogs and are switchable at
-runtime (see D10). English is the source locale. Domain identifiers and the availability engine are
-locale-agnostic. Curated binding action names stay in their source language unless a translated
-profile catalog exists.
+runtime (see D10). English is the source locale; shipped catalogs: en, es, pt, fr, zh, de, ja.
+Domain identifiers and the availability engine are locale-agnostic. Curated binding action names stay
+in their source language unless a translated profile catalog exists.
 
 **Responsive layout:** the app must be usable on phone, tablet, and desktop (see D12).
 

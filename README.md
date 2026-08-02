@@ -9,17 +9,17 @@ interactive keyboard and mouse, and instantly see **which keys are still free** 
 
 **Stage 5 complete — Deployment and polish (MVP).** Search and select curated games and tools, toggle
 binding layers, import/export profiles (JSON, Source CFG, INI, BindScope XML), switch UI language
-(en / es / pt / fr / zh) and theme (light / dark / system), and download the current free (safe) key
-set. Static deploy to GitHub Pages is wired via Actions.
+(en / es / pt / fr / zh / de / ja) and theme (light / dark / system), and download the current free
+(safe) key set. Static deploy to GitHub Pages is wired via Actions.
 
 **UI Refresh (UR1–UR5) complete:** keyboard-first shell, neutral free keys, collapsible chrome,
 Full/TKL/60%/ISO selector, and mouse visualizer with first-class availability ids. See
 `PROJECT_ROADMAP.md`.
 
-**Next:** Product Depth track (PD1–PD7) in `PLAN.md`. **PD1–PD6 complete** — **26** curated catalog
-entries; chord marks; stage action-name search; Full / TKL / 60% / ISO Full layouts; Playwright smoke
-(`make e2e`); client-side config parsers. Default next: authorize **PD7** (extra locales) or open
-**V3**. QA notes: `qa.md`.
+**Product Depth (PD1–PD7) complete** — **26** curated catalog entries; chord marks; stage action-name
+search; Full / TKL / 60% / ISO Full layouts; Playwright smoke (`make e2e`); client-side config
+parsers; German and Japanese UI locales. Default next: open **V3** when authorized. QA notes:
+`qa.md`.
 
 To run it, see **Getting Started** below.
 

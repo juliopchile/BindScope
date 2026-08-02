@@ -1,13 +1,15 @@
+import { de } from './locales/de'
 import { en, type MessageCatalog, type MessageKey } from './locales/en'
 import { es } from './locales/es'
 import { fr } from './locales/fr'
+import { ja } from './locales/ja'
 import { pt } from './locales/pt'
 import { zh } from './locales/zh'
 
 export type { MessageCatalog, MessageKey }
-export type Locale = 'en' | 'es' | 'pt' | 'fr' | 'zh'
+export type Locale = 'en' | 'es' | 'pt' | 'fr' | 'zh' | 'de' | 'ja'
 
-export const LOCALES: readonly Locale[] = ['en', 'es', 'pt', 'fr', 'zh']
+export const LOCALES: readonly Locale[] = ['en', 'es', 'pt', 'fr', 'zh', 'de', 'ja']
 
 /** Native labels for the language switcher (not translated). */
 export const LOCALE_LABELS: Record<Locale, string> = {
@@ -16,6 +18,8 @@ export const LOCALE_LABELS: Record<Locale, string> = {
   pt: 'Português',
   fr: 'Français',
   zh: '中文',
+  de: 'Deutsch',
+  ja: '日本語',
 }
 
 export const catalogs: Record<Locale, MessageCatalog> = {
@@ -24,6 +28,8 @@ export const catalogs: Record<Locale, MessageCatalog> = {
   pt,
   fr,
   zh,
+  de,
+  ja,
 }
 
 export const DEFAULT_LOCALE: Locale = 'en'
