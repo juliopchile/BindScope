@@ -72,4 +72,11 @@ export const zh: MessageCatalog = {
   chordDetailBadge: '含组合键',
   detailBareHeading: '单键',
   detailChordHeading: '修饰键组合',
+  actionSearchPlaceholder: '查找操作…',
+  actionSearchAriaLabel: '按操作名称搜索绑定',
+  actionSearchScopeAriaLabel: '操作搜索范围',
+  actionSearchScopeSelected: '已选',
+  actionSearchScopeCatalog: '目录',
+  actionSearchEmptySelection: '未选择游戏。打开「游戏」并添加标题 — 或将范围切换为「目录」。',
+  actionSearchNoResults: '没有匹配的操作。',
 }

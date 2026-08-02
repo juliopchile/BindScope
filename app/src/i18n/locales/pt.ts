@@ -73,4 +73,12 @@ export const pt: MessageCatalog = {
   chordDetailBadge: 'tem acordes',
   detailBareHeading: 'Tecla simples',
   detailChordHeading: 'Acordes com modificadores',
+  actionSearchPlaceholder: 'Procurar ação…',
+  actionSearchAriaLabel: 'Pesquisar binds pelo nome da ação',
+  actionSearchScopeAriaLabel: 'Âmbito da pesquisa de ações',
+  actionSearchScopeSelected: 'Selecionados',
+  actionSearchScopeCatalog: 'Catálogo',
+  actionSearchEmptySelection:
+    'Nenhum jogo selecionado. Abra Jogos e adicione um título — ou mude o âmbito para Catálogo.',
+  actionSearchNoResults: 'Nenhuma ação corresponde.',
 }

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ActionSearch } from './components/ActionSearch'
 import { ChromeToolbar, type ChromePanelId } from './components/ChromeToolbar'
 import { GameSearch } from './components/GameSearch'
 import { KeyboardVisualizer } from './components/KeyboardVisualizer'
@@ -9,7 +10,13 @@ import { MouseVisualizer } from './components/MouseVisualizer'
 import { PrefsControls } from './components/PrefsControls'
 import { ProfileIO } from './components/ProfileIO'
 import { SelectedGames } from './components/SelectedGames'
-import { CATALOG_GAMES, GAMES_BY_ID, pickRandomStarter } from './data/catalog'
+import {
+  CATALOG_GAMES,
+  CATALOG_INPUT_PROFILES,
+  GAMES_BY_ID,
+  GAMES_NAME_BY_ID,
+  pickRandomStarter,
+} from './data/catalog'
 import { getLayout } from './data/keyboardLayouts'
 import { getMouseLayout, isMouseKeyId } from './data/mouseLayout'
 import { RESERVED_KEY_RULES } from './data/reservedKeys'
@@ -30,6 +37,7 @@ import {
   writeStoredShowChordMarks,
   writeStoredShowMouse,
 } from './lib/preferences'
+import type { ActionSearchHit } from './lib/actionSearch'
 import {
   buildEnabledLayers,
   gamesNameMapForSelection,
@@ -163,6 +171,21 @@ export default function App() {
     setSelectedKey((prev) => (prev === key ? null : key))
   }
 
+  function focusKey(key: KeyboardKey) {
+    if (isMouseKeyId(key) && !showMouse) {
+      handleShowMouseChange(true)
+    }
+    setSelectedKey(key)
+  }
+
+  function handleActionSearchHit(hit: ActionSearchHit) {
+    if (!selectedIdSet.has(hit.gameId)) {
+      addGame(hit.gameId)
+    }
+    setOpenPanel(null)
+    focusKey(hit.key)
+  }
+
   function dismissDetail() {
     setSelectedKey(null)
   }
@@ -294,17 +317,26 @@ export default function App() {
             style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}
             aria-labelledby="keyboard-heading"
           >
-            <div className="mb-3 flex flex-wrap items-end justify-between gap-2">
-              <h2
-                id="keyboard-heading"
-                className="text-xs font-semibold tracking-wide uppercase"
-                style={{ color: 'var(--fg-muted)' }}
-              >
-                {showMouse ? t('devicesHeading') : t('keyboardHeading')}
-              </h2>
-              <p className="text-xs" style={{ color: 'var(--fg-muted)' }}>
-                {t('starterNote')}
-              </p>
+            <div className="mb-3 flex flex-wrap items-end justify-between gap-x-3 gap-y-2">
+              <div className="min-w-0 space-y-1">
+                <h2
+                  id="keyboard-heading"
+                  className="text-xs font-semibold tracking-wide uppercase"
+                  style={{ color: 'var(--fg-muted)' }}
+                >
+                  {showMouse ? t('devicesHeading') : t('keyboardHeading')}
+                </h2>
+                <p className="text-xs" style={{ color: 'var(--fg-muted)' }}>
+                  {t('starterNote')}
+                </p>
+              </div>
+              <ActionSearch
+                selectedProfiles={effectiveProfiles}
+                catalogProfiles={CATALOG_INPUT_PROFILES}
+                selectedGamesById={gamesById}
+                catalogGamesById={GAMES_NAME_BY_ID}
+                onSelectHit={handleActionSearchHit}
+              />
             </div>
 
             <div className="flex flex-col items-stretch gap-4 lg:flex-row lg:items-start lg:gap-3">

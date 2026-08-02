@@ -44,8 +44,8 @@ BindScope/
 │   │   ├── utils/              # Key normalization + forgiving search
 │   │   ├── ui/                 # Key-state meta; EN messages re-export
 │   │   ├── styles/             # Theme tokens (light / dark / system)
-│   │   ├── components/         # ChromeToolbar, keyboard, mouse, detail, prefs, IO
-│   │   ├── lib/                # Selection, import/export, theme prefs
+│   │   ├── components/         # ChromeToolbar, ActionSearch, keyboard, mouse, detail, prefs, IO
+│   │   ├── lib/                # Selection, action search, chords, import/export, theme prefs
 │   │   └── i18n/               # Locale catalogs + provider (en/es/pt/fr/zh)
 │   ├── public/                 # Static assets
 │   ├── tests/                  # Unit tests
@@ -93,8 +93,8 @@ Paths are relative to `app/src/`.
 | `data/catalog/` | File-per-title seeds; tools marked `kind: 'tool'` |
 | `i18n/` | UI message catalogs and locale selection helpers. No domain logic |
 | `components/` | Presentation. Contains no business rules |
-| `lib/` | Selection helpers, JSON import/export; real config parsers later |
-| `utils/` | Key identifier normalization, forgiving search |
+| `lib/` | Selection helpers, action-name search, chords, JSON import/export; real config parsers later |
+| `utils/` | Key identifier normalization, forgiving search (games + action match) |
 | `types/` | Models shared across domain, data, and UI |
 | `styles/` | Global CSS and theme tokens for light / dark / system modes |
 

@@ -10,7 +10,7 @@ into `PROJECT_ROADMAP.md`; stable design information lives in `PROJECT_STRUCTURE
 
 **Current track:** Product Depth (post–UI Refresh)
 
-**Status:** PD2 complete; authorize **PD3** next (default)
+**Status:** PD3 complete; authorize **PD4** next (default)
 
 **Context:** MVP (Stages 0–5) and UI Refresh (UR1–UR5) are complete. The shell is keyboard-first with
 Full/TKL layouts, mouse visualizer, collapsible chrome, i18n, and theme. Remaining work is
@@ -105,27 +105,28 @@ modifier+key occupancy (engine already stores modifiers).
 
 ---
 
-### Phase PD3 — Action-name search
+### Phase PD3 — Action-name search ✅
+
+**Status:** Complete
 
 **Goal.** Find keys/bindings by action text across selected profiles (e.g. “push to talk”, “reload”).
 
-**Must do**
+**Delivered**
 
-- Search UI (likely in Games chrome or a stage-level find) using existing forgiving search utilities
-  where possible; match against binding `action` / `context` in selected (or catalog) profiles.
-- Selecting a hit focuses the key/mouse control and opens detail.
-- Locale-agnostic matching on curated action strings (actions stay in source language — D10).
-- i18n for chrome only.
-
-**Out of scope**
-
-- Translating seed action names; fuzzy NLP; server search.
+- Compact stage-level **Find action** control (idle: input + Selected/Catalog scope; results overlay
+  only while querying — does not push the visualizer).
+- Default scope = **selected** overlay profiles; optional **Catalog** searches default-layer seeds.
+- Match helpers in `lib/actionSearch.ts` reuse `utils/search.ts` normalization; action + context only
+  (D10 — curated source strings, chrome i18n only).
+- Selecting a hit focuses the key/mouse control, opens detail, adds the game if missing from
+  selection, and enables the mouse when the hit is a mouse id.
+- Empty selection / no-match chrome strings in en/es/pt/fr/zh; tests in `tests/actionSearch.test.ts`.
 
 **Acceptance**
 
-- [ ] User can query an action string and jump to the occupying control.
-- [ ] Empty and no-match states localized.
-- [ ] Tests for match helpers; `make test` / `lint` / `build` pass.
+- [x] User can query an action string and jump to the occupying control.
+- [x] Empty and no-match states localized.
+- [x] Tests for match helpers; `make test` / `lint` / `build` pass.
 
 ---
 
@@ -258,7 +259,7 @@ Do not stub empty backend modules (D3 / D9).
 
 ## Immediate Next Step
 
-Authorize **Phase PD3** (action-name search) unless the user prioritizes another phase
+Authorize **Phase PD4** (60% / ISO layouts) unless the user prioritizes another phase
 (e.g. PD6 parsers or PD5 Playwright) explicitly.
 
 ## Verification Commands (every implementation phase)

@@ -72,6 +72,14 @@ export const en = {
   chordDetailBadge: 'has chords',
   detailBareHeading: 'Bare key',
   detailChordHeading: 'Modifier chords',
+  actionSearchPlaceholder: 'Find action…',
+  actionSearchAriaLabel: 'Search bindings by action name',
+  actionSearchScopeAriaLabel: 'Action search scope',
+  actionSearchScopeSelected: 'Selected',
+  actionSearchScopeCatalog: 'Catalog',
+  actionSearchEmptySelection:
+    'No games selected. Open Games and add a title — or switch scope to Catalog.',
+  actionSearchNoResults: 'No matching actions.',
 } as const
 
 export type MessageKey = keyof typeof en

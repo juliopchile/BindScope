@@ -15,6 +15,7 @@ Closed-track summary: `PLAN.md`.
 | Hierarchy | Header (brand + action cluster) → keyboard/mouse stage (+ selection detail) |
 | Open chrome | Brand, tagline; visible layout selector; compact toolbar triggers (Games, Import / Export, Preferences) |
 | Closed chrome | Devices sit in a bordered `.keyboard-stage` surface |
+| Action find (PD3) | Compact **Find action** in the stage header; Selected (default) / Catalog scope; results overlay while querying |
 | Controls | Exclusive header disclosures via `ChromeToolbar` — collapsed by default |
 | Detail panel | Selection-driven; beside stage on desktop; bottom drawer + backdrop on phone |
 | Density | Slim legend + availability counts under the devices; heavy controls off the critical path |

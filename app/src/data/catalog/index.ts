@@ -1,4 +1,5 @@
-import type { CatalogEntry, CatalogKind, Game, SeedProfile } from '../../types'
+import type { CatalogEntry, CatalogKind, Game, InputProfile, SeedProfile } from '../../types'
+import { defaultEnabledLayerIds, toInputProfile } from './flatten'
 import { apexLegends } from './games/apex-legends'
 import { baldursGate3 } from './games/baldurs-gate-3'
 import { counterStrike2 } from './games/counter-strike-2'
@@ -76,6 +77,11 @@ export const CATALOG_ENTRIES: CatalogEntry[] = ENTRIES
 
 export const CATALOG_GAMES: Game[] = ENTRIES.map((entry) => entry.game)
 
+/** Default-layer flatten of every seed — for catalog-wide action search (PD3). */
+export const CATALOG_INPUT_PROFILES: InputProfile[] = ENTRIES.map((entry) =>
+  toInputProfile(entry.profile, defaultEnabledLayerIds(entry.profile)),
+)
+
 export const SEED_PROFILES_BY_GAME_ID: Record<string, SeedProfile> = Object.fromEntries(
   ENTRIES.map((entry) => [entry.game.id, entry.profile]),
 )
@@ -104,4 +110,4 @@ export function pickRandomStarter(
   return pool[index] ?? pool[0]!
 }
 
-export { defaultEnabledLayerIds, toInputProfile } from './flatten'
+export { defaultEnabledLayerIds, toInputProfile }

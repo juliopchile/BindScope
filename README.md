@@ -15,10 +15,9 @@ Pages is wired via Actions.
 **UI Refresh (UR1–UR5) complete:** keyboard-first shell, neutral free keys, collapsible chrome,
 Full/TKL selector, and mouse visualizer with first-class availability ids. See `PROJECT_ROADMAP.md`.
 
-**Next:** Product Depth track (PD1–PD7) in `PLAN.md`. **PD1–PD2 complete** — **26** curated catalog
-entries (22 games + 4 tools); chord marks / detail grouping shipped. Default next: **PD3**
-(action-name search). Remaining: V2
-features, config parsers, optional E2E. QA notes: `qa.md`.
+**Next:** Product Depth track (PD1–PD7) in `PLAN.md`. **PD1–PD3 complete** — **26** curated catalog
+entries; chord marks; stage action-name search. Default next: **PD4** (60%/ISO layouts). Remaining:
+layout variants, config parsers, optional E2E. QA notes: `qa.md`.
 
 To run it, see **Getting Started** below.
 
