@@ -24,8 +24,10 @@ import {
 } from './lib/importExport'
 import {
   readStoredLayout,
+  readStoredShowChordMarks,
   readStoredShowMouse,
   writeStoredLayout,
+  writeStoredShowChordMarks,
   writeStoredShowMouse,
 } from './lib/preferences'
 import {
@@ -62,6 +64,8 @@ export default function App() {
   const [openPanel, setOpenPanel] = useState<ChromePanelId | null>(null)
   const [layoutId, setLayoutId] = useState<LayoutId>(() => readStoredLayout())
   const [showMouse, setShowMouse] = useState(() => readStoredShowMouse())
+  const [showChordMarks, setShowChordMarks] = useState(() => readStoredShowChordMarks())
+  const [chordsOnly, setChordsOnly] = useState(false)
 
   const layout = getLayout(layoutId)
   const mouseLayout = getMouseLayout()
@@ -95,6 +99,15 @@ export default function App() {
     if (!next) {
       setSelectedKey((prev) => (prev && isMouseKeyId(prev) ? null : prev))
     }
+  }
+
+  function handleShowChordMarksChange(next: boolean) {
+    setShowChordMarks(next)
+    writeStoredShowChordMarks(next)
+  }
+
+  function toggleChordsOnly() {
+    setChordsOnly((prev) => !prev)
   }
 
   function addGame(gameId: string) {
@@ -258,7 +271,12 @@ export default function App() {
             />
           }
           prefsPanel={
-            <PrefsControls showMouse={showMouse} onShowMouseChange={handleShowMouseChange} />
+            <PrefsControls
+              showMouse={showMouse}
+              onShowMouseChange={handleShowMouseChange}
+              showChordMarks={showChordMarks}
+              onShowChordMarksChange={handleShowChordMarksChange}
+            />
           }
         />
       </header>
@@ -297,6 +315,8 @@ export default function App() {
                   selectedKey={selectedKey}
                   onSelectKey={handleSelectKey}
                   activeFilters={activeFilters}
+                  chordsOnly={chordsOnly}
+                  showChordMarks={showChordMarks}
                 />
               </div>
               {showMouse ? (
@@ -307,6 +327,8 @@ export default function App() {
                     selectedKey={selectedKey}
                     onSelectKey={handleSelectKey}
                     activeFilters={activeFilters}
+                    chordsOnly={chordsOnly}
+                    showChordMarks={showChordMarks}
                   />
                 </div>
               ) : null}
@@ -317,7 +339,12 @@ export default function App() {
               style={{ borderColor: 'var(--border)' }}
             >
               <div className="min-w-0 flex-1">
-                <Legend activeFilters={activeFilters} onToggleFilter={toggleFilter} />
+                <Legend
+                  activeFilters={activeFilters}
+                  onToggleFilter={toggleFilter}
+                  chordsOnly={chordsOnly}
+                  onToggleChordsOnly={toggleChordsOnly}
+                />
               </div>
               <dl
                 className="flex flex-wrap gap-x-4 gap-y-1 text-sm"

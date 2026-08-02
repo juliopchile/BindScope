@@ -152,6 +152,14 @@ body {
   user-select: none;
 }
 
+.key-chord-mark {
+  fill: var(--key-mark);
+  font-size: 11px;
+  font-weight: 700;
+  pointer-events: none;
+  user-select: none;
+}
+
 .pattern-stroke {
   stroke: var(--pattern-stroke);
 }
@@ -209,6 +217,11 @@ body {
       transparent 25%
     );
   background-size: 6px 6px;
+}
+.legend-swatch--chord {
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  border-color: var(--accent);
+  border-style: dashed;
 }
 
 /* Visually hidden but available to assistive tech / file inputs */

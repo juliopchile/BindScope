@@ -110,13 +110,13 @@ Delivered:
 
 ## In Progress
 
-**Product Depth track (post–UI Refresh)** — active in `PLAN.md` (phases PD1–PD7). **PD1 complete.**
-Default next authorization: **PD2** (modifier combinations UI).
+**Product Depth track (post–UI Refresh)** — active in `PLAN.md` (phases PD1–PD7). **PD1–PD2 complete.**
+Default next authorization: **PD3** (action-name search).
 
 | Phase | Status | Summary |
 |---|---|---|
 | PD1. Catalog growth (~20–30 titles) | **Complete** | **26** curated entries (22 games + 4 tools); verification + invariant tests |
-| PD2. Modifier combinations UI | Planned | Surface chords already in the model (V2 slice) |
+| PD2. Modifier combinations UI | **Complete** | Additive `+` chord marks, legend chords-only filter, detail bare/chord groups; scoring unchanged |
 | PD3. Action-name search | Planned | Find bindings by action text; focus key/mouse |
 | PD4. Layout variants 60% / ISO | Planned | Extend form-factor selector beyond Full/TKL |
 | PD5. Playwright smoke | Planned | Optional thin E2E; can parallelize after PD1 |
@@ -165,12 +165,20 @@ invariant tests cover unique ids, key normalization (including `NumLock`), and c
 cross-title conflicts (MOBA abilities, MMO hotbars, FPS WASD/voice, Discord PTT) keep overlays
 demonstrable. No parsers or wiki scrape.
 
+### Product Depth — PD2 (complete)
+
+Surfaced modifier chords already stored in the model without changing bare-key availability scoring.
+Keyboard and mouse keys with ≥1 chord binding show a bottom-left `+` mark (toggle in Preferences,
+`bindscope.showChordMarks`). Legend **Chords** filters to those keys. Detail panel groups bare vs
+modifier-chord bindings and keeps `bindingChordLabel` lines. Helpers/tests in `lib/chords.ts`.
+Demo with existing OBS / Afterburner / LoL / Discord chord seeds.
+
 ## Pending Work
 
 Detailed acceptance criteria and order live in `PLAN.md` (Product Depth PD1–PD7). Summary:
 
 - **PD1** — ~~Grow the hand-curated catalog toward ~20–30 titles~~ **Done (26 entries)**
-- **PD2** — Modifier combinations in the UI (V2)
+- **PD2** — ~~Modifier combinations in the UI (V2)~~ **Done**
 - **PD3** — Action-name search (V2)
 - **PD4** — Remaining layout variants: 60%, ISO (V2)
 - **PD5** — Optional Playwright smoke / broader E2E
@@ -203,7 +211,7 @@ Known risks that become debt if neglected:
 | Phase | Scope |
 |---|---|
 | UI Refresh (UR1–UR5) | **Complete** — keyboard-first shell, free-key retoken, collapsible chrome, Full/TKL selector, mouse visualizer |
-| Product Depth (PD1–PD7) | **Active plan** in `PLAN.md` — PD1 done (26 seeds); next PD2+ |
+| Product Depth (PD1–PD7) | **Active plan** in `PLAN.md` — PD1–PD2 done; next PD3+ |
 | V2 (via PD2–PD4, PD7) | Modifier combinations, action-name search, 60%/ISO layouts, more UI locales |
 | V3 | Steam sync, cloud profiles (adapter — D3), game detection; real-config import starts as **PD6** |
 | V4 | Recommendations: *"the best push-to-talk key for your library"* |

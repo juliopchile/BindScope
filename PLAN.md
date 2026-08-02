@@ -10,7 +10,7 @@ into `PROJECT_ROADMAP.md`; stable design information lives in `PROJECT_STRUCTURE
 
 **Current track:** Product Depth (post–UI Refresh)
 
-**Status:** PD1 complete; authorize **PD2** next (default)
+**Status:** PD2 complete; authorize **PD3** next (default)
 
 **Context:** MVP (Stages 0–5) and UI Refresh (UR1–UR5) are complete. The shell is keyboard-first with
 Full/TKL layouts, mouse visualizer, collapsible chrome, i18n, and theme. Remaining work is
@@ -81,29 +81,27 @@ Prefer **PD1 before feature polish** when capacity is limited (D7 / D9).
 
 ---
 
-### Phase PD2 — Modifier combinations in the UI (V2 slice)
+### Phase PD2 — Modifier combinations in the UI (V2 slice) ✅
+
+**Status:** Complete
 
 **Goal.** Surface chords that already exist in the model so users can distinguish bare keys from
 modifier+key occupancy (engine already stores modifiers).
 
-**Must do**
+**Delivered**
 
-- Define UX per `docs` / product judgment: e.g. chord indicators on keys, filter/toggle “show chords”,
-  detail panel clarity (already shows chord labels in places — extend consistently).
-- Do not break bare-key availability scoring without an explicit, tested rule change. Prefer
-  additive UI on top of current per-physical-key aggregation unless a design decision says otherwise.
-- Keep domain pure; any new scoring rules live in `domain/` with table-driven tests.
-- i18n for new chrome.
-
-**Out of scope**
-
-- Full Keybindr-style chord editor; remapping workflow.
+- Additive UI only — **no availability scoring change**. Chords still aggregate on the physical key.
+- `+` chord mark on keyboard/mouse keys that have ≥1 modifier binding; aria suffix; D11 text cue.
+- Legend **Chords** control filters to keys with chords (dims the rest); Preferences toggle persists
+  show/hide of chord marks (`bindscope.showChordMarks`).
+- Detail panel groups **Bare key** vs **Modifier chords**; status line notes when chords are present.
+- Helpers + tests in `lib/chords.ts` / `tests/chords.test.ts`; i18n en/es/pt/fr/zh; `STYLES.md` cues.
 
 **Acceptance**
 
-- [ ] User can see which bindings are chords vs bare keys in the visualizer and/or detail.
-- [ ] Tests cover chord display / any scoring change.
-- [ ] `make test` / `lint` / `build` pass; STYLES.md updated if new cues ship.
+- [x] User can see which bindings are chords vs bare keys in the visualizer and/or detail.
+- [x] Tests cover chord display / any scoring change.
+- [x] `make test` / `lint` / `build` pass; STYLES.md updated if new cues ship.
 
 ---
 
@@ -260,7 +258,7 @@ Do not stub empty backend modules (D3 / D9).
 
 ## Immediate Next Step
 
-Authorize **Phase PD2** (modifier combinations in the UI) unless the user prioritizes another phase
+Authorize **Phase PD3** (action-name search) unless the user prioritizes another phase
 (e.g. PD6 parsers or PD5 Playwright) explicitly.
 
 ## Verification Commands (every implementation phase)

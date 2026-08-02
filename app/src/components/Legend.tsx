@@ -1,4 +1,5 @@
 import { useI18n } from '../i18n/useI18n'
+import { CHORD_MARK } from '../lib/chords'
 import type { KeyAvailabilityState } from '../types'
 import { getKeyStateMeta, LEGEND_STATES } from '../ui/keyStateMeta'
 
@@ -6,9 +7,17 @@ interface LegendProps {
   /** Active filter states. Empty set = show all. */
   activeFilters: ReadonlySet<KeyAvailabilityState>
   onToggleFilter: (state: KeyAvailabilityState) => void
+  /** When true, dim keys without modifier chords. */
+  chordsOnly: boolean
+  onToggleChordsOnly: () => void
 }
 
-export function Legend({ activeFilters, onToggleFilter }: LegendProps) {
+export function Legend({
+  activeFilters,
+  onToggleFilter,
+  chordsOnly,
+  onToggleChordsOnly,
+}: LegendProps) {
   const { t } = useI18n()
   const showAll = activeFilters.size === 0
 
@@ -55,6 +64,29 @@ export function Legend({ activeFilters, onToggleFilter }: LegendProps) {
             </li>
           )
         })}
+        <li>
+          <button
+            type="button"
+            aria-pressed={chordsOnly}
+            onClick={onToggleChordsOnly}
+            className="flex min-h-10 items-center gap-2 rounded-md border px-2 py-1.5 focus-visible:outline focus-visible:outline-2"
+            style={{
+              borderColor: chordsOnly ? 'var(--accent)' : 'var(--border)',
+              background: 'var(--bg)',
+              opacity: chordsOnly ? 1 : 0.85,
+            }}
+          >
+            <span className="legend-swatch legend-swatch--chord" aria-hidden="true">
+              {CHORD_MARK}
+            </span>
+            <span>
+              <span className="font-medium">{t('chordLegendLabel')}</span>
+              <span className="ml-1 text-xs" style={{ color: 'var(--fg-muted)' }}>
+                {t('chordLegendDesc')}
+              </span>
+            </span>
+          </button>
+        </li>
       </ul>
     </section>
   )

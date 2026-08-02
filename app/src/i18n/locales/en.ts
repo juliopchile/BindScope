@@ -65,6 +65,13 @@ export const en = {
   layoutAnsiFull: 'Full',
   layoutAnsiTkl: 'TKL',
   showMouseLabel: 'Show mouse',
+  showChordMarksLabel: 'Show chord marks (+)',
+  chordLegendLabel: 'Chords',
+  chordLegendDesc: 'Has modifier+key binds — click to show only those keys',
+  chordAriaSuffix: 'includes modifier chords',
+  chordDetailBadge: 'has chords',
+  detailBareHeading: 'Bare key',
+  detailChordHeading: 'Modifier chords',
 } as const
 
 export type MessageKey = keyof typeof en

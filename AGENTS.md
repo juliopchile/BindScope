@@ -10,9 +10,10 @@ import/export, locale catalogs under `app/src/i18n/` (en/es/pt/fr/zh), light/dar
 `html[data-theme]`, and GitHub Pages deploy from `.github/workflows/deploy-pages.yml`. Visual tokens
 live in `STYLES.md`.
 
-**Active work:** Product Depth track (PD1–PD7) in `PLAN.md`. **PD1 complete** — seed catalog has
-**26** curated entries (22 games + 4 tools). Next default: authorize **PD2** (modifier UI). Remaining:
-V2 UI slices (modifiers, action search, 60%/ISO), optional Playwright, config parsers, extra locales.
+**Active work:** Product Depth track (PD1–PD7) in `PLAN.md`. **PD1–PD2 complete** — seed catalog has
+**26** curated entries (22 games + 4 tools); modifier chords surfaced in the UI (`+` marks, legend
+filter, detail grouping). Next default: authorize **PD3** (action search). Remaining: V2 UI slices
+(action search, 60%/ISO), optional Playwright, config parsers, extra locales.
 UI Refresh (UR1–UR5) is complete. Do not start a PD phase until the user authorizes it. Requirements
 archive: `qa.md`; competitive brief: `docs/keybindr-analysis.md` (D13).
 

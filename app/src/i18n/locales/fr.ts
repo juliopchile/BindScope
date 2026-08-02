@@ -67,4 +67,11 @@ export const fr: MessageCatalog = {
   layoutAnsiFull: 'Complet',
   layoutAnsiTkl: 'TKL',
   showMouseLabel: 'Afficher la souris',
+  showChordMarksLabel: 'Afficher les marques d’accords (+)',
+  chordLegendLabel: 'Accords',
+  chordLegendDesc: 'A des binds modificateur+touche — cliquer pour n’afficher que ces touches',
+  chordAriaSuffix: 'inclut des accords avec modificateur',
+  chordDetailBadge: 'a des accords',
+  detailBareHeading: 'Touche seule',
+  detailChordHeading: 'Accords avec modificateur',
 }

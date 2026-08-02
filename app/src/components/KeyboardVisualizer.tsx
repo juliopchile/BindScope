@@ -1,6 +1,7 @@
 import { useI18n } from '../i18n/useI18n'
+import { CHORD_MARK, keyHasChordBindings } from '../lib/chords'
 import type { KeyAvailability, KeyAvailabilityState, KeyboardKey, KeyboardLayout } from '../types'
-import { isStateVisible } from '../lib/selection'
+import { isKeyVisible } from '../lib/selection'
 import { getKeyStateMeta } from '../ui/keyStateMeta'
 
 interface KeyboardVisualizerProps {
@@ -10,6 +11,10 @@ interface KeyboardVisualizerProps {
   onSelectKey: (key: KeyboardKey) => void
   /** Empty set = all states visible. */
   activeFilters?: ReadonlySet<KeyAvailabilityState>
+  /** When true, dim keys that have no modifier chords. */
+  chordsOnly?: boolean
+  /** When true, draw the + chord cue on keys that have chords. */
+  showChordMarks?: boolean
 }
 
 function KeyPatterns() {
@@ -45,6 +50,8 @@ export function KeyboardVisualizer({
   selectedKey,
   onSelectKey,
   activeFilters = new Set(),
+  chordsOnly = false,
+  showChordMarks = true,
 }: KeyboardVisualizerProps) {
   const { t } = useI18n()
   const byKey = new Map(keys.map((item) => [item.key, item]))
@@ -63,14 +70,20 @@ export function KeyboardVisualizer({
           const state = availability?.state ?? 'free'
           const meta = getKeyStateMeta(state)
           const selected = selectedKey === layoutKey.id
-          const visible = isStateVisible(state, activeFilters)
+          const hasChords = keyHasChordBindings(availability?.bindings ?? [])
+          const visible = isKeyVisible(state, hasChords, activeFilters, chordsOnly)
+          const showChord = showChordMarks && hasChords
+          const stateLabel = t(meta.labelKey)
+          const ariaLabel = showChord
+            ? `${layoutKey.label}, ${stateLabel}, ${t('chordAriaSuffix')}`
+            : `${layoutKey.label}, ${stateLabel}`
 
           return (
             <g
               key={layoutKey.id}
               role="button"
               tabIndex={visible ? 0 : -1}
-              aria-label={`${layoutKey.label}, ${t(meta.labelKey)}`}
+              aria-label={ariaLabel}
               aria-pressed={selected}
               aria-hidden={!visible}
               className={visible ? 'cursor-pointer' : 'pointer-events-none'}
@@ -106,7 +119,7 @@ export function KeyboardVisualizer({
               <text
                 className="key-label"
                 x={layoutKey.x + layoutKey.width / 2}
-                y={layoutKey.y + layoutKey.height / 2 + (meta.mark ? 2 : 0)}
+                y={layoutKey.y + layoutKey.height / 2 + (meta.mark || showChord ? 2 : 0)}
                 textAnchor="middle"
                 dominantBaseline="middle"
               >
@@ -120,6 +133,16 @@ export function KeyboardVisualizer({
                   textAnchor="end"
                 >
                   {meta.mark}
+                </text>
+              ) : null}
+              {showChord ? (
+                <text
+                  className="key-chord-mark"
+                  x={layoutKey.x + 6}
+                  y={layoutKey.y + layoutKey.height - 5}
+                  textAnchor="start"
+                >
+                  {CHORD_MARK}
                 </text>
               ) : null}
             </g>

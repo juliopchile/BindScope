@@ -84,3 +84,18 @@ export function isStateVisible(
   if (activeFilters.size === 0) return true
   return activeFilters.has(state)
 }
+
+/**
+ * Combines legend state filters with the optional "chords only" cue.
+ * Does not change availability scoring — visual dimming only.
+ */
+export function isKeyVisible(
+  state: KeyAvailabilityState,
+  hasChords: boolean,
+  activeFilters: ReadonlySet<KeyAvailabilityState>,
+  chordsOnly: boolean,
+): boolean {
+  if (!isStateVisible(state, activeFilters)) return false
+  if (chordsOnly && !hasChords) return false
+  return true
+}

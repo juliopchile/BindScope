@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   DEFAULT_LAYOUT,
+  DEFAULT_SHOW_CHORD_MARKS,
   DEFAULT_SHOW_MOUSE,
   DEFAULT_THEME,
   isLayoutId,
@@ -27,6 +28,10 @@ describe('preferences helpers', () => {
 
   it('defaults to showing the mouse visualizer', () => {
     expect(DEFAULT_SHOW_MOUSE).toBe(true)
+  })
+
+  it('defaults to showing chord marks on occupied keys', () => {
+    expect(DEFAULT_SHOW_CHORD_MARKS).toBe(true)
   })
 
   it('shares locale validation with i18n', () => {

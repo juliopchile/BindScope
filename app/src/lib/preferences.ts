@@ -8,11 +8,13 @@ const LOCALE_KEY = 'bindscope.locale'
 const THEME_KEY = 'bindscope.theme'
 const LAYOUT_KEY = 'bindscope.layout'
 const SHOW_MOUSE_KEY = 'bindscope.showMouse'
+const SHOW_CHORD_MARKS_KEY = 'bindscope.showChordMarks'
 
 export const THEME_PREFERENCES: readonly ThemePreference[] = ['light', 'dark', 'system']
 export const DEFAULT_THEME: ThemePreference = 'system'
 export const DEFAULT_LAYOUT: LayoutId = 'ansi-full'
 export const DEFAULT_SHOW_MOUSE = true
+export const DEFAULT_SHOW_CHORD_MARKS = true
 export { LAYOUT_IDS, isLayoutId }
 
 export function isThemePreference(value: string): value is ThemePreference {
@@ -87,6 +89,25 @@ export function readStoredShowMouse(): boolean {
 export function writeStoredShowMouse(show: boolean): void {
   try {
     localStorage.setItem(SHOW_MOUSE_KEY, show ? '1' : '0')
+  } catch {
+    /* ignore */
+  }
+}
+
+export function readStoredShowChordMarks(): boolean {
+  try {
+    const raw = localStorage.getItem(SHOW_CHORD_MARKS_KEY)
+    if (raw === '0' || raw === 'false') return false
+    if (raw === '1' || raw === 'true') return true
+  } catch {
+    /* ignore */
+  }
+  return DEFAULT_SHOW_CHORD_MARKS
+}
+
+export function writeStoredShowChordMarks(show: boolean): void {
+  try {
+    localStorage.setItem(SHOW_CHORD_MARKS_KEY, show ? '1' : '0')
   } catch {
     /* ignore */
   }

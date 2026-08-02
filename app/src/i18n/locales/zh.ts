@@ -65,4 +65,11 @@ export const zh: MessageCatalog = {
   layoutAnsiFull: '全尺寸',
   layoutAnsiTkl: 'TKL',
   showMouseLabel: '显示鼠标',
+  showChordMarksLabel: '显示组合键标记 (+)',
+  chordLegendLabel: '组合键',
+  chordLegendDesc: '含修饰键绑定 — 点击仅显示这些键',
+  chordAriaSuffix: '包含修饰键组合',
+  chordDetailBadge: '含组合键',
+  detailBareHeading: '单键',
+  detailChordHeading: '修饰键组合',
 }

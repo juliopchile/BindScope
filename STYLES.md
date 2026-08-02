@@ -103,7 +103,17 @@ State is never conveyed by color alone. Every state uses color **and** a mark / 
 | Reserved | × | checker | `--key-reserved-*` |
 | Unknown | ? | light diagonal | `--key-unknown-*` |
 
-Meta lives in `app/src/ui/keyStateMeta.ts`. Aria labels include the state name.
+Chord occupancy (modifier+key) is an **additive cue**, not a new availability state. Keys with at
+least one chord binding show a bottom-left `+` mark (`.key-chord-mark`) when “Show chord marks” is
+on. The legend’s **Chords** control filters to those keys only (dims the rest). Detail groups bare
+vs chord bindings. Bare-key availability scoring is unchanged.
+
+| Cue | Mark | Where |
+|---|---|---|
+| Has modifier chords | + | Bottom-left of key / mouse control; legend swatch (dashed accent) |
+
+Meta lives in `app/src/ui/keyStateMeta.ts`. Chord helpers live in `app/src/lib/chords.ts`. Aria
+labels include the state name and, when relevant, a chord suffix.
 
 ## Breakpoints
 
@@ -121,14 +131,14 @@ container.
 - Toolbar: `app/src/components/ChromeToolbar.tsx` — exclusive header disclosures + visible layout select
 - Layout selector: `app/src/components/LayoutSelector.tsx` — Full / TKL; preference via `lib/preferences.ts`
 - Keyboard: `app/src/components/KeyboardVisualizer.tsx` — data-driven from `KeyboardLayout`; dims
-  keys whose state is filtered out via the legend
+  keys whose state is filtered out via the legend; optional `+` chord marks
 - Mouse: `app/src/components/MouseVisualizer.tsx` — data-driven from `MouseLayout` (`data/mouseLayout.ts`);
   same key-state fill/pattern/mark tokens as keyboard; selectable buttons share the detail panel
-- Detail: `app/src/components/KeyDetailPanel.tsx` — selection-driven; desktop side panel / phone drawer
-- Legend: `app/src/components/Legend.tsx` — toggles state filters
+- Detail: `app/src/components/KeyDetailPanel.tsx` — selection-driven; bare vs chord binding groups
+- Legend: `app/src/components/Legend.tsx` — toggles state filters + chords-only filter
 - Search / selection: `GameSearch.tsx`, `SelectedGames.tsx` (inside Games disclosure)
 - Profile IO: `ProfileIO.tsx` (inside Import / Export disclosure)
-- Prefs: `PrefsControls.tsx` — locale + theme + show mouse (inside Preferences disclosure)
+- Prefs: `PrefsControls.tsx` — locale + theme + show mouse + show chord marks (Preferences disclosure)
 - Chrome copy: locale catalogs in `app/src/i18n/locales/` via `useI18n()`
 
 ## Design rules

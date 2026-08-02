@@ -9,9 +9,16 @@ const selectClass =
 interface PrefsControlsProps {
   showMouse: boolean
   onShowMouseChange: (show: boolean) => void
+  showChordMarks: boolean
+  onShowChordMarksChange: (show: boolean) => void
 }
 
-export function PrefsControls({ showMouse, onShowMouseChange }: PrefsControlsProps) {
+export function PrefsControls({
+  showMouse,
+  onShowMouseChange,
+  showChordMarks,
+  onShowChordMarksChange,
+}: PrefsControlsProps) {
   const { locale, setLocale, t } = useI18n()
   const { theme, setTheme } = useTheme()
 
@@ -72,6 +79,19 @@ export function PrefsControls({ showMouse, onShowMouseChange }: PrefsControlsPro
           aria-label={t('showMouseLabel')}
         />
         <span>{t('showMouseLabel')}</span>
+      </label>
+
+      <label
+        className="flex min-h-10 items-center gap-2 self-end rounded-md border px-3 py-2 text-sm"
+        style={{ borderColor: 'var(--border)', color: 'var(--fg)' }}
+      >
+        <input
+          type="checkbox"
+          checked={showChordMarks}
+          onChange={(event) => onShowChordMarksChange(event.target.checked)}
+          aria-label={t('showChordMarksLabel')}
+        />
+        <span>{t('showChordMarksLabel')}</span>
       </label>
     </div>
   )

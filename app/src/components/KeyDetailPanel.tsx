@@ -1,6 +1,7 @@
 import { GAMES_BY_ID } from '../data/catalog'
 import { useI18n } from '../i18n/useI18n'
-import type { ConflictSummary, KeyboardKey } from '../types'
+import { partitionBindingsByChord } from '../lib/chords'
+import type { ConflictSummary, KeyBindingRef, KeyboardKey } from '../types'
 import { bindingChordLabel } from '../utils/keyNormalization'
 import { getKeyStateMeta } from '../ui/keyStateMeta'
 
@@ -53,6 +54,7 @@ export function KeyDetailPanel({ summary, selectedKey, onDismiss }: KeyDetailPan
 function SelectedDetail({ selected }: { selected: NonNullable<ConflictSummary['keys'][number]> }) {
   const { t } = useI18n()
   const meta = getKeyStateMeta(selected.state)
+  const { bare, chords } = partitionBindingsByChord(selected.bindings)
 
   return (
     <div className="mt-3 space-y-3 text-sm">
@@ -61,6 +63,7 @@ function SelectedDetail({ selected }: { selected: NonNullable<ConflictSummary['k
         <p style={{ color: 'var(--fg-muted)' }}>
           {t(meta.labelKey)}
           {meta.mark ? ` ${meta.mark}` : ''}
+          {chords.length > 0 ? ` · ${t('chordDetailBadge')}` : ''}
         </p>
         {selected.reservedReason ? (
           <p className="mt-1 text-xs" style={{ color: 'var(--fg-muted)' }}>
@@ -74,32 +77,61 @@ function SelectedDetail({ selected }: { selected: NonNullable<ConflictSummary['k
           {selected.state === 'reserved' ? t('detailReserved') : t('detailFree')}
         </p>
       ) : (
-        <ul className="space-y-2">
-          {selected.bindings.map((ref) => (
-            <li
-              key={`${ref.profileId}-${ref.binding.action}-${ref.binding.modifiers?.join('+') ?? ''}`}
-              className="rounded-md border p-3"
-              style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}
-            >
-              <p className="font-medium">
-                {ref.gameName}
-                {GAMES_BY_ID[ref.gameId]?.kind === 'tool' ? (
-                  <span className="ml-2 text-xs font-normal" style={{ color: 'var(--fg-muted)' }}>
-                    {t('kindTool')}
-                  </span>
-                ) : null}
-              </p>
-              <p className="text-xs" style={{ color: 'var(--fg-muted)' }}>
-                {ref.profileName}
-                {ref.binding.context ? ` · ${ref.binding.context}` : ''}
-              </p>
-              <p className="mt-1">
-                {bindingChordLabel(ref.binding.key, ref.binding.modifiers)} → {ref.binding.action}
-              </p>
-            </li>
-          ))}
-        </ul>
+        <div className="space-y-3">
+          {bare.length > 0 ? (
+            <BindingGroup heading={t('detailBareHeading')} bindings={bare} />
+          ) : null}
+          {chords.length > 0 ? (
+            <BindingGroup heading={t('detailChordHeading')} bindings={chords} />
+          ) : null}
+        </div>
       )}
+    </div>
+  )
+}
+
+function BindingGroup({
+  heading,
+  bindings,
+}: {
+  heading: string
+  bindings: KeyBindingRef[]
+}) {
+  const { t } = useI18n()
+
+  return (
+    <div className="space-y-2">
+      <h3
+        className="text-xs font-semibold tracking-wide uppercase"
+        style={{ color: 'var(--fg-muted)' }}
+      >
+        {heading}
+      </h3>
+      <ul className="space-y-2">
+        {bindings.map((ref) => (
+          <li
+            key={`${ref.profileId}-${ref.binding.action}-${ref.binding.modifiers?.join('+') ?? ''}`}
+            className="rounded-md border p-3"
+            style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}
+          >
+            <p className="font-medium">
+              {ref.gameName}
+              {GAMES_BY_ID[ref.gameId]?.kind === 'tool' ? (
+                <span className="ml-2 text-xs font-normal" style={{ color: 'var(--fg-muted)' }}>
+                  {t('kindTool')}
+                </span>
+              ) : null}
+            </p>
+            <p className="text-xs" style={{ color: 'var(--fg-muted)' }}>
+              {ref.profileName}
+              {ref.binding.context ? ` · ${ref.binding.context}` : ''}
+            </p>
+            <p className="mt-1">
+              {bindingChordLabel(ref.binding.key, ref.binding.modifiers)} → {ref.binding.action}
+            </p>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
